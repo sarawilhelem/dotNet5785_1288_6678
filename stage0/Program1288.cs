@@ -1,5 +1,7 @@
 ﻿partial class Program
 {
+    static partial void Welcome6678();
+
     private static void Main(string[] args)
     {
         Welcome1288();
@@ -12,6 +14,5 @@
         string name = Console.ReadLine();
         Console.WriteLine("{0}, welcome to my first console application", name);
     }
-    private static void Welcome6678()
-    { }
+ 
 }
