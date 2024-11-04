@@ -8,6 +8,7 @@
         Welcome6678();
     }
 
+
     private static void Welcome1288()
     {
         Console.WriteLine("Enter your name: ");
