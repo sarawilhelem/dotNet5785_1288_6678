@@ -22,4 +22,10 @@ static internal class Config
     }
     static DateTime Clock;
     static TimeSpan RiskRange;
+    public Config()
+    {
+        Clock = DateTime.Now;
+        RiskRange = TimeSpan.Zero;
+    }
 }
+
