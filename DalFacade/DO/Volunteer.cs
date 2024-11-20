@@ -17,4 +17,4 @@ public record Volunteer
     double? MaxDistanceCall = null,
     Distance_Type Distance_Type = Distance_Type.Air
     )
-{ };
+;

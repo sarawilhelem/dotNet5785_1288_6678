@@ -1,7 +1,17 @@
 ﻿
 
 namespace DO;
-
+/// <summary>
+/// Call Entity
+/// </summary>
+/// <param name="Id">unique ID (created automatically)</param>
+/// <param name="Call_Type">type of call:Take_Care_At_Home/Take_Care_Out/Physiotherapy</param>
+/// <param name="address">to where do they want volunteer</param>
+/// <param name="Latitude">vertical distance from the equator</param>
+/// <param name="Longitude">horizontal distance from the equator</param>
+/// <param name="Open_Time">the time they call a volunteer</param>
+/// <param name="Description">details abaut the call</param>
+/// <param name="Close_Time">when it has to be closed</param>
 public record Call
 (
 
@@ -9,12 +19,22 @@ public record Call
  string address,
  double Latitude,
  double Longitude,
- DateTime Open_Time,
   string? Description = null,
  DateTime? Close_Time = null
 )
 {
     public int Id=Config.NextCallId;
+    DateTime Open_Time = Config.clock;
+
+
+    public Call()
+    {
+        address = "Zayit 1, Jerusalem, Israel";
+        Latitude = 0;
+        Longitude =0;
+        Description = "no more details";
+
+    }
 }
 
 
