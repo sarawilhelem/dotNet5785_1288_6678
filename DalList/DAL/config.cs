@@ -12,22 +12,25 @@ namespace DAL;
 
 static internal class Config
 {
-	internal static int nextCallId = 1;
-	public static int NextCallId
-	{
-		get { return nextCallId++; }
-	}
+    internal const int startCallId = 1000;
+    private static int nextCallId = startCallId;
+    internal static int NextCallId { get => nextCallId++; }
 
+    internal const int startAssigmentId = 2000;
+    private static int nextAssignmentId = startAssigmentId;
+    internal static int NextAssignmentId { get => NextAssignmentId++; }
 
-    internal static int nextAssignment = 1;
-
-    public static int NextAssignment
-    {
-        get { return nextAssignment++; }
-
-    }
     static DateTime Clock;
     static TimeSpan RiskRange;
+
+    internal static void reset()
+    {
+        nextCallId = startCallId;
+        nextAssignmentId = startAssigmentId
+        Clock = DateTime.Now;
+        RiskRange = TimeSpan.Zero;
+    }
+
     internal Config()
     {
         Clock = DateTime.Now;
