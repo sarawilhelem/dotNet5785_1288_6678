@@ -23,7 +23,7 @@ public record Call
  DateTime? Close_Time = null
 )
 {
-    public int Id=Config.NextCallId;
+    public int Id = Config.NextCallId;
     DateTime Open_Time = Config.clock;
 
 
@@ -31,8 +31,9 @@ public record Call
     {
         address = "Zayit 1, Jerusalem, Israel";
         Latitude = 0;
-        Longitude =0;
+        Longitude = 0;
         Description = "no more details";
+
 
     }
 }
