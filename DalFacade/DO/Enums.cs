@@ -2,7 +2,7 @@
 namespace DO;
 public enum Role
 {
-    Managare,
+    Manager,
     Volunteer
 }
 public enum Distance_Type
@@ -20,5 +20,8 @@ public enum Call_Type
 
 public enum Finish_Type
 {
-
+    Addressed,
+    SelfCancel,
+    ManageCancel,
+    Expired
 }

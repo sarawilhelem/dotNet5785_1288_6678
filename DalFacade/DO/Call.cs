@@ -4,6 +4,7 @@ namespace DO;
 
 public record Call
 (
+
  Call_Type Call_Type,
  string address,
  double Latitude,
@@ -13,7 +14,7 @@ public record Call
  DateTime? Close_Time = null
 )
 {
-    public static int Id;
+    public int Id=Config.NextCallId;
 }
 
 
