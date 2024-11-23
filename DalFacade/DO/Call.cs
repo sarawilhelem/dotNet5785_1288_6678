@@ -1,6 +1,10 @@
 ﻿
 
 namespace DO;
+using DalApi;
+
+
+
 /// <summary>
 /// Call Entity
 /// </summary>
@@ -21,9 +25,13 @@ public record Call
  double Longitude,
   string? Description = null,
  DateTime? Close_Time = null
+
 )
 {
-    public int Id = Config.NextCallId;
+
+    internal int Id { get; init; } = Config.nextCallId;;
+
+
     DateTime Open_Time = Config.clock;
 
 

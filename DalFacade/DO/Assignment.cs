@@ -24,7 +24,7 @@ public record Assignment
 
     private DateTime insersiontTime=Config.Clock;
 
-    public int InsersiontTime {  get; }
+    public int InsersiontTime { get; }
 
     public Assignment()
     {

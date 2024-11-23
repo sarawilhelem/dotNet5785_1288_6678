@@ -18,23 +18,19 @@ static internal class Config
 
     internal const int startAssigmentId = 2000;
     private static int nextAssignmentId = startAssigmentId;
-    internal static int NextAssignmentId { get => NextAssignmentId++; }
+    internal static int NextAssignmentId { get => nextAssignmentId++; }
 
-    static DateTime Clock;
-    static TimeSpan RiskRange;
+    internal static DateTime Clock;
+    internal static TimeSpan RiskRange;
 
     internal static void reset()
     {
         nextCallId = startCallId;
-        nextAssignmentId = startAssigmentId
+        nextAssignmentId = startAssigmentId;
         Clock = DateTime.Now;
         RiskRange = TimeSpan.Zero;
     }
 
-    internal Config()
-    {
-        Clock = DateTime.Now;
-        RiskRange = TimeSpan.Zero;
-    }
+    
 }
 
