@@ -16,12 +16,14 @@ public static class Initialization
 
     private static void createVolunteers()
     {
+        const int COUNT_VOLUNTEERS = 20;
+        int managerIndex = s_rand.Next(0, 19);
         const int MIN_ID = 200000000;
         const int MAX_ID = 399999999;
         string[] vNames =
             { "Dani Levy", "Eli Amar", "Yair Cohen", "Ariela Levin", "Dina Klein", "Shira Israelof", "Sarah Cohen", "Jacob Levi", "Leah Goldstein", "David Rosenberg", "Rachel Schwartz", "Isaac Cohen", "Rebecca Levy", "Aaron Friedman", "Miriam Cohen", "Benjamin Levy", "Esther Cohen", "Samuel Goldberg", "Hannah Levy", "Solomon Cohen" };
-        string[] startPhones = { "05041", "05271", "05341", "05484", "05567", "05832" };
-        string[] addresses = {
+        string[] vStartsPhones = { "05041", "05271", "05341", "05484", "05567", "05832" };
+        string[] vAddresses = {
             "Sunset Blvd, 123, Los Angeles, USA",
             "Broadway, 456, New York City, USA",
            "Oxford Street, 789, London, UK",
@@ -43,11 +45,32 @@ public static class Initialization
            "Christ the Redeemer, 777, Rio de Janeiro, Brazil",
            "Golden Gate Bridge, 888, San Francisco, USA"
         };
-    }
+        for (int i = 0; i < COUNT_VOLUNTEERS; i++)
+        {
+            int vId;
+            do
+                vId = s_rand.Next(MIN_ID, MAX_ID);
+            while (s_dalVolunteer!.Read(vId) != null);
 
+            string vPhone = string.Concat(vStartsPhones[s_rand.Next(0, 5)], s_rand.Next(0, 99999).ToString());
+            string vEmail = string.Concat(vNames[i].Split(' ')[0], "@gmail.com");
+            int maxDistance = s_rand.Next(10, 1000);
+            Role role = i == managerIndex ? Role.Manager : Role.Volunteer;
+            Volunteer newV = new Volunteer(vId, vNames[i], vPhone, vEmail, maxDistance, role);
+            try
+            {
+                s_dalVolunteer.Create(newV);
+            }
+            catch
+            {
+                i--;            //This iteration in the for didn't succeed, so we do it again
+            }
+        }
+    }
     private static void createCalls()
     {
-        string[] addresses = {
+        const int COUNT_CALLS = 50;
+        string[] cAddresses = {
             "Sunset Blvd, 123, Los Angeles, USA",
             "Broadway, 456, New York City, USA",
             "Oxford Street, 789, London, UK",
@@ -97,5 +120,11 @@ public static class Initialization
             "Antelope Canyon, 888, Arizona, USA",
             "Bora Bora, 999, French Polynesia"
         };
+        string[] cDescriptions = {"7 years old boy", "Disabled boy", "Miserable and cute girl", "Have a brother's wedding", "Need phisyothraphy 5 times a week"};
+        for (int i = 0; i< COUNT_CALLS;i++)
+        {
+            Call_Type type = (Call_Type)s_rand.Next(0, 2);
+
+        }
     }
 }

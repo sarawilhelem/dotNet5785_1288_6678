@@ -20,15 +20,16 @@ public record Call
  double Latitude,
  double Longitude,
  string? Description = null,
- DateTime? Close_Time = null
+DateTime? Close_Time = null
 )
-
 {
+    DateTime Open_Time = Config.Clock;
+
 
     public int Id { get; init; } = Config.NextCallId;
 
 
-    DateTime Open_Time = Config.Clock;
+    
 
 
     public Call() : this(Call_Type.Take_Care_At_Home, "Zayit 1, Jerusalem, Israel", 0, 0, "no more details")

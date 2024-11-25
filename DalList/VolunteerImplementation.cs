@@ -1,26 +1,25 @@
 ﻿
 
-namespace Dal;
 
 using DAL;
 using DalApi;
-using DalApi.DO;
 using DO;
 
+namespace Dal;
 
 public class VolunteerImplementation : IVolunteer
 {
     public void Create(Volunteer item)
     {
-        if(DataSource.Volunteers.Find(v => v.Id == item.Id)!=null)
-            throw new Exception($"Volunteer with id {item.Id} is not exist");
+        if (DataSource.Volunteers.Find(v => v.Id == item.Id) != null)
+            throw new Exception($"Volunteer with id {item.Id} is yet exist");
         else
             DataSource.Volunteers.Add(item);
     }
 
     public void Delete(int id)
     {
-        Volunteer? thisVolunteer = DataSource.Volunteers.Find(v => v.Id == item.Id);
+        Volunteer? thisVolunteer = DataSource.Volunteers.Find(v => v.Id == id);
         if (thisVolunteer != null)
         {
             DataSource.Volunteers.Remove(thisVolunteer);
@@ -37,7 +36,6 @@ public class VolunteerImplementation : IVolunteer
     public Volunteer? Read(int id)
     {
         return DataSource.Volunteers.Find(v => v.Id == id);
-
 
     }
 

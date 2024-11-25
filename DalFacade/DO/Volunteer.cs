@@ -21,14 +21,14 @@ public record Volunteer
     string Name,
     string Phone,
     string Email,
+    double? MaxDistanceCall = null,
+    Role Role = Role.Volunteer,
+    Distance_Type Distance_Type = Distance_Type.Air,
     string? Password = null,
     string? Address = null,
     double? Latitude = null,
     double? Longitude = null,
-    Role Role = Role.Volunteer,
-    bool? IsActive = null,
-    double? MaxDistanceCall = null,
-    Distance_Type Distance_Type = Distance_Type.Air
+    bool? IsActive = null
     )
 {
     public Volunteer() : this(0, "no name", "000-000-0000", "email@gmail.com")
