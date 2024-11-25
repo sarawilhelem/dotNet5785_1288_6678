@@ -1,9 +1,5 @@
-﻿
-
+﻿using DAL;
 namespace DO;
-using DalApi;
-
-
 
 /// <summary>
 /// Call Entity
@@ -23,27 +19,20 @@ public record Call
  string address,
  double Latitude,
  double Longitude,
-  string? Description = null,
+ string? Description = null,
  DateTime? Close_Time = null
-
 )
+
 {
 
-    internal int Id { get; init; } = Config.nextCallId;;
+    public int Id { get; init; } = Config.NextCallId;
 
 
-    DateTime Open_Time = Config.clock;
+    DateTime Open_Time = Config.Clock;
 
 
-    public Call()
-    {
-        address = "Zayit 1, Jerusalem, Israel";
-        Latitude = 0;
-        Longitude = 0;
-        Description = "no more details";
-
-
-    }
+    public Call() : this(Call_Type.Take_Care_At_Home, "Zayit 1, Jerusalem, Israel", 0, 0, "no more details")
+    { }
 }
 
 

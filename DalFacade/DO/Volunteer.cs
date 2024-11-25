@@ -31,10 +31,6 @@ public record Volunteer
     Distance_Type Distance_Type = Distance_Type.Air
     )
 {
-    public Volunteer()
-    {
-        Id = 0;
-        Name = "";
-        Email = "";
-    }
+    public Volunteer() : this(0, "no name", "000-000-0000", "email@gmail.com")
+    { }
 }

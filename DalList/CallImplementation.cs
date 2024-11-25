@@ -1,19 +1,19 @@
 ﻿
 
-namespace Dal;
+
 
 using DAL;
 using DalApi;
-using DalApi.DO;
+
 using DO;
 
-
+namespace Dal;
 public class CallImplementation : ICall
 {
     public void Create(Call item)
     {
         int id = Config.NextCallId;
-        Call newCall = item with { id = id };
+        Call newCall = item with { Id = id };
         DataSource.Calls.Add(item);
     }
 

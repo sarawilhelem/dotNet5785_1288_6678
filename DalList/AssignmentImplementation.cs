@@ -1,18 +1,16 @@
 ﻿
 
-namespace Dal;
 
-using DAL;
 using DalApi;
-using DalApi.DO;
 using DO;
 
 
+namespace Dal;
 public class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
-        int id = Config.NextAssignmentId;
+        int id = DAL.Config.NextAssignmentId;
         Assignment newAssignment = item with { Id = id };
         DataSource.Assignments.Add(item);
     }

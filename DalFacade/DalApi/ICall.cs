@@ -1,7 +1,8 @@
-﻿namespace DalApi;
-using DO;
-namespace DO;
+﻿using DO;
 
+
+
+namespace DalApi;
 
 
 public interface ICall
