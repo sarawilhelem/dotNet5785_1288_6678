@@ -1,7 +1,4 @@
-﻿
-
-
-using DalApi;
+﻿using DalApi;
 using DO;
 
 
@@ -10,7 +7,7 @@ public class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
-        int id = DAL.Config.NextAssignmentId;
+        int id = Config.NextAssignmentId;
         Assignment newAssignment = item with { Id = id };
         DataSource.Assignments.Add(item);
     }

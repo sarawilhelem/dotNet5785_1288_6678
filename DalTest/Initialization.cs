@@ -1,12 +1,9 @@
-﻿
-
-namespace DalTest;
+﻿namespace DalTest;
 using DalApi;
 using DO;
 
 public static class Initialization
 {
-
     private static IAssignment? s_dalAssignment;
     private static ICall? s_dalCall;
     private static IVolunteer? s_dalVolunteer;
@@ -16,35 +13,33 @@ public static class Initialization
 
     private static void createVolunteers()
     {
-        const int COUNT_VOLUNTEERS = 20;
-        int managerIndex = s_rand.Next(0, 19);
+        const int COUNT_VOLUNTEERS = 16;
+        int managerIndex = s_rand.Next(0, 20);
         const int MIN_ID = 200000000;
-        const int MAX_ID = 399999999;
+        const int MAX_ID = 400000000;
         string[] vNames =
-            { "Dani Levy", "Eli Amar", "Yair Cohen", "Ariela Levin", "Dina Klein", "Shira Israelof", "Sarah Cohen", "Jacob Levi", "Leah Goldstein", "David Rosenberg", "Rachel Schwartz", "Isaac Cohen", "Rebecca Levy", "Aaron Friedman", "Miriam Cohen", "Benjamin Levy", "Esther Cohen", "Samuel Goldberg", "Hannah Levy", "Solomon Cohen" };
-        string[] vStartsPhones = { "05041", "05271", "05341", "05484", "05567", "05832" };
-        string[] vAddresses = {
-            "Sunset Blvd, 123, Los Angeles, USA",
-            "Broadway, 456, New York City, USA",
-           "Oxford Street, 789, London, UK",
-           "Champs-Élysées, 101, Paris, France",
-           "Alexanderplatz, 222, Berlin, Germany",
-           "Gran Vía, 333, Madrid, Spain",
-           "Shibuya Crossing, 444, Tokyo, Japan",
-            "Sydney Opera House, 555, Sydney, Australia",
-            "Piazza San Marco, 666, Venice, Italy",
-            "Red Square, 777, Moscow, Russia",
-           "Copacabana Beach, 888, Rio de Janeiro, Brazil",
-            "Cape Town Waterfront, 999, Cape Town, South Africa",
-            "Petronas Towers, 111, Kuala Lumpur, Malaysia",
-           "Burj Khalifa, 222, Dubai, UAE",
-            "Taj Mahal, 333, Agra, India",
-            "Machu Picchu, 444, Cusco, Peru",
-            "Great Wall of China, 555, Beijing, China",
-            "Colosseum, 666, Rome, Italy",
-           "Christ the Redeemer, 777, Rio de Janeiro, Brazil",
-           "Golden Gate Bridge, 888, San Francisco, USA"
-        };
+            ["Dani Levy", "Eli Amar", "Yair Cohen", "Ariela Levin", "Dina Klein", "Shira Israelof", "Sarah Cohen", "Jacob Levi", "Leah Goldstein", "David Rosenberg", "Rachel Schwartz", "Isaac Cohen", "Rebecca Levy", "Aaron Friedman", "Miriam Cohen", "Benjamin Levy", "Esther Cohen", "Samuel Goldberg", "Hannah Levy", "Solomon Cohen"];
+        string[] vStartsPhones = ["05041", "05271", "05341", "05484", "05567", "05832"];
+        string[] vAddresses =
+            ["הרצל 10 כיכר המדינה ישראל",
+            "דיזנגוף 48 תל אביב ישראל",
+            "הירקון 7 נמל תל אביב ישראל",
+            "רוטשילד 22 תל אביב ישראל",
+            "בן יהודה 15 נמל חיפה ישראל",
+            "המרכז 5 מרכז העיר חיפה ישראל",
+            "הגבעה 3 מושב חורפיש ישראל",
+            "הצופים 12 הר הצופים ישראל",
+            "הנחל 30 מושב כפר סבא ישראל",
+            "האלון 4 גבעתיים ישראל",
+            "הצבי 9 נחלת בנימין ישראל",
+            "היער 17 שכונת יערות ישראל",
+            "הכרמל 6 כפר חסידים ישראל",
+            "האדמור 11 שכונת אדמורים ישראל",
+            "אלנבי 25 שינקין ישראל",
+            "שפע חיים 14 ירושלים ישראל"];
+        double[] vLatitude = [34.770410, 34.775382, 34.778712, 34.774574, 34.983579, 34.987190, 34.988004, 34.742663, 34.912945, 34.794960, 34.912181, 34.799589, 34.801429, 34.790317, 34.773367, 34.325698];
+        double[] vLongitude = [32.093035, 32.075237, 32.074741, 32.069773, 32.820103, 32.820918, 32.820536, 32.977347, 32.175679, 32.072830, 32.175537, 32.070820, 32.070131, 32.074038, 32.072976, 32.845631];
+
         for (int i = 0; i < COUNT_VOLUNTEERS; i++)
         {
             int vId;
@@ -52,11 +47,12 @@ public static class Initialization
                 vId = s_rand.Next(MIN_ID, MAX_ID);
             while (s_dalVolunteer!.Read(vId) != null);
 
-            string vPhone = string.Concat(vStartsPhones[s_rand.Next(0, 5)], s_rand.Next(0, 99999).ToString());
+            string vPhone = string.Concat(vStartsPhones[s_rand.Next(0, 6)], s_rand.Next(10000, 100000).ToString());
             string vEmail = string.Concat(vNames[i].Split(' ')[0], "@gmail.com");
             int maxDistance = s_rand.Next(10, 1000);
             Role role = i == managerIndex ? Role.Manager : Role.Volunteer;
-            Volunteer newV = new Volunteer(vId, vNames[i], vPhone, vEmail, maxDistance, role);
+
+            Volunteer newV = new Volunteer(vId, vNames[i], vPhone, vEmail, vAddresses[i], vLatitude[i], vLongitude[i], maxDistance, role);
             try
             {
                 s_dalVolunteer.Create(newV);
@@ -70,61 +66,101 @@ public static class Initialization
     private static void createCalls()
     {
         const int COUNT_CALLS = 50;
-        string[] cAddresses = {
-            "Sunset Blvd, 123, Los Angeles, USA",
-            "Broadway, 456, New York City, USA",
-            "Oxford Street, 789, London, UK",
-            "Champs-Élysées, 101, Paris, France",
-            "Alexanderplatz, 222, Berlin, Germany",
-            "Gran Vía, 333, Madrid, Spain",
-            "Shibuya Crossing, 444, Tokyo, Japan",
-            "Sydney Opera House, 555, Sydney, Australia",
-            "Piazza San Marco, 666, Venice, Italy",
-            "Red Square, 777, Moscow, Russia",
-            "Copacabana Beach, 888, Rio de Janeiro, Brazil",
-            "Cape Town Waterfront, 999, Cape Town, South Africa",
-            "Petronas Towers, 111, Kuala Lumpur, Malaysia",
-            "Burj Khalifa, 222, Dubai, UAE",
-            "Taj Mahal, 333, Agra, India",
-            "Machu Picchu, 444, Cusco, Peru",
-            "Great Wall of China, 555, Beijing, China",
-            "Colosseum, 666, Rome, Italy",
-            "Christ the Redeemer, 777, Rio de Janeiro, Brazil",
-            "Golden Gate Bridge, 888, San Francisco, USA",
-            "Table Mountain, 999, Cape Town, South Africa",
-            "Grand Canyon, 111, Arizona, USA",
-            "Eiffel Tower, 222, Paris, France",
-            "Statue of Liberty, 333, New York City, USA",
-            "Acropolis of Athens, 444, Athens, Greece",
-            "Angkor Wat, 555, Siem Reap, Cambodia",
-            "Alhambra, 666, Granada, Spain",
-            "Hollywood Sign, 777, Los Angeles, USA",
-            "Neuschwanstein Castle, 888, Bavaria, Germany",
-            "Sagrada Família, 999, Barcelona, Spain",
-            "Buckingham Palace, 111, London, UK",
-            "Forbidden City, 222, Beijing, China",
-            "Saint Basil's Cathedral, 333, Moscow, Russia",
-            "Sydney Harbour Bridge, 444, Sydney, Australia",
-            "Zhangjiajie National Forest Park, 555, Zhangjiajie, China",
-            "Petra, 666, Ma'an, Jordan",
-            "Mesa Verde, 777, Colorado, USA",
-            "Dubrovnik Old Town, 888, Dubrovnik, Croatia",
-            "Mont Saint-Michel, 999, Normandy, France",
-            "Palace of Versailles, 111, Versailles, France",
-            "Burano Island, 222, Venice, Italy",
-            "Santorini, 333, Cyclades, Greece",
-            "Tulum, 444, Quintana Roo, Mexico",
-            "Meteora, 555, Thessaly, Greece",
-            "Yosemite National Park, 666, California, USA",
-            "Victoria Falls, 777, Livingstone, Zambia",
-            "Antelope Canyon, 888, Arizona, USA",
-            "Bora Bora, 999, French Polynesia"
-        };
-        string[] cDescriptions = {"7 years old boy", "Disabled boy", "Miserable and cute girl", "Have a brother's wedding", "Need phisyothraphy 5 times a week"};
-        for (int i = 0; i< COUNT_CALLS;i++)
+        string[] cAddresses =
+            ["Har Safra St 1, Jerusalem", "Mount Scopus St 4, Jerusalem", "Keren Hayesod St 30, Jerusalem",
+            "Neve Yaakov St 17, Jerusalem", "Shmuel HaNavi St 12, Jerusalem", "Yechiel St 3, Jerusalem",
+            "Rav Kook St 4, Jerusalem", "Talmud Torah St 8, Jerusalem", "Sanhedria St 18, Jerusalem",
+            "Kiryat Moshe St 6, Jerusalem", "Achad Ha'am St 2, Jerusalem", "Bar Ilan St 7, Jerusalem",
+            "City Center St 14, Jerusalem", "Rechov Yechiel 3, Jerusalem", "Giv'at Shaul St 7, Jerusalem",
+            "Nachlaot St 7, Jerusalem", "Rav Kook St 5, Jerusalem", "Har Nof St 18, Jerusalem",
+            "Ramat Shlomo St 15, Jerusalem", "Sderot Yitzhak Rabin St 5, Jerusalem", "Har Hatzofim St 8, Jerusalem",
+            "Giv'at HaMivtar St 6, Jerusalem", "Tefilat Yisrael St 14, Jerusalem", "Malkhei Yisrael St 10, Jerusalem",
+            "Kiryat Tzahal St 6, Jerusalem", "Nachal Noach St 17, Jerusalem", "Maalot Dafna St 6, Jerusalem",
+            "Har HaMor St 3, Jerusalem", "Ramat HaSharon St 2, Jerusalem", "Yakar St 3, Jerusalem",
+            "Rav Haim Ozer St 9, Jerusalem", "Yehoshua Ben-Nun St 5, Jerusalem", "Meir Schauer St 12, Jerusalem",
+            "Meah Shearim St 10, Jerusalem", "Chazon Ish St 6, Jerusalem", "Ramat Eshkol St 11, Jerusalem",
+            "Menachem Begin St 11, Jerusalem", "Yisrael Yaakov St 13, Jerusalem", "Ben Yehuda St 6, Jerusalem" ];
+        double[] cLatitudes =
+       [
+            31.785228, 31.786335, 31.769799, 31.773315, 31.786812,
+            31.776216, 31.773144, 31.764577, 31.767558, 31.774280,
+            31.782129, 31.784256, 31.779211, 31.783858, 31.783022,
+            31.774607, 31.773122, 31.782645, 31.783712, 31.773770,
+            31.779614, 31.767658, 31.785070, 31.778488, 31.766734,
+            31.780314, 31.783537, 31.775809, 31.773657, 31.781039,
+            31.779433, 31.771505, 31.770824, 31.774722, 31.776229,
+            31.773940, 31.777524, 31.774912, 31.770963, 31.777611,
+            31.776545, 31.771675, 31.767727, 31.771267, 31.768520,
+            31.776597, 31.785040, 31.772628, 31.776763, 31.780179
+        ];
+        double[] cLongitudes =
+       [
+            35.224211, 35.219538, 35.224968, 35.226063, 35.219375,
+            35.213736, 35.217712, 35.229053, 35.217509, 35.220429,
+            35.222809, 35.222797, 35.226436, 35.221255, 35.220655,
+            35.229191, 35.222992, 35.227074, 35.221162, 35.227591,
+            35.225712, 35.220829, 35.223016, 35.219865, 35.230012,
+            35.220076, 35.221336, 35.228300, 35.221133, 35.224713,
+            35.227271, 35.219754, 35.226358, 35.225099, 35.228086,
+            35.228418, 35.222438, 35.221694, 35.223145, 35.221228,
+            35.225721, 35.217133, 35.229169, 35.230535, 35.225939,
+            35.222590, 35.222579, 35.222869, 35.226072, 35.221711
+       ];
+
+        string[] cDescriptions = ["7 years old boy", "Disabled boy", "Miserable and cute girl", "Have a brother's wedding", "Need phisyothraphy 5 times a week"];
+        DateTime startOpen = new DateTime(s_dalConfig.Clock.Year - 1, 1, 1);
+        int range = (s_dalConfig.Clock - startOpen).Days; 
+
+        for (int i = 0; i < COUNT_CALLS; i++)
         {
-            Call_Type type = (Call_Type)s_rand.Next(0, 2);
+            Call_Type type = (Call_Type)s_rand.Next(0, 3);
+            DateTime open = startOpen.AddDays(s_rand.Next(range));
+            DateTime endClose = i>45? new DateTime(open.Year, open.Month, open.Day+1): new DateTime(open.Year + 1, 1, 1);   //in order that part of the calls (45-50) will be expired
+            DateTime close = endClose.AddDays(-s_rand.Next(range));
+
+            Call newC = new Call(type, cAddresses[i], cLatitudes[i], cLongitudes[i], open, close, cDescriptions[i]);
+
+
+             s_dalCall.Create(newC);
 
         }
+    }
+    private static void createAssignments()
+    {
+        const int COUNT_ASSIGNMENTS = 50;
+        List<Call> calls = s_dalCall.ReadAll();
+        List<Volunteer> volunteers = s_dalVolunteer.ReadAll();
+       
+        for (int i = 0;i< COUNT_ASSIGNMENTS;i++)
+        {
+            int cId = calls[i].Id;
+            int vId = i < 10 ? volunteers[s_rand.Next(0,4)].Id: volunteers[s_rand.Next(0,14)].Id;   //in order that part of the volunteers (0-3) proccessed did many calls, part of them (4-13) some calls, and part of them (14-15) no calls
+            DateTime insersion = calls[i].OpenTime.AddDays(s_rand.Next(calls[i].MaxCloseTime.Day - calls[i].OpenTime.Day));
+            DateTime? fTime = calls[i].MaxCloseTime < s_dalConfig.Clock ? calls[i].MaxCloseTime: 
+                i > 10 ? insersion.AddDays(s_rand.Next(s_dalConfig.Clock.Day - insersion.Day)) : null ;
+            Finish_Type? fType = calls[i].MaxCloseTime<s_dalConfig.Clock? Finish_Type.Expired : 
+                fTime != null ?  (Finish_Type)s_rand.Next(0,3) : null ;
+
+            Assignment newA = new Assignment(cId,vId, insersion, fTime, fType);
+            s_dalAssignment.Create(newA);
+        }
+
+    }
+
+    public static void Do(IVolunteer? dalVolunteer, ICall? dalCall, IAssignment? dalAssignment, IConfig? dalConfig) //stage 1
+    {
+        s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL OBJECT CAN'T BE NULL");
+        s_dalCall = dalCall ?? throw new NullReferenceException("DAL OBJECT CAN'T BE NULL");
+        s_dalAssignment = dalAssignment ?? throw new NullReferenceException("DAL OBJECT CAN'T BE NULL");
+        s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL OBJECT CAN'T BE NULL");
+
+        s_dalVolunteer.DeleteAll();
+        s_dalCall.DeleteAll();
+        s_dalAssignment.DeleteAll();
+        s_dalConfig.Reset();
+
+        createVolunteers();
+        createCalls();
+        createAssignments();
     }
 }

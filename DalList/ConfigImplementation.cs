@@ -1,9 +1,8 @@
 ﻿
 using DalApi;
-using DAL;
 namespace Dal;
 
-public class ConfigImlementation:IConfig
+public class ConfigImplementation:IConfig
 {
 
 	public DateTime Clock

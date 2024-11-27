@@ -1,6 +1,4 @@
-﻿
-using DAL;
-namespace DO;
+﻿namespace DO;
 
 
 

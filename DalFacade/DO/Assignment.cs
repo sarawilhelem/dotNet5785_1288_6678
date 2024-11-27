@@ -1,4 +1,4 @@
-using DAL;
+
 namespace DO;
 
 /// <summary>
@@ -13,24 +13,14 @@ namespace DO;
 
 public record Assignment
     (
-    int callId,
-    int volunteerId,
-
-    DateTime? finishTime = null,
-    Finish_Type? finishType = null
+    int CallId,
+    int VolunteerId,
+    DateTime insersion,
+    DateTime? FinishTime = null,
+    Finish_Type? FinishType = null
     )
 {
-    internal int id = Config.NextAssignmentId;
     public int Id { get; init; }
-
-    private DateTime insersiontTime = Config.Clock;
-
-    public int InsersiontTime { get; }
-
-    public Assignment() : this(0,0)
-    {
-
-    }
+    public Assignment() : this(0,0,DateTime.Now)   { }
 
 }
-
