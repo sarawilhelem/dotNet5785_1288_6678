@@ -7,6 +7,7 @@ internal class VolunteerImplementation : IVolunteer
 {
     public void Create(Volunteer item)
     {
+        //create new volunteer
         if (DataSource.Volunteers.Find(v => v.Id == item.Id) != null)
             throw new DalAlreadyExistsException($"Volunteer with id {item.Id} is yet exist");
         else
@@ -15,6 +16,7 @@ internal class VolunteerImplementation : IVolunteer
 
     public void Delete(int id)
     {
+        //delete volunteer from the list by id
         Volunteer? thisVolunteer = DataSource.Volunteers.Find(v => v.Id == id);
         if (thisVolunteer != null)
         {
@@ -26,11 +28,13 @@ internal class VolunteerImplementation : IVolunteer
 
     public void DeleteAll()
     {
+        //delete volunteers list
         DataSource.Volunteers.Clear();
     }
 
     public Volunteer? Read(int id)
     {
+        //reed volunteer by id
         return DataSource.Volunteers.FirstOrDefault(v => v.Id == id);
 
     }
@@ -43,6 +47,7 @@ internal class VolunteerImplementation : IVolunteer
 
     public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) //stage 2
     {
+        //read all volunteers who return true to filter
         return filter == null
             ? DataSource.Volunteers.Select(item => item)
             : DataSource.Volunteers.Where(filter);
@@ -51,6 +56,7 @@ internal class VolunteerImplementation : IVolunteer
 
     public void Update(Volunteer item)
     {
+        //update volunteer by id
         Volunteer? thisVolunteer = DataSource.Volunteers.Find(c => c.Id == item.Id);
         if (thisVolunteer != null)
         {

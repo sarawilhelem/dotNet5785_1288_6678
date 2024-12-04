@@ -4,11 +4,11 @@ using DO;
 
 public static class Initialization
 {
-    private static IDal? s_dal;
+    private static IDal? s_dal; //static field to approach the cruds
 
-    private static readonly Random s_rand = new();
+    private static readonly Random s_rand = new(); //static field which used to rand
 
-    private static void createVolunteers()
+    private static void createVolunteers()  //create 16 volunteers
     {
         const int COUNT_VOLUNTEERS = 16;
         int managerIndex = s_rand.Next(0, 20);
@@ -60,7 +60,7 @@ public static class Initialization
             }
         }
     }
-    private static void createCalls()
+    private static void createCalls()   //create 50 calls
     {
         const int COUNT_CALLS = 50;
         string[] cAddresses =
@@ -122,7 +122,7 @@ public static class Initialization
 
         }
     }
-    private static void createAssignments()
+    private static void createAssignments() //create 50 assignments according to rules
     {
         const int COUNT_ASSIGNMENTS = 50;
         List<Call> calls = (List<Call>)s_dal!.Call.ReadAll();
@@ -144,7 +144,7 @@ public static class Initialization
 
     }
 
-    public static void Do(IDal dal)
+    public static void Do(IDal dal) //static function to call the function in order to init
     {
         s_dal = dal ?? throw new NullReferenceException("DAL OBJECT CAN'T BE NULL");
 

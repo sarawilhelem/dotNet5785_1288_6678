@@ -7,6 +7,7 @@ internal class CallImplementation : ICall
 {
     public void Create(Call item)
     {
+        //create new call
         int id = Config.NextCallId;
         Call newCall = item with { Id = id };
         DataSource.Calls.Add(item);
@@ -14,6 +15,7 @@ internal class CallImplementation : ICall
 
     public void Delete(int id)
     {
+        //delete call according id
         Call? thisCall = DataSource.Calls.Find(c => c.Id == id);
         if (thisCall != null)
         {
@@ -26,11 +28,13 @@ internal class CallImplementation : ICall
 
     public void DeleteAll()
     {
+        //delete all calls
        DataSource.Calls.Clear();
     }
 
     public Call? Read(int id)
     {
+        //read call according to id
         return DataSource.Calls.FirstOrDefault(c => c.Id == id);
 
 
@@ -44,6 +48,7 @@ internal class CallImplementation : ICall
 
     public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null) //stage 2
     {
+        //accept all calls
         return filter == null
             ? DataSource.Calls.Select(item => item)
             : DataSource.Calls.Where(filter);
@@ -53,6 +58,7 @@ internal class CallImplementation : ICall
 
     public void Update(Call item)
     {
+        //update call according to id of item
         Call? thisCall = DataSource.Calls.Find(c => c.Id == item.Id);
         if (thisCall != null)
         {

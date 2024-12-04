@@ -10,7 +10,7 @@ namespace DalTest
     internal enum Config_Menu { Exit, Add_Minute, Add_Hour, Add_Day, Add_Month, Display_Clock, Update_Risk_Range, Display_Risk_Range, Reset }
     internal class Program
     {
-        private static IDal? s_dal = new DallList(); 
+        private static IDal? s_dal = new DallList();
         static void Main(string[] args)
         {
             try
@@ -84,10 +84,10 @@ namespace DalTest
                         createEntity(type);
                         break;
                     case Entity_Menu.Read:
-                        actPerId(type, true);
+                        read(type);
                         break;
                     case Entity_Menu.Read_All:
-                        publicActs(type, true);
+                        readAll(type);
                         break;
                     case Entity_Menu.Update:
                         updateEntity(type);
@@ -95,7 +95,7 @@ namespace DalTest
                     case Entity_Menu.Delete:
                         try
                         {
-                            actPerId(type, false);
+                            delete(type);
                         }
                         catch (Exception ex)
                         {
@@ -103,7 +103,7 @@ namespace DalTest
                         }
                         break;
                     case Entity_Menu.Delete_All:
-                        publicActs(type, false);
+                        deleteAll(type);
                         break;
 
                 }
@@ -120,7 +120,7 @@ namespace DalTest
             {
                 case "volunteer":
                     Volunteer volunteer = inputVolunteer();
-                    
+
                     try
                     {
                         if (volunteer == null)
@@ -143,7 +143,7 @@ namespace DalTest
                     s_dal!.Call.Create(call);
                     break;
                 case "assignment":
-                    
+
                     Assignment assingment = inputAssignment();
                     if (assingment == null)
                     {
@@ -164,7 +164,7 @@ namespace DalTest
                     Console.WriteLine($"Volunteer details: {s_dal!.Volunteer.Read(id)}");
                     Console.WriteLine("If you want to update, enter details. else click 'ENTER'");
                     Volunteer? volunteer = inputVolunteer();
-                    
+
                     if (volunteer != null)
                     {
                         try
@@ -249,7 +249,7 @@ namespace DalTest
         {
             Console.Write("enter call type");
             string typeStr = Console.ReadLine();
-            if (typeStr =="")
+            if (typeStr == "")
                 return null;
             if (!Call_Type.TryParse(typeStr, out Call_Type type))
                 throw new FormatException("call type is invalid!");
@@ -257,7 +257,7 @@ namespace DalTest
             string address = Console.ReadLine();
 
             Console.Write("enter latitude");
-            
+
             if (!double.TryParse(Console.ReadLine(), out double latitude))
                 throw new FormatException("latitude is invalid!");
             Console.Write("enter longitude");
@@ -300,57 +300,90 @@ namespace DalTest
             Assignment newA = new Assignment(cId, vId, insersion, finishTime, finishType);
             return newA;
         }
-        private static void actPerId(string type, bool isRead)
+        private static void read(string type)
         {
             Console.WriteLine("Enter ID");
             int ID = int.Parse(Console.ReadLine());
             switch (type)
             {
                 case "volunteer":
-                    if (isRead)
-                        Console.WriteLine(s_dal!.Volunteer.Read(ID));
-                    else
-                        s_dal!.Volunteer.Delete(ID);
+
+                    Console.WriteLine(s_dal!.Volunteer.Read(ID));
                     break;
                 case "call":
-                    if (isRead)
-                        Console.WriteLine(s_dal!.Call.Read(ID));
-                    else
-                        s_dal!.Call.Delete(ID);
+
+                    Console.WriteLine(s_dal!.Call.Read(ID));
+
                     break;
                 case "assignment":
-                    if (isRead)
-                        Console.WriteLine(s_dal!.Assignment.Read(ID));
-                    else
-                        s_dal!.Assignment.Delete(ID);
+
+                    Console.WriteLine(s_dal!.Assignment.Read(ID));
+
                     break;
             }
 
         }
-        private static void publicActs(string type, bool isRead)
+        private static void delete(string type)
+        {
+            Console.WriteLine("Enter ID");
+            int ID = int.Parse(Console.ReadLine());
+            switch (type)
+            {
+                case "volunteer":
+
+                    s_dal!.Volunteer.Delete(ID);
+                    break;
+                case "call":
+
+                    s_dal!.Call.Delete(ID);
+                    break;
+                case "assignment":
+
+                    s_dal!.Assignment.Delete(ID);
+                    break;
+            }
+
+        }
+        private static void readAll(string type)
         {
 
             switch (type)
             {
                 case "volunteer":
-                    if (isRead)
+
                         foreach (Volunteer v in s_dal!.Volunteer.ReadAll())
                             Console.WriteLine(v);
-                    else
+                    break;
+                case "call":
+
+                        foreach (Call c in s_dal!.Call.ReadAll())
+                            Console.WriteLine(c);
+
+                    break;
+                case "assignment":
+
+                        foreach (Assignment ass in s_dal!.Assignment.ReadAll())
+                            Console.WriteLine(ass);
+
+                    break;
+            }
+
+        }
+        private static void deleteAll(string type)
+        {
+
+            switch (type)
+            {
+                case "volunteer":
+
                         s_dal!.Volunteer.DeleteAll();
                     break;
                 case "call":
-                    if (isRead)
-                        foreach (Call c in s_dal!.Call.ReadAll())
-                            Console.WriteLine(c);
-                    else
+
                         s_dal!.Call.DeleteAll();
                     break;
                 case "assignment":
-                    if (isRead)
-                        foreach (Assignment ass in s_dal!.Assignment.ReadAll())
-                            Console.WriteLine(ass);
-                    else
+
                         s_dal!.Assignment.DeleteAll();
                     break;
             }

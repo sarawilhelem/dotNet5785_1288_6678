@@ -7,6 +7,7 @@ internal class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
+        //create new assignment
         int id = Config.NextAssignmentId;
         Assignment newAssignment = item with { Id = id };
         DataSource.Assignments.Add(item);
@@ -14,6 +15,7 @@ internal class AssignmentImplementation : IAssignment
 
     public void Delete(int id)
     {
+        //delete assignment according to id
         Assignment? thisAssignment = DataSource.Assignments.Find(a => a.Id == id);
         if (thisAssignment != null)
         {
@@ -25,11 +27,13 @@ internal class AssignmentImplementation : IAssignment
 
     public void DeleteAll()
     {
+        //delete all assignments
         DataSource.Assignments.Clear();
     }
 
     public Assignment? Read(int id)
     {
+        //read assignment according to id
         return DataSource.Assignments.FirstOrDefault(a => a.Id == id); //stage2
 
     }
@@ -42,6 +46,7 @@ internal class AssignmentImplementation : IAssignment
 
     public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null) //stage 2
     {
+        //read all assignments
         return filter == null
             ? DataSource.Assignments.Select(item => item)
             : DataSource.Assignments.Where(filter);
@@ -51,6 +56,7 @@ internal class AssignmentImplementation : IAssignment
 
     public void Update(Assignment item)
     {
+        //update assignment by item id
         Assignment? thisAssignment = DataSource.Assignments.Find(a => a.Id == item.Id);
         if (thisAssignment != null)
         {
