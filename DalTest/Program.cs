@@ -69,7 +69,7 @@ namespace DalTest
             }
         }
         private static void EntityMenu(string type)
-        {
+        {   //menue to each entity (except from config)
             foreach (Entity_Menu menu in Enum.GetValues(typeof(Entity_Menu)))
             {
                 Console.WriteLine($"{(int)menu}: {menu}");
