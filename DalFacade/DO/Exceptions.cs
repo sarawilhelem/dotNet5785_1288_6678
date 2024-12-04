@@ -31,3 +31,13 @@ public class DalDeleteImpossible : Exception
 
     }
 }
+
+[Serializable]
+public class DalXMLFileLoadCreateException : Exception
+{
+    //exception for when deleting is impossible
+    public DalXMLFileLoadCreateException(string? message) : base(message)
+    {
+
+    }
+}
