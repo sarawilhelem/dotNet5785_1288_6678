@@ -3,7 +3,7 @@
 using DO;
 
 namespace Dal;
-public class CallImplementation : ICall
+internal class CallImplementation : ICall
 {
     public void Create(Call item)
     {
@@ -20,7 +20,7 @@ public class CallImplementation : ICall
             DataSource.Calls.Remove(thisCall);
         }
         else
-            throw new Exception($"Call with id {id} is not exist");
+            throw new DalDeleteImpossible($"Call with id {id} is not exist");
 
     }
 
@@ -31,17 +31,23 @@ public class CallImplementation : ICall
 
     public Call? Read(int id)
     {
-        return DataSource.Calls.Find(c => c.Id == id);
+        return DataSource.Calls.FirstOrDefault(c => c.Id == id);
 
 
     }
 
-    public List<Call> ReadAll()
+    public Call? Read(Func<Call, bool> filter)
     {
-        List<Call> list = new List<Call>();
-        foreach (Call c in DataSource.Calls)
-            list.Add(c);
-        return list;
+        // return first call in datasource.calls which return true to filter function
+        return DataSource.Calls.FirstOrDefault(c => filter(c));
+    }
+
+    public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null) //stage 2
+    {
+        return filter == null
+            ? DataSource.Calls.Select(item => item)
+            : DataSource.Calls.Where(filter);
+
     }
 
 
@@ -54,7 +60,7 @@ public class CallImplementation : ICall
             DataSource.Calls.Add(item);
         }
         else
-            throw new Exception($"Call with id {item.Id} is not exist");
+            throw new DalDoesNotExistException($"Call with id {item.Id} is not exist");
 
     }
 }

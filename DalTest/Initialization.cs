@@ -4,10 +4,7 @@ using DO;
 
 public static class Initialization
 {
-    private static IAssignment? s_dalAssignment;
-    private static ICall? s_dalCall;
-    private static IVolunteer? s_dalVolunteer;
-    private static IConfig? s_dalConfig;
+    private static IDal? s_dal;
 
     private static readonly Random s_rand = new();
 
@@ -45,7 +42,7 @@ public static class Initialization
             int vId;
             do
                 vId = s_rand.Next(MIN_ID, MAX_ID);
-            while (s_dalVolunteer!.Read(vId) != null);
+            while (s_dal!.Volunteer!.Read(vId) != null);
 
             string vPhone = string.Concat(vStartsPhones[s_rand.Next(0, 6)], s_rand.Next(10000, 100000).ToString());
             string vEmail = string.Concat(vNames[i].Split(' ')[0], "@gmail.com");
@@ -55,7 +52,7 @@ public static class Initialization
             Volunteer newV = new Volunteer(vId, vNames[i], vPhone, vEmail, vAddresses[i], vLatitude[i], vLongitude[i], maxDistance, role);
             try
             {
-                s_dalVolunteer.Create(newV);
+                s_dal!.Volunteer.Create(newV);
             }
             catch
             {
@@ -108,56 +105,50 @@ public static class Initialization
        ];
 
         string[] cDescriptions = ["7 years old boy", "Disabled boy", "Miserable and cute girl", "Have a brother's wedding", "Need phisyothraphy 5 times a week"];
-        DateTime startOpen = new DateTime(s_dalConfig.Clock.Year - 1, 1, 1);
-        int range = (s_dalConfig.Clock - startOpen).Days; 
+        DateTime startOpen = new DateTime(s_dal!.Config.Clock.Year - 1, 1, 1);
+        int range = (s_dal!.Config.Clock - startOpen).Days;
 
         for (int i = 0; i < COUNT_CALLS; i++)
         {
             Call_Type type = (Call_Type)s_rand.Next(0, 3);
             DateTime open = startOpen.AddDays(s_rand.Next(range));
-            DateTime endClose = i>45? new DateTime(open.Year, open.Month, open.Day+1): new DateTime(open.Year + 1, 1, 1);   //in order that part of the calls (45-50) will be expired
+            DateTime endClose = i > 45 ? new DateTime(open.Year, open.Month, open.Day + 1) : new DateTime(open.Year + 1, 1, 1);   //in order that part of the calls (45-50) will be expired
             DateTime close = endClose.AddDays(-s_rand.Next(range));
 
             Call newC = new Call(type, cAddresses[i], cLatitudes[i], cLongitudes[i], open, close, cDescriptions[i]);
 
 
-             s_dalCall.Create(newC);
+            s_dal!.Call.Create(newC);
 
         }
     }
     private static void createAssignments()
     {
         const int COUNT_ASSIGNMENTS = 50;
-        List<Call> calls = s_dalCall.ReadAll();
-        List<Volunteer> volunteers = s_dalVolunteer.ReadAll();
-       
-        for (int i = 0;i< COUNT_ASSIGNMENTS;i++)
+        List<Call> calls = (List<Call>)s_dal!.Call.ReadAll();
+        List<Volunteer> volunteers = (List<Volunteer>)s_dal!.Volunteer.ReadAll();
+
+        for (int i = 0; i < COUNT_ASSIGNMENTS; i++)
         {
             int cId = calls[i].Id;
-            int vId = i < 10 ? volunteers[s_rand.Next(0,4)].Id: volunteers[s_rand.Next(0,14)].Id;   //in order that part of the volunteers (0-3) proccessed did many calls, part of them (4-13) some calls, and part of them (14-15) no calls
+            int vId = i < 10 ? volunteers[s_rand.Next(0, 4)].Id : volunteers[s_rand.Next(0, 14)].Id;   //in order that part of the volunteers (0-3) proccessed did many calls, part of them (4-13) some calls, and part of them (14-15) no calls
             DateTime insersion = calls[i].OpenTime.AddDays(s_rand.Next(calls[i].MaxCloseTime.Day - calls[i].OpenTime.Day));
-            DateTime? fTime = calls[i].MaxCloseTime < s_dalConfig.Clock ? calls[i].MaxCloseTime: 
-                i > 10 ? insersion.AddDays(s_rand.Next(s_dalConfig.Clock.Day - insersion.Day)) : null ;
-            Finish_Type? fType = calls[i].MaxCloseTime<s_dalConfig.Clock? Finish_Type.Expired : 
-                fTime != null ?  (Finish_Type)s_rand.Next(0,3) : null ;
+            DateTime? fTime = calls[i].MaxCloseTime < s_dal!.Config.Clock ? calls[i].MaxCloseTime :
+                i > 10 ? insersion.AddDays(s_rand.Next(s_dal!.Config.Clock.Day - insersion.Day)) : null;
+            Finish_Type? fType = calls[i].MaxCloseTime < s_dal!.Config.Clock ? Finish_Type.Expired :
+                fTime != null ? (Finish_Type)s_rand.Next(0, 3) : null;
 
-            Assignment newA = new Assignment(cId,vId, insersion, fTime, fType);
-            s_dalAssignment.Create(newA);
+            Assignment newA = new Assignment(cId, vId, insersion, fTime, fType);
+            s_dal!.Assignment.Create(newA);
         }
 
     }
 
-    public static void Do(IVolunteer? dalVolunteer, ICall? dalCall, IAssignment? dalAssignment, IConfig? dalConfig) //stage 1
+    public static void Do(IDal dal)
     {
-        s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL OBJECT CAN'T BE NULL");
-        s_dalCall = dalCall ?? throw new NullReferenceException("DAL OBJECT CAN'T BE NULL");
-        s_dalAssignment = dalAssignment ?? throw new NullReferenceException("DAL OBJECT CAN'T BE NULL");
-        s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL OBJECT CAN'T BE NULL");
+        s_dal = dal ?? throw new NullReferenceException("DAL OBJECT CAN'T BE NULL");
 
-        s_dalVolunteer.DeleteAll();
-        s_dalCall.DeleteAll();
-        s_dalAssignment.DeleteAll();
-        s_dalConfig.Reset();
+        s_dal.ResetDB();
 
         createVolunteers();
         createCalls();

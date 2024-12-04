@@ -3,7 +3,7 @@ using DO;
 
 
 namespace Dal;
-public class AssignmentImplementation : IAssignment
+internal class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
@@ -20,7 +20,7 @@ public class AssignmentImplementation : IAssignment
             DataSource.Assignments.Remove(thisAssignment);
         }
         else
-            throw new Exception($"Assignment with id {id} is not exist");
+            throw new DalDeleteImpossible($"Assignment with id {id} is not exist");
     }
 
     public void DeleteAll()
@@ -30,16 +30,22 @@ public class AssignmentImplementation : IAssignment
 
     public Assignment? Read(int id)
     {
-        return DataSource.Assignments.Find(a => a.Id == id);
+        return DataSource.Assignments.FirstOrDefault(a => a.Id == id); //stage2
 
     }
 
-    public List<Assignment> ReadAll()
+    public Assignment?  Read(Func<Assignment, bool> filter)
     {
-        List<Assignment> list = new List<Assignment>();
-        foreach (Assignment a in DataSource.Assignments)
-            list.Add(a);
-        return list;
+        // return first assignment in datasource.assignments which return true to filter function
+        return DataSource.Assignments.FirstOrDefault(a => filter(a));
+    }
+
+    public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null) //stage 2
+    {
+        return filter == null
+            ? DataSource.Assignments.Select(item => item)
+            : DataSource.Assignments.Where(filter);
+
     }
 
 
@@ -52,7 +58,7 @@ public class AssignmentImplementation : IAssignment
             DataSource.Assignments.Add(item);
         }
         else
-            throw new Exception($"Assignment with id {item.Id} is not exist");
+            throw new DalDoesNotExistException($"Assignment with id {item.Id} is not exist");
 
 
     }

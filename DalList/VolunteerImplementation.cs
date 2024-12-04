@@ -3,12 +3,12 @@ using DO;
 
 namespace Dal;
 
-public class VolunteerImplementation : IVolunteer
+internal class VolunteerImplementation : IVolunteer
 {
     public void Create(Volunteer item)
     {
         if (DataSource.Volunteers.Find(v => v.Id == item.Id) != null)
-            throw new Exception($"Volunteer with id {item.Id} is yet exist");
+            throw new DalAlreadyExistsException($"Volunteer with id {item.Id} is yet exist");
         else
             DataSource.Volunteers.Add(item);
     }
@@ -21,7 +21,7 @@ public class VolunteerImplementation : IVolunteer
             DataSource.Volunteers.Remove(thisVolunteer);
         }
         else
-            throw new Exception($"Volunteer with id {id} is not exist");
+            throw new DalDeleteImpossible($"Volunteer with id {id} is not exist");
     }
 
     public void DeleteAll()
@@ -31,18 +31,23 @@ public class VolunteerImplementation : IVolunteer
 
     public Volunteer? Read(int id)
     {
-        return DataSource.Volunteers.Find(v => v.Id == id);
+        return DataSource.Volunteers.FirstOrDefault(v => v.Id == id);
 
     }
 
-    public List<Volunteer> ReadAll()
+    public Volunteer? Read(Func<Volunteer, bool> filter)
     {
-        List<Volunteer> list = new List<Volunteer>();
-        foreach (Volunteer v in DataSource.Volunteers)
-            list.Add(v);
-        return list;
+        // return first volunteer in datasource.volunteers which return true to filter function
+        return DataSource.Volunteers.FirstOrDefault(v => filter(v));
     }
 
+    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) //stage 2
+    {
+        return filter == null
+            ? DataSource.Volunteers.Select(item => item)
+            : DataSource.Volunteers.Where(filter);
+
+    }
 
     public void Update(Volunteer item)
     {
@@ -53,7 +58,7 @@ public class VolunteerImplementation : IVolunteer
             DataSource.Volunteers.Add(item);
         }
         else
-            throw new Exception($"Volunteer with id {item.Id} is not exist");
+            throw new DalDoesNotExistException($"Volunteer with id {item.Id} is not exist");
 
     }
 }
