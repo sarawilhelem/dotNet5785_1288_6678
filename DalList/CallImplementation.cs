@@ -10,7 +10,8 @@ internal class CallImplementation : ICall
         //create new call
         int id = Config.NextCallId;
         Call newCall = item with { Id = id };
-        DataSource.Calls.Add(item);
+        DataSource.Calls.Add(newCall);
+
     }
 
     public void Delete(int id)

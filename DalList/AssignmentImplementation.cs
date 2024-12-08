@@ -10,7 +10,7 @@ internal class AssignmentImplementation : IAssignment
         //create new assignment
         int id = Config.NextAssignmentId;
         Assignment newAssignment = item with { Id = id };
-        DataSource.Assignments.Add(item);
+        DataSource.Assignments.Add(newAssignment);
     }
 
     public void Delete(int id)

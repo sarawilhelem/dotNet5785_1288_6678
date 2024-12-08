@@ -402,23 +402,23 @@ namespace DalTest
                 switch (choice)
                 {
                     case Config_Menu.Add_Minute:
-                        s_dal!.Config.Clock.AddMinutes(1);
+                        s_dal!.Config.Clock = s_dal!.Config.Clock.AddMinutes(1);
                         break;
                     case Config_Menu.Add_Hour:
-                        s_dal!.Config.Clock.AddHours(1);
+                        s_dal!.Config.Clock = s_dal!.Config.Clock.AddHours(1);
                         break;
                     case Config_Menu.Add_Day:
-                        s_dal!.Config.Clock.AddDays(1);
+                        s_dal!.Config.Clock = s_dal!.Config.Clock.AddDays(1);
                         break;
                     case Config_Menu.Add_Month:
-                        s_dal!.Config.Clock.AddMonths(1);
+                        s_dal!.Config.Clock = s_dal!.Config.Clock.AddMonths(1);
                         break;
                     case Config_Menu.Display_Clock:
                         Console.WriteLine(s_dal!.Config.Clock);
                         break;
                     case Config_Menu.Update_Risk_Range:
                         Console.WriteLine("Enter risk range: ");
-                        TimeSpan range = (TimeSpan)Enum.Parse(typeof(TimeSpan), Console.ReadLine());
+                        TimeSpan range = TimeSpan.Parse(Console.ReadLine());
                         s_dal!.Config.RiskRange = range;
                         break;
                     case Config_Menu.Display_Risk_Range:

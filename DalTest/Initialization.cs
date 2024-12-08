@@ -76,7 +76,11 @@ public static class Initialization
             "Har HaMor St 3, Jerusalem", "Ramat HaSharon St 2, Jerusalem", "Yakar St 3, Jerusalem",
             "Rav Haim Ozer St 9, Jerusalem", "Yehoshua Ben-Nun St 5, Jerusalem", "Meir Schauer St 12, Jerusalem",
             "Meah Shearim St 10, Jerusalem", "Chazon Ish St 6, Jerusalem", "Ramat Eshkol St 11, Jerusalem",
-            "Menachem Begin St 11, Jerusalem", "Yisrael Yaakov St 13, Jerusalem", "Ben Yehuda St 6, Jerusalem" ];
+            "Menachem Begin St 11, Jerusalem", "Yisrael Yaakov St 13, Jerusalem", "Ben Yehuda St 6, Jerusalem" ,
+            "Sulam Yaakov St 10, Jerusalem", "Rambam St 29 Bne-Brack", " Chazon Ish St 15, Bne-Brack", 
+            "Ktzot Hashen St 3, Kiryat-Sefer", "Netivot Hamishpat St 15, Kiryat-Sefer", "HaRimon St 3, Telz-Stown",
+            "Nachal Sorek St 18, Bet-Shemesh", "Shefa Chaim St 18, Netanya", "Maymon St 30, Bne-Brack", 
+            "Nachl Shimshon St 6, Bet-Shemesh", "Bet Shamay St 20, Kiryat-Sefer"];
         double[] cLatitudes =
        [
             31.785228, 31.786335, 31.769799, 31.773315, 31.786812,
@@ -103,19 +107,20 @@ public static class Initialization
             35.225721, 35.217133, 35.229169, 35.230535, 35.225939,
             35.222590, 35.222579, 35.222869, 35.226072, 35.221711
        ];
-
         string[] cDescriptions = ["7 years old boy", "Disabled boy", "Miserable and cute girl", "Have a brother's wedding", "Need phisyothraphy 5 times a week"];
         DateTime startOpen = new DateTime(s_dal!.Config.Clock.Year - 1, 1, 1);
         int range = (s_dal!.Config.Clock - startOpen).Days;
 
         for (int i = 0; i < COUNT_CALLS; i++)
         {
+            if (i == 39)
+                i = i;
             Call_Type type = (Call_Type)s_rand.Next(0, 3);
             DateTime open = startOpen.AddDays(s_rand.Next(range));
             DateTime endClose = i > 45 ? new DateTime(open.Year, open.Month, open.Day + 1) : new DateTime(open.Year + 1, 1, 1);   //in order that part of the calls (45-50) will be expired
             DateTime close = endClose.AddDays(-s_rand.Next(range));
 
-            Call newC = new Call(type, cAddresses[i], cLatitudes[i], cLongitudes[i], open, close, cDescriptions[i]);
+            Call newC = new Call(type, cAddresses[i], cLatitudes[i], cLongitudes[i], open, close, cDescriptions[i%5]);
 
 
             s_dal!.Call.Create(newC);
