@@ -5,6 +5,7 @@ using DO;
 namespace Dal;
 internal class AssignmentImplementation : IAssignment
 {
+    //  Realization of assignment CRUD
     public void Create(Assignment item)
     {
         //create new assignment
@@ -43,6 +44,7 @@ internal class AssignmentImplementation : IAssignment
         // return first assignment in datasource.assignments which return true to filter function
         return DataSource.Assignments.FirstOrDefault(a => filter(a));
     }
+    
 
     public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null) //stage 2
     {

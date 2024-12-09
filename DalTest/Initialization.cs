@@ -1,6 +1,7 @@
 ﻿namespace DalTest;
 using DalApi;
 using DO;
+using System.Reflection.PortableExecutable;
 
 public static class Initialization
 {
@@ -108,17 +109,21 @@ public static class Initialization
             35.222590, 35.222579, 35.222869, 35.226072, 35.221711
        ];
         string[] cDescriptions = ["7 years old boy", "Disabled boy", "Miserable and cute girl", "Have a brother's wedding", "Need phisyothraphy 5 times a week"];
-        DateTime startOpen = new DateTime(s_dal!.Config.Clock.Year - 1, 1, 1);
-        int range = (s_dal!.Config.Clock - startOpen).Days;
+        DateTime startOpen = s_dal.Config.Clock.AddYears(-1);
+        int range = (int)(s_dal!.Config.Clock - startOpen).TotalDays;
 
         for (int i = 0; i < COUNT_CALLS; i++)
         {
             if (i == 39)
                 i = i;
             Call_Type type = (Call_Type)s_rand.Next(0, 3);
-            DateTime open = startOpen.AddDays(s_rand.Next(range));
-            DateTime endClose = i > 45 ? new DateTime(open.Year, open.Month, open.Day + 1) : new DateTime(open.Year + 1, 1, 1);   //in order that part of the calls (45-50) will be expired
-            DateTime close = endClose.AddDays(-s_rand.Next(range));
+            DateTime open = startOpen.AddDays(s_rand.Next(0,range));
+            DateTime endClose = i > 45
+                ? open.AddDays(3)
+                : open.AddYears(1);   //in order that part of the calls (45-50) probably will be expired
+            DateTime close = i>45
+                ?endClose.AddDays(-s_rand.Next(0,3))
+                :endClose.AddDays(-s_rand.Next(0,365));
 
             Call newC = new Call(type, cAddresses[i], cLatitudes[i], cLongitudes[i], open, close, cDescriptions[i%5]);
 
@@ -130,16 +135,30 @@ public static class Initialization
     private static void createAssignments() //create 50 assignments according to rules
     {
         const int COUNT_ASSIGNMENTS = 50;
-        List<Call> calls = (List<Call>)s_dal!.Call.ReadAll();
-        List<Volunteer> volunteers = (List<Volunteer>)s_dal!.Volunteer.ReadAll();
+        List<Call> calls = (List<Call>)s_dal!.Call.ReadAll().ToList();
+        List<Volunteer> volunteers = (List<Volunteer>)s_dal!.Volunteer.ReadAll().ToList();
 
         for (int i = 0; i < COUNT_ASSIGNMENTS; i++)
         {
             int cId = calls[i].Id;
-            int vId = i < 10 ? volunteers[s_rand.Next(0, 4)].Id : volunteers[s_rand.Next(0, 14)].Id;   //in order that part of the volunteers (0-3) proccessed did many calls, part of them (4-13) some calls, and part of them (14-15) no calls
-            DateTime insersion = calls[i].OpenTime.AddDays(s_rand.Next(calls[i].MaxCloseTime.Day - calls[i].OpenTime.Day));
-            DateTime? fTime = calls[i].MaxCloseTime < s_dal!.Config.Clock ? calls[i].MaxCloseTime :
-                i > 10 ? insersion.AddDays(s_rand.Next(s_dal!.Config.Clock.Day - insersion.Day)) : null;
+            int vId = i < 10
+                ? volunteers[s_rand.Next(0, 4)].Id 
+                : volunteers[s_rand.Next(0, 14)].Id;   //in order that part of the volunteers (0-3) proccessed did many calls, part of them (4-13) some calls, and part of them (14-15) no calls
+            DateTime insersion = calls[i].OpenTime.AddDays(s_rand.Next(0, (int)(calls[i].MaxCloseTime - calls[i].OpenTime).TotalDays));
+            DateTime? fTime;
+            try
+            {
+                //To cope the case that config.clock is before insersion (It can be because the user can set the clock
+                fTime = calls[i].MaxCloseTime < s_dal!.Config.Clock
+                ? calls[i].MaxCloseTime : i > 10
+                    ? insersion.AddDays(s_rand.Next(0, (int)(s_dal!.Config.Clock - insersion).TotalDays))
+                    : null;
+            }
+            catch 
+            {
+                fTime = null;
+            }
+            
             Finish_Type? fType = calls[i].MaxCloseTime < s_dal!.Config.Clock ? Finish_Type.Expired :
                 fTime != null ? (Finish_Type)s_rand.Next(0, 3) : null;
 

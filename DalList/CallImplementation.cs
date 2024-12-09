@@ -5,6 +5,7 @@ using DO;
 namespace Dal;
 internal class CallImplementation : ICall
 {
+    //Realization of call CRUD
     public void Create(Call item)
     {
         //create new call
@@ -48,6 +49,7 @@ internal class CallImplementation : ICall
     }
 
     public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null) //stage 2
+
     {
         //accept all calls
         return filter == null

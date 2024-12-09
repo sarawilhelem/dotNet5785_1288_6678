@@ -27,7 +27,7 @@ static internal class Config
         nextCallId = startCallId;
         nextAssignmentId = startAssigmentId;
         Clock = new DateTime(2024, 1, 1, 0, 0, 0);
-        RiskRange = TimeSpan.Zero;
+        RiskRange = new TimeSpan(24, 0, 0);
     }
 }
 

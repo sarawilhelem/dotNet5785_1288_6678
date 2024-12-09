@@ -5,6 +5,7 @@ namespace Dal;
 
 internal class VolunteerImplementation : IVolunteer
 {
+    //Realization of volunteer CRUD
     public void Create(Volunteer item)
     {
         //create new volunteer

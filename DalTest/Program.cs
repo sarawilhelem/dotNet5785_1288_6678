@@ -1,5 +1,4 @@
 ﻿using Dal;
-
 using DalApi;
 using DO;
 
@@ -10,9 +9,10 @@ namespace DalTest
     internal enum Config_Menu { Exit, Add_Minute, Add_Hour, Add_Day, Add_Month, Display_Clock, Update_Risk_Range, Display_Risk_Range, Reset }
     internal class Program
     {
-        private static IDal? s_dal = new DallList();
+        private static IDal? s_dal = new DallList();    //Static field of DalList type which through it we approach to the implentations
         static void Main(string[] args)
         {
+            //The main function calls to the main menu with try and catch
             try
             {
                 MainMenu();
@@ -24,35 +24,37 @@ namespace DalTest
         }
         private static void MainMenu()
         {
+            //The main menu which offers entities menu and public actions
+            Console.WriteLine("Main menu:");
             foreach (Main_Menu menu in Enum.GetValues(typeof(Main_Menu)))
             {
+                //Print the menu
                 Console.WriteLine($"{(int)menu}: {menu}");
             }
             Main_Menu choice;
-            Enum.TryParse(Console.ReadLine(), out choice);
+            while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(Main_Menu), choice))
+                Console.WriteLine("Wrong choice, try again");
             while (choice != Main_Menu.Exit)
             {
                 switch (choice)
                 {
                     case Main_Menu.Volunteer_Menu:
-                        EntityMenu("volunteer");
+                        entityMenu("volunteer");
                         break;
                     case Main_Menu.Call_Menu:
-                        EntityMenu("call");
+                        entityMenu("call");
                         break;
                     case Main_Menu.Assignment_Menu:
-                        EntityMenu("assignment");
+                        entityMenu("assignment");
                         break;
                     case Main_Menu.Config_Menu:
-                        ConfigMenu();
+                        configMenu();
                         break;
                     case Main_Menu.Init_All:
                         Initialization.Do(s_dal);
                         break;
                     case Main_Menu.Display_All:
-                        Console.WriteLine(s_dal!.Volunteer.ReadAll());
-                        Console.WriteLine(s_dal!.Call.ReadAll());
-                        Console.WriteLine(s_dal!.Assignment.ReadAll());
+                        displayAll();
                         break;
                     case Main_Menu.Reset:
                         s_dal!.Volunteer.DeleteAll();
@@ -61,21 +63,29 @@ namespace DalTest
                         s_dal!.Config.Reset();
                         break;
                 }
+                
+                Console.WriteLine("Main menu:");
                 foreach (Main_Menu menu in Enum.GetValues(typeof(Main_Menu)))
                 {
+                    //Printhin the menu
                     Console.WriteLine($"{(int)menu}: {menu}");
                 }
-                Enum.TryParse(Console.ReadLine(), out choice);
+                while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(Main_Menu), choice))
+                    Console.WriteLine("Wrong choice, try again");
             }
         }
-        private static void EntityMenu(string type)
-        {   //menue to each entity (except from config)
+        private static void entityMenu(string type)
+        {
+            //menue to each data entity (accept etity type as string
+            Console.WriteLine($"{type} menu");
             foreach (Entity_Menu menu in Enum.GetValues(typeof(Entity_Menu)))
             {
+                //Printing the menu
                 Console.WriteLine($"{(int)menu}: {menu}");
             }
             Entity_Menu choice;
-            Enum.TryParse(Console.ReadLine(), out choice);
+            while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(Entity_Menu), choice))
+                Console.WriteLine("Wrong choice, enter again");
             while (choice != Entity_Menu.Exit)
             {
                 switch (choice)
@@ -107,15 +117,19 @@ namespace DalTest
                         break;
 
                 }
+                Console.WriteLine($"{type} menu");
                 foreach (Entity_Menu menu in Enum.GetValues(typeof(Entity_Menu)))
                 {
+                    //Printing the menu
                     Console.WriteLine($"{(int)menu}: {menu}");
                 }
-                Enum.TryParse(Console.ReadLine(), out choice);
+                while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(Entity_Menu), choice))
+                    Console.WriteLine("Wrong choice, enter again");
             }
         }
         private static void createEntity(string type)
         {
+            //Create an entity (accept the entity type as string)
             switch (type)
             {
                 case "volunteer":
@@ -156,6 +170,8 @@ namespace DalTest
         }
         private static void updateEntity(string type)
         {
+            //Update an entity (accept entity type as string)
+            //Inputs an id and print the entity's details, and offers to update it 
             Console.WriteLine("Please enter ID:");
             int id = int.Parse(Console.ReadLine());
             switch (type)
@@ -200,108 +216,177 @@ namespace DalTest
         }
         private static Volunteer? inputVolunteer()
         {
-            Console.Write("enter id");
+            //Inputs volunteer's details.
+            //Returns a volunteer with that details.
+            //Stops and return null if the user enter id = ''
+            Console.Write("enter id: ");
             string idStr = Console.ReadLine();
             if (idStr == "")
                 return null;
-            if (!int.TryParse(idStr, out int id))
-                throw new FormatException("id is invalid!");
-            Console.Write("Enter name");
+            int id;
+            while (!int.TryParse(idStr, out id))
+            {
+                Console.WriteLine("id is invalid! enter id again!");
+                idStr = Console.ReadLine();
+                if (idStr == "")
+                    return null;
+            }
+            Console.Write("Enter name: ");
             string name = Console.ReadLine();
-            Console.Write("Enter phone");
+            Console.Write("Enter phone: ");
             string phone = Console.ReadLine();
-            Console.Write("Enter email");
+            Console.Write("Enter email: ");
             string email = Console.ReadLine();
-            Console.Write("Enter address");
+            Console.Write("Enter address: ");
             string address = Console.ReadLine();
-            Console.Write("enter latitude");
+            Console.Write("enter latitude:");
             string latitudeStr = Console.ReadLine();
-            if (!double.TryParse(latitudeStr, out double latitude) && latitudeStr != "")
-                throw new FormatException("latitude is invalid!");
-            Console.Write("enter longitude");
+            double latitude;
+            while (!double.TryParse(latitudeStr, out latitude) && latitudeStr != "")
+            {
+                Console.WriteLine("latitude is invalid! enter again!");
+                latitudeStr = Console.ReadLine();
+            }
+            Console.Write("enter longitude: ");
             string longitudeStr = Console.ReadLine();
-            if (!double.TryParse(longitudeStr, out double longitude) && longitudeStr != "")
-                throw new FormatException("longitude is invalid!");
-            Console.Write("Enter max distance call");
+            double longitude;
+            while (!double.TryParse(longitudeStr, out longitude) && longitudeStr != "")
+            {
+                Console.WriteLine("longitude is invalid! enter again!");
+                longitudeStr = Console.ReadLine();
+            }
+            Console.Write("Enter max distance call: ");
             string maxDistanceStr = Console.ReadLine();
-            if (!double.TryParse(maxDistanceStr, out double maxDistance) && maxDistanceStr != "")
-                throw new FormatException("max distance is invalid!");
-            Console.Write("Enter role 0/1");
+            double maxDistance;
+            while (!double.TryParse(maxDistanceStr, out maxDistance) && maxDistanceStr != "")
+            {
+                Console.WriteLine("max distance is invalid! enter again!");
+                maxDistanceStr = Console.ReadLine();
+            }
+            Console.Write("Enter role 0/1: ");
             string roleStr = Console.ReadLine();
-            if (!Role.TryParse(roleStr, out Role role) && roleStr != "")
-                throw new FormatException("role is invalid!");
+            Role role = new Role();
+            while (!(Enum.TryParse(roleStr, out role) && Enum.IsDefined(typeof(Role), role)) && roleStr != "")
+            {
+                Console.WriteLine("role is invalid! enter again");
+                roleStr = Console.ReadLine();
+            }
             if (roleStr == "")
                 role = Role.Volunteer;
-            Console.Write("Enter distance type");
+            Console.Write("Enter distance type 0-2: ");
             string distanceTypeStr = Console.ReadLine();
-            if (!Distance_Type.TryParse(distanceTypeStr, out Distance_Type distanceType) && distanceTypeStr != "")
-                throw new FormatException("role is invalid!");
+            Distance_Type distanceType = new Distance_Type();
+            while (!(Enum.TryParse(distanceTypeStr, out distanceType) && Enum.IsDefined(typeof(Distance_Type), distanceType)) && distanceTypeStr != "")
+            {
+                Console.WriteLine("role is invalid! enter again");
+                distanceTypeStr = Console.ReadLine();
+            }
             if (distanceTypeStr == "")
                 distanceType = Distance_Type.Air;
-            Console.Write("Enter password");
+            Console.Write("Enter password: ");
             string password = Console.ReadLine();
-            Volunteer newV = new Volunteer(id, name, phone, email, address, latitude, longitude, maxDistance, role, distanceType, password);
+            Console.Write("enter is active ('true' or 'false') :");
+            string isActiveStr = Console.ReadLine();
+            bool isActive = true;
+            while (!bool.TryParse(isActiveStr, out isActive) && isActiveStr != "")
+            {
+                Console.WriteLine("isActive is invalid! enter again!");
+                longitudeStr = Console.ReadLine();
+            }
+            if (isActiveStr == "")
+                isActive = true;
+            Volunteer newV = new Volunteer(id, name, phone, email, address, latitude, longitude, maxDistance, role, distanceType, password,isActive);
             return newV;
-
 
         }
         private static Call? inputCall()
         {
-            Console.Write("enter call type");
+            //Inputs Call's details.
+            //Returns a call with that details.
+            //Stops and return null if the user enter type = ''
+            Console.Write("enter call type 0-2: ");
             string typeStr = Console.ReadLine();
             if (typeStr == "")
                 return null;
-            if (!Call_Type.TryParse(typeStr, out Call_Type type))
-                throw new FormatException("call type is invalid!");
-            Console.Write("Enter address");
+            Call_Type type = new Call_Type();
+            while (!(Enum.TryParse(typeStr, out type) && Enum.IsDefined(typeof(Call_Type), type)))
+            {
+                Console.WriteLine("call type is invalid! enter again");
+                typeStr = Console.ReadLine();
+            }
+            Console.Write("Enter address: ");
             string address = Console.ReadLine();
-
-            Console.Write("enter latitude");
-
-            if (!double.TryParse(Console.ReadLine(), out double latitude))
-                throw new FormatException("latitude is invalid!");
-            Console.Write("enter longitude");
-            if (!double.TryParse(Console.ReadLine(), out double longitude))
-                throw new FormatException("longitude is invalid!");
-            Console.Write("enter open time");
-            if (!DateTime.TryParse(Console.ReadLine(), out DateTime open))
-                throw new FormatException("open time is invalid!");
-            Console.Write("enter max close time");
+            Console.Write("enter latitude: ");
+            double latitude;
+            while (!double.TryParse(Console.ReadLine(), out latitude))
+                Console.WriteLine("latitude is invalid! enter again");
+            Console.Write("enter longitude: ");
+            double longitude;
+            while (!double.TryParse(Console.ReadLine(), out longitude))
+                Console.WriteLine("longitude is invalid! enter again");
+            Console.Write("enter open time :");
+            DateTime open = new DateTime();
+            while (!DateTime.TryParse(Console.ReadLine(), out open))
+                Console.WriteLine("open time is invalid! enter again");
+            Console.Write("enter max close time :");
             string maxCloseStr = Console.ReadLine();
-            if (!DateTime.TryParse(maxCloseStr, out DateTime maxClose) && maxCloseStr != "")
-                throw new FormatException("latitude is invalid!");
-            Console.Write("enter description");
+            DateTime maxClose = new DateTime();
+            while (!DateTime.TryParse(maxCloseStr, out maxClose) && maxCloseStr != "" )
+            {
+                Console.WriteLine("max close is invalid! enter again");
+                maxCloseStr = Console.ReadLine();
+            }
+            Console.Write("enter description: ");
             string description = Console.ReadLine();
             Call newC = new Call(type, address, latitude, longitude, open, maxClose, description);
             return newC;
         }
         private static Assignment? inputAssignment()
         {
-            Console.Write("enter call id");
-            string idStr = Console.ReadLine();
-            if (idStr == "")
+            //Inputs Assignment's details.
+            //Returns a assignment with that details.
+            //Stops and return null if the user enter call id = ''
+
+            Console.Write("enter call id: ");
+            string cIdStr = Console.ReadLine();
+            if (cIdStr == "")
                 return null;
-            if (!int.TryParse(idStr, out int cId))
-                throw new FormatException("id is invalid!");
+            int cId;
+            while (!int.TryParse(cIdStr, out cId))
+            {
+                Console.WriteLine("id is invalid! try again");
+                cIdStr = Console.ReadLine();
+            }
             Console.Write("enter volunteer id");
-            if (!int.TryParse(Console.ReadLine(), out int vId))
-                throw new FormatException("id is invalid!");
-            Console.Write("enter insersion time");
-            if (!DateTime.TryParse(Console.ReadLine(), out DateTime insersion))
-                throw new FormatException("insersion time is invalid!");
-            Console.Write("Enter finish time");
+            int vId;
+            while (!int.TryParse(Console.ReadLine(), out vId))
+                Console.WriteLine("id is invalid! try again");
+            Console.Write("enter insersion time: ");
+            DateTime insersion = new DateTime();    
+            while (!DateTime.TryParse(Console.ReadLine(), out insersion))
+                Console.WriteLine("insersion time is invalid! try agagin");
+            Console.Write("Enter finish time: ");
             string finishTimeStr = Console.ReadLine();
-            if (!DateTime.TryParse(finishTimeStr, out DateTime finishTime) && finishTimeStr != "")
-                throw new FormatException("finish time is invalid!");
-            Console.Write("Enter finish type");
+            DateTime finishTime = new DateTime();
+            while (!DateTime.TryParse(finishTimeStr, out finishTime) && finishTimeStr != "")
+            {
+                Console.WriteLine("finish time is invalid! try again");
+                finishTimeStr = Console.ReadLine();
+            }
+            Console.Write("Enter finish type: ");
             string finishTypeStr = Console.ReadLine();
-            if (!Finish_Type.TryParse(finishTypeStr, out Finish_Type finishType) && finishTypeStr != "")
-                throw new FormatException("finish type is invalid!");
+            Finish_Type finishType = new Finish_Type();
+            while (!(Enum.TryParse(finishTypeStr, out finishType) && Enum.IsDefined(typeof(Finish_Type), finishType)) && finishTypeStr != "")
+            {
+                Console.WriteLine("finish type is invalid!");
+                finishTypeStr = Console.ReadLine();
+            }
             Assignment newA = new Assignment(cId, vId, insersion, finishTime, finishType);
             return newA;
         }
         private static void read(string type)
         {
+            //Inputs id and read the entity with that id. (accept the entity type as string)
             Console.WriteLine("Enter ID");
             int ID = int.Parse(Console.ReadLine());
             switch (type)
@@ -325,6 +410,7 @@ namespace DalTest
         }
         private static void delete(string type)
         {
+            //Inputs id and delete the entity with that id. (accept the entity type as string)
             Console.WriteLine("Enter ID");
             int ID = int.Parse(Console.ReadLine());
             switch (type)
@@ -346,7 +432,7 @@ namespace DalTest
         }
         private static void readAll(string type)
         {
-
+            //Read all entities of this type
             switch (type)
             {
                 case "volunteer":
@@ -371,6 +457,7 @@ namespace DalTest
         }
         private static void deleteAll(string type)
         {
+            //Deletes all entities of this type
 
             switch (type)
             {
@@ -389,14 +476,18 @@ namespace DalTest
             }
 
         }
-        private static void ConfigMenu()
+        private static void configMenu()
         {
+            Console.WriteLine("Config menu");
+            //Offers config menu
             foreach (Config_Menu menu in Enum.GetValues(typeof(Config_Menu)))
             {
+                //Printing the menu
                 Console.WriteLine($"{(int)menu}: {menu}");
             }
             Config_Menu choice;
-            Enum.TryParse(Console.ReadLine(), out choice);
+            while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(Config_Menu), choice))
+                Console.WriteLine("Wrong choice, enter again");
             while (choice != Config_Menu.Exit)
             {
                 switch (choice)
@@ -429,16 +520,30 @@ namespace DalTest
                         break;
 
                 }
+
+                Console.WriteLine("Config menu");
                 foreach (Config_Menu menu in Enum.GetValues(typeof(Config_Menu)))
                 {
+                    //Printing the menu
                     Console.WriteLine($"{(int)menu}: {menu}");
                 }
-                Enum.TryParse(Console.ReadLine(), out choice);
+                while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(Config_Menu), choice))
+                    Console.WriteLine("Wrong choice, enter again");
             }
+        }
+        private static void displayAll()
+        {
+            //Displaying all volunteers, calls and assignments
+            Console.WriteLine("Volunteers:");
+            foreach (Volunteer v in s_dal!.Volunteer.ReadAll())
+                Console.WriteLine(v);
+            Console.WriteLine("Calls:");
+            foreach (Call c in s_dal!.Call.ReadAll())
+                Console.WriteLine(c);
+            Console.WriteLine("Assignments: ");
+            foreach (Assignment a in s_dal!.Assignment.ReadAll())
+                Console.WriteLine(a);
         }
     }
 
 }
-
-internal enum Config_Menu { Exit, Add_Minute, Add_Hour, Add_Day, Add_Month, Display_Clock, Update_Time_Span, Display_Time_Span, Reset }
-
