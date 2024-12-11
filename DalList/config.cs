@@ -22,11 +22,11 @@ static internal class Config
     internal static DateTime Clock { get; set; } = new DateTime(2024, 1, 1, 0, 0, 0);
     public static TimeSpan RiskRange { get; set; }
 
-    internal static void reset()
+    internal static void Reset()
     {
         nextCallId = startCallId;
         nextAssignmentId = startAssigmentId;
-        Clock = new DateTime(2024, 1, 1, 0, 0, 0);
+        Clock = new DateTime(2024, 1, 1);
         RiskRange = new TimeSpan(24, 0, 0);
     }
 }

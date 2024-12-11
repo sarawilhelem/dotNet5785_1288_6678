@@ -2,14 +2,14 @@
 using DalApi;
 namespace Dal;
 
-internal class ConfigImplementation:IConfig
+internal class ConfigImplementation : IConfig
 {
     //Realization of config's actions
-	public DateTime Clock   //Get and set config's clock
-	{
-		get => Config.Clock;
-		set => Config.Clock = value;
-	}
+    public DateTime Clock   //Get and set config's clock
+    {
+        get => Config.Clock;
+        set => Config.Clock = value;
+    }
 
     public TimeSpan RiskRange   //Get and set config's riskRange
     {

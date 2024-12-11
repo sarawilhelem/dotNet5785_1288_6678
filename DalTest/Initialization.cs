@@ -9,7 +9,7 @@ public static class Initialization
 
     private static readonly Random s_rand = new(); //static field which used to rand
 
-    private static void createVolunteers()  //create 16 volunteers
+    private static void CreateVolunteers()  //create 16 volunteers
     {
         const int COUNT_VOLUNTEERS = 16;
         int managerIndex = s_rand.Next(0, 20);
@@ -61,7 +61,7 @@ public static class Initialization
             }
         }
     }
-    private static void createCalls()   //create 50 calls
+    private static void CreateCalls()   //create 50 calls
     {
         const int COUNT_CALLS = 50;
         string[] cAddresses =
@@ -114,8 +114,6 @@ public static class Initialization
 
         for (int i = 0; i < COUNT_CALLS; i++)
         {
-            if (i == 39)
-                i = i;
             Call_Type type = (Call_Type)s_rand.Next(0, 3);
             DateTime open = startOpen.AddDays(s_rand.Next(0,range));
             DateTime endClose = i > 45
@@ -132,7 +130,7 @@ public static class Initialization
 
         }
     }
-    private static void createAssignments() //create 50 assignments according to rules
+    private static void CreateAssignments() //create 50 assignments according to rules
     {
         const int COUNT_ASSIGNMENTS = 50;
         List<Call> calls = (List<Call>)s_dal!.Call.ReadAll().ToList();
@@ -174,8 +172,8 @@ public static class Initialization
 
         s_dal.ResetDB();
 
-        createVolunteers();
-        createCalls();
-        createAssignments();
+        CreateVolunteers();
+        CreateCalls();
+        CreateAssignments();
     }
 }

@@ -3,41 +3,25 @@
 namespace DO;
 
 [Serializable]
-public class DalDoesNotExistException : Exception
+public class DalDoesNotExistException(string? message) : Exception(message)
 {
     //exception for when trying use not exist entity
-    public DalDoesNotExistException(string? message) : base(message)
-    { 
-
-    }
 }
 
 [Serializable]
-public class DalAlreadyExistsException : Exception
+public class DalAlreadyExistsException(string? message) : Exception(message)
 {
     //exception for when trying to add exist entity
-    public DalAlreadyExistsException(string? message) : base(message)
-    {
-
-    }
 }
 
 [Serializable]
-public class DalDeleteImpossible : Exception
-{
-    //exception for when deleting is impossible
-    public DalDeleteImpossible(string? message) : base(message)
-    {
-
-    }
+public class DalDeleteImpossible(string? message) : Exception(message)
+{ //exception for when deleting is impossible
 }
 
 [Serializable]
-public class DalXMLFileLoadCreateException : Exception
+public class DalXMLFileLoadCreateException(string? message) : Exception(message)
+//exception for when load create xml file is failed
 {
-    //exception for when deleting is impossible
-    public DalXMLFileLoadCreateException(string? message) : base(message)
-    {
-
-    }
 }
+
