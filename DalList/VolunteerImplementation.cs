@@ -11,19 +11,14 @@ internal class VolunteerImplementation : IVolunteer
         //create new volunteer
         if (DataSource.Volunteers.Find(v => v.Id == item.Id) != null)
             throw new DalAlreadyExistsException($"Volunteer with id {item.Id} is yet exist");
-        else
-            DataSource.Volunteers.Add(item);
+        DataSource.Volunteers.Add(item);
     }
 
     public void Delete(int id)
     {
         //delete volunteer from the list by id
         Volunteer? thisVolunteer = DataSource.Volunteers.Find(v => v.Id == id);
-        if (thisVolunteer != null)
-        {
-            DataSource.Volunteers.Remove(thisVolunteer);
-        }
-        else
+        if (DataSource.Volunteers.RemoveAll(it => it.Id == id) == 0)
             throw new DalDeleteImpossible($"Volunteer with id {id} is not exist");
     }
 
@@ -58,14 +53,8 @@ internal class VolunteerImplementation : IVolunteer
     public void Update(Volunteer item)
     {
         //update volunteer by id
-        Volunteer? thisVolunteer = DataSource.Volunteers.Find(c => c.Id == item.Id);
-        if (thisVolunteer != null)
-        {
-            DataSource.Volunteers.Remove(thisVolunteer);
-            DataSource.Volunteers.Add(item);
-        }
-        else
+        if (DataSource.Volunteers.RemoveAll(it => it.Id == item.Id) == 0)
             throw new DalDoesNotExistException($"Volunteer with id {item.Id} is not exist");
-
+        DataSource.Volunteers.Add(item);
     }
 }

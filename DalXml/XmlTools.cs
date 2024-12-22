@@ -35,10 +35,10 @@ static class XMLTools
 
         try
         {
-            if (!File.Exists(xmlFilePath)) return new();
+            if (!File.Exists(xmlFilePath)) return [];
             using FileStream file = new(xmlFilePath, FileMode.Open);
             XmlSerializer x = new(typeof(List<T>));
-            return x.Deserialize(file) as List<T> ?? new();
+            return x.Deserialize(file) as List<T> ?? [];
         }
         catch (Exception ex)
         {

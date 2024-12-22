@@ -1,5 +1,5 @@
 ﻿/// <summary>
-/// Volunteer Entity represents a student with all its props 
+/// Volunteer Entity represents a volunteer with all its props 
 /// </summary> 
 /// <param name=" Id "> Personal unique ID of the volunteer  </param> 
 /// <param name=" Name "> Private Name of the volunteer </param> 

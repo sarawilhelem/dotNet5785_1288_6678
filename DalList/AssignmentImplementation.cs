@@ -18,11 +18,7 @@ internal class AssignmentImplementation : IAssignment
     {
         //delete assignment according to id
         Assignment? thisAssignment = DataSource.Assignments.Find(a => a.Id == id);
-        if (thisAssignment != null)
-        {
-            DataSource.Assignments.Remove(thisAssignment);
-        }
-        else
+        if (DataSource.Assignments.RemoveAll(it => it.Id == id) == 0)
             throw new DalDeleteImpossible($"Assignment with id {id} is not exist");
     }
 
@@ -55,19 +51,12 @@ internal class AssignmentImplementation : IAssignment
 
     }
 
-
     public void Update(Assignment item)
     {
         //update assignment by item id
-        Assignment? thisAssignment = DataSource.Assignments.Find(a => a.Id == item.Id);
-        if (thisAssignment != null)
-        {
-            DataSource.Assignments.Remove(thisAssignment);
-            DataSource.Assignments.Add(item);
-        }
-        else
+        if (DataSource.Assignments.RemoveAll(it => it.Id == item.Id) == 0)
             throw new DalDoesNotExistException($"Assignment with id {item.Id} is not exist");
-
+        DataSource.Assignments.Add(item);
 
     }
 }

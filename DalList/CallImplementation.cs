@@ -19,11 +19,7 @@ internal class CallImplementation : ICall
     {
         //delete call according id
         Call? thisCall = DataSource.Calls.Find(c => c.Id == id);
-        if (thisCall != null)
-        {
-            DataSource.Calls.Remove(thisCall);
-        }
-        else
+        if (DataSource.Calls.RemoveAll(it => it.Id == id) == 0)
             throw new DalDeleteImpossible($"Call with id {id} is not exist");
 
     }
@@ -62,14 +58,8 @@ internal class CallImplementation : ICall
     public void Update(Call item)
     {
         //update call according to id of item
-        Call? thisCall = DataSource.Calls.Find(c => c.Id == item.Id);
-        if (thisCall != null)
-        {
-            DataSource.Calls.Remove(thisCall);
-            DataSource.Calls.Add(item);
-        }
-        else
+        if (DataSource.Calls.RemoveAll(it => it.Id == item.Id) == 0)
             throw new DalDoesNotExistException($"Call with id {item.Id} is not exist");
-
+        DataSource.Calls.Add(item);
     }
 }
