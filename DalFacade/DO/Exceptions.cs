@@ -24,4 +24,11 @@ public class DalXMLFileLoadCreateException(string? message) : Exception(message)
 //exception for when load create xml file is failed
 {
 }
+[Serializable]
+public class DalConfigException : Exception
+{
+    public DalConfigException(string msg) : base(msg) { }
+    public DalConfigException(string msg, Exception ex) : base(msg, ex) { }
+}
+
 

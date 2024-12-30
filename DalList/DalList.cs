@@ -3,10 +3,13 @@
 namespace Dal;
 using DalApi;
 using DO;
+using System.Diagnostics;
 
-sealed public class DallList : IDal
+sealed public class DalList : IDal
 {
     //Class which contains all entities' implementations and has a function to reset them
+
+    
     public IVolunteer Volunteer { get; } = new VolunteerImplementation();   //A field of VolunteerImplemantation type
 
     public ICall Call { get; } = new CallImplementation();  //A field of CallImplemantation type

@@ -3,10 +3,12 @@
 namespace Dal;
 using DalApi;
 using DO;
+using System.Diagnostics;
 
-public class DalXml : IDal
+sealed public class DalXml : IDal
 {
     //Inheriting and realizing IDal = Interface which contains fields of the entities' interfaces and declare their reset 
+
     public IVolunteer Volunteer { get; } = new VolunteerImplementation();   //A VolunteerImplantation field
 
     public ICall Call { get; } = new CallImplementation();  //A CallImplantation field
