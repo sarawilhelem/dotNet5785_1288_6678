@@ -10,12 +10,13 @@ using System.Diagnostics;
 /// </summary>
 sealed internal class DalList : IDal
 {
+    //Class which contains all entities' implementations and has a function to reset them
 
     /// <summary>
     /// A field who keep the only one dalllist
     /// </summary>
     public static IDal Instance { get; } = new DalList();
-
+    
     /// <summary>
     /// private constructor
     /// </summary>
@@ -47,6 +48,7 @@ sealed internal class DalList : IDal
     /// </summary>
     public void ResetDB()
     {
+        //Reset all the entities through the fields
         Volunteer.DeleteAll();
         Call.DeleteAll();
         Assignment.DeleteAll();

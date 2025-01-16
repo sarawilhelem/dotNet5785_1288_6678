@@ -28,6 +28,13 @@ public class DalAlreadyExistsException(string? message) : Exception(message)
 public class DalDeleteImpossible(string? message) : Exception(message)
 {
 }
+[Serializable]
+public class DalConfigException : Exception
+{
+    public DalConfigException(string msg) : base(msg) { }
+    public DalConfigException(string msg, Exception ex) : base(msg, ex) { }
+}
+
 
 /// <summary>
 /// exception for when load create xml file is failed
