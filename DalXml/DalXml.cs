@@ -3,22 +3,49 @@
 namespace Dal;
 using DalApi;
 using DO;
+using System.Diagnostics;
 
-public class DalXml : IDal
+/// <summary>
+/// Inheriting and realizing IDal = Interface which contains fields of the entities' interfaces and declare their reset 
+/// </summary>
+sealed internal class DalXml : IDal
 {
-    //Inheriting and realizing IDal = Interface which contains fields of the entities' interfaces and declare their reset 
-    public IVolunteer Volunteer { get; } = new VolunteerImplementation();   //A VolunteerImplantation field
+    /// <summary>
+    /// A field who keep the only one dalXml;
+    /// </summary>
+    public static IDal Instance { get; } = new DalXml();
 
-    public ICall Call { get; } = new CallImplementation();  //A CallImplantation field
+    /// <summary>
+    /// private constructor
+    /// </summary>
+    private DalXml() { }
 
-    public IAssignment Assignment { get; } = new AssignmenImplementaion();  //A AssignmentImplantation field
+    /// <summary>
+    /// A VolunteerImplantation field
+    /// </summary>
+    public IVolunteer Volunteer { get; } = new VolunteerImplementation();
 
-    public IConfig Config { get; } = new ConfigImplementation();    //A ConfigImplantation field
+    /// <summary>
+    /// A CallImplantation field
+    /// </summary>
 
+    public ICall Call { get; } = new CallImplementation();
+
+    /// <summary>
+    /// An AssignmentImplantation field
+    /// </summary>
+    public IAssignment Assignment { get; } = new AssignmenImplementaion();
+
+    /// <summary>
+    /// A ConfigImplantation field
+    /// </summary>
+    public IConfig Config { get; } = new ConfigImplementation();
+
+    /// <summary>
+    /// Reseting all entities through the fields
+    /// </summary>
     public void ResetDB()
     {
-        //Reseting all entities through the fields
-
         Volunteer.DeleteAll();
         Call.DeleteAll();
         Assignment.DeleteAll();

@@ -15,7 +15,7 @@ public record Assignment
     (
     int CallId,
     int VolunteerId,
-    DateTime insersion,
+    DateTime Insersion,
     DateTime? FinishTime = null,
     Finish_Type? FinishType = null
     )

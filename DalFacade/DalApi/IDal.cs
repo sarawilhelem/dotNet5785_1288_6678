@@ -1,15 +1,33 @@
-﻿
-
-using DO;
-
+﻿using DO;
 namespace DalApi;
 
+/// <summary>
+/// Interface which contains fields of the entities' interfaces and declare their reset 
+/// </summary>
 public interface IDal
 {
-    //Interface which contains fields of the entities' interfaces and declare their reset 
-    IVolunteer Volunteer { get; }   //A field of  IVolunteer type
-    ICall Call { get; } //A field of  ICall type
-    IAssignment Assignment { get; } //A field of  IAssignment type
-    IConfig Config { get; } //A field of  IConfig type
-    void ResetDB(); //Reset all fields
+    /// <summary>
+    /// A field of  IVolunteer type
+    /// </summary>
+    IVolunteer Volunteer { get; }
+
+    /// <summary>
+    /// A field of  ICall type
+    /// </summary>
+    ICall Call { get; }
+
+    /// <summary>
+    /// A field of  IAssignment type
+    /// </summary>
+    IAssignment Assignment { get; }
+
+    /// <summary>
+    /// A field of  IConfig type
+    /// </summary>
+    IConfig Config { get; }
+
+    /// <summary>
+    /// Reset all fields
+    /// </summary>
+    void ResetDB(); 
 }

@@ -1,15 +1,24 @@
 ﻿namespace DalTest;
 using DalApi;
 using DO;
-using System.Reflection.PortableExecutable;
+
 
 public static class Initialization
 {
-    private static IDal? s_dal; //static field to approach the cruds
+    /// <summary>
+    /// static field to approach the cruds
+    /// </summary>
+    private static IDal? s_dal;
 
-    private static readonly Random s_rand = new(); //static field which used to rand
+    /// <summary>
+    /// static field which used to rand
+    /// </summary>
+    private static readonly Random s_rand = new();
 
-    private static void CreateVolunteers()  //create 16 volunteers
+    /// <summary>
+    /// create 16 volunteers
+    /// </summary>
+    private static void CreateVolunteers()  
     {
         const int COUNT_VOLUNTEERS = 16;
         int managerIndex = s_rand.Next(0, 20);
@@ -50,7 +59,7 @@ public static class Initialization
             int maxDistance = s_rand.Next(10, 1000);
             Role role = i == managerIndex ? Role.Manager : Role.Volunteer;
 
-            Volunteer newV = new Volunteer(vId, vNames[i], vPhone, vEmail, vAddresses[i], vLatitude[i], vLongitude[i], maxDistance, role);
+            Volunteer newV = new (vId, vNames[i], vPhone, vEmail, vAddresses[i], vLatitude[i], vLongitude[i], maxDistance, role);
             try
             {
                 s_dal!.Volunteer.Create(newV);
@@ -61,7 +70,11 @@ public static class Initialization
             }
         }
     }
-    private static void CreateCalls()   //create 50 calls
+
+    /// <summary>
+    /// create 50 calls
+    /// </summary>
+    private static void CreateCalls() 
     {
         const int COUNT_CALLS = 50;
         string[] cAddresses =
@@ -109,7 +122,7 @@ public static class Initialization
             35.222590, 35.222579, 35.222869, 35.226072, 35.221711
        ];
         string[] cDescriptions = ["7 years old boy", "Disabled boy", "Miserable and cute girl", "Have a brother's wedding", "Need phisyothraphy 5 times a week"];
-        DateTime startOpen = s_dal.Config.Clock.AddYears(-1);
+        DateTime startOpen = s_dal!.Config.Clock.AddYears(-1);
         int range = (int)(s_dal!.Config.Clock - startOpen).TotalDays;
 
         for (int i = 0; i < COUNT_CALLS; i++)
@@ -123,14 +136,18 @@ public static class Initialization
                 ?endClose.AddDays(-s_rand.Next(0,3))
                 :endClose.AddDays(-s_rand.Next(0,365));
 
-            Call newC = new Call(type, cAddresses[i], cLatitudes[i], cLongitudes[i], open, close, cDescriptions[i%5]);
+            Call newC = new (type, cAddresses[i], cLatitudes[i], cLongitudes[i], open, close, cDescriptions[i%5]);
 
 
             s_dal!.Call.Create(newC);
 
         }
     }
-    private static void CreateAssignments() //create 50 assignments according to rules
+
+    /// <summary>
+    /// create 50 assignments according to the rules
+    /// </summary>
+    private static void CreateAssignments() 
     {
         const int COUNT_ASSIGNMENTS = 50;
         List<Call> calls = (List<Call>)s_dal!.Call.ReadAll().ToList();
@@ -160,15 +177,18 @@ public static class Initialization
             Finish_Type? fType = calls[i].MaxCloseTime < s_dal!.Config.Clock ? Finish_Type.Expired :
                 fTime != null ? (Finish_Type)s_rand.Next(0, 3) : null;
 
-            Assignment newA = new Assignment(cId, vId, insersion, fTime, fType);
+            Assignment newA = new(cId, vId, insersion, fTime, fType);
             s_dal!.Assignment.Create(newA);
         }
 
     }
 
-    public static void Do(IDal dal) //static function to call the function in order to init
+    /// <summary>
+    /// static function to call the function in order to init
+    /// </summary>
+    public static void Do() 
     {
-        s_dal = dal ?? throw new NullReferenceException("DAL OBJECT CAN'T BE NULL");
+        s_dal = DalApi.Factory.Get;
 
         s_dal.ResetDB();
 
