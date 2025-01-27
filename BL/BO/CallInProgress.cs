@@ -19,7 +19,7 @@ public class CallInProgress
 {
     public int Id { get; init; }
     public int CallId { get; init; }
-    public CallType CallType { get; set; }
+    public Call_Type CallType { get; set; }
     public string? Description { get; set; }
     required public string Address { get; set; }
     public DateTime OpenTime { get; init; }
@@ -30,8 +30,3 @@ public class CallInProgress
     public CallStatus Status { get; set; }
 }
 
-public enum CallStatus
-{
-    InProcess,
-    InProcessInRiskRange
-}
