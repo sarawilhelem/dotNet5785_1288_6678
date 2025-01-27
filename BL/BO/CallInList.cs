@@ -14,11 +14,11 @@ namespace BO;
 /// <param name="Status">What is the call's status</param>
 /// <param name="TotalAssignment">How many assignments this call already assignmented</param>
 
-public class OpenCallInList
+public class CallInList
 {
     public int Id { get; init; }
     public int CallId { get; set; }
-    public CallType CallType { get; set; }
+    public Call_Type CallType { get; set; }
     public DateTime OpenTime { get; init; }
     public DateTime? MaxCloseTime { get; set; }
     public string? LastVolunteerName {get;set;}
