@@ -18,7 +18,7 @@ public class OpenCallInList
 {
     public int Id { get; init; }
     public int CallId { get; set; }
-    public CallType CallType { get; set; }
+    public Call_Type CallType { get; set; }
     public DateTime OpenTime { get; init; }
     public DateTime? MaxCloseTime { get; set; }
     public string? LastVolunteerName {get;set;}

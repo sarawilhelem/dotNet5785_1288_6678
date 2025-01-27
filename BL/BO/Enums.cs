@@ -16,6 +16,13 @@ public enum Distance_Type
     Walk,
     Drive
 }
+
+public enum CallStatus
+{
+    InProcess,
+    InProcessInRiskRange
+}
+
 public enum Call_Type
 {
     Take_Care_At_Home,
