@@ -2,11 +2,23 @@
 
 namespace DalApi;
 
-
+/// <summary>
+/// IConfig interface. 
+/// </summary>
 public interface IConfig
 {
-    //IConfig interface. 
-    DateTime Clock { get; set; }    //get and set the config's clock
-    TimeSpan RiskRange { get; set; }    //get and set the config's risgRange
-    void Reset();   //reset the config
+    /// <summary>
+    /// get and set the config's clock
+    /// </summary>
+    DateTime Clock { get; set; }
+
+    /// <summary>
+    /// get and set the config's risgRange
+    /// </summary>
+    TimeSpan RiskRange { get; set; }
+
+    /// <summary>
+    /// reset the config
+    /// </summary>
+    void Reset();
 }

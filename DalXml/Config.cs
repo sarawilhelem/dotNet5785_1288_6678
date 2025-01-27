@@ -1,43 +1,70 @@
 ﻿namespace Dal;
+/// <summary>
+/// Config class to store and load to xml files
+/// </summary>
 internal static class Config
 {
-    //Config class to store and load to xml files
+    /// <summary>
+    /// Keeping config xml file's name
+    /// </summary>
+    internal const string s_data_config_xml = "data-config.xml";
 
-    internal const string s_data_config_xml = "data-config.xml";    //Keeping config xml file's name
-    internal const string s_volunteers_xml = "volunteers.xml";  //Keeping volunteers xml file's name
-    internal const string s_calls_xml = "calls.xml";    //Keeping calls xml file's name
-    internal const string s_assignments_xml = "assignments.xml";    //Keeping assignments xml file's name
+    /// <summary>
+    /// Keeping volunteers xml file's name
+    /// </summary>
+    internal const string s_volunteers_xml = "volunteers.xml";
 
+    /// <summary>
+    /// Keeping calls xml file's name
+    /// </summary>
+    internal const string s_calls_xml = "calls.xml";
 
-    internal static int NextCallId  //store(and increase) and load nextCallId in data-config.xml
+    /// <summary>
+    /// Keeping assignments xml file's name
+    /// </summary>
+    internal const string s_assignments_xml = "assignments.xml";
+
+    /// <summary>
+    /// store(and increase) and load nextCallId in data-config.xml
+    /// </summary>
+    internal static int NextCallId  
     {
         get => XMLTools.GetAndIncreaseConfigIntVal(s_data_config_xml, "NextCallId");
         private set => XMLTools.SetConfigIntVal(s_data_config_xml, "NextCallId", value);
     }
 
-    internal static int NextAssignmentId    //store(and increase) and load nextAssignmentId in data-config.xml
+    /// <summary>
+    /// store(and increase) and load nextAssignmentId in data-config.xml
+    /// </summary>
+    internal static int NextAssignmentId
     {
         get => XMLTools.GetAndIncreaseConfigIntVal(s_data_config_xml, "NextAssignmentId");
         private set => XMLTools.SetConfigIntVal(s_data_config_xml, "NextAssignmentId", value);
     }
 	
-
+    /// <summary>
+    /// refer to xmlTools function to set and get the clock
+    /// </summary>
     internal static DateTime Clock
     {
         get => XMLTools.GetConfigDateVal(s_data_config_xml, "Clock");
         set => XMLTools.SetConfigDateVal(s_data_config_xml, "Clock", value);
     }
 
+    /// <summary>
+    /// refer to xmlTools function to set and get the riskRange
+    /// </summary>
     internal static TimeSpan RiskRange
     {
         get => XMLTools.GetConfigTimeSpanVal(s_data_config_xml, "RiskRange");
         set => XMLTools.SetConfigTimeSpanVal(s_data_config_xml, "RiskRange", value);
     }
 
+    /// <summary>
+    /// Reseting the config fields (will set in the xml files)
+    /// </summary>
     internal static void Reset()
     {
-        //Reseting the config fields (will set in the xml files)
-
         NextCallId = 1000;
         NextAssignmentId = 2000;
         Clock = new DateTime(2024, 1, 1, 0, 0, 0);

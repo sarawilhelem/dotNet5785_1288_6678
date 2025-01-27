@@ -1,10 +1,13 @@
 ﻿
 namespace DO;
+
 public enum Role
 {
     Manager,
     Volunteer
 }
+
+
 public enum Distance_Type
 {
     Air,

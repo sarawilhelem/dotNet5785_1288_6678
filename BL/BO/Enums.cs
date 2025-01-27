@@ -1,0 +1,91 @@
+﻿
+using Microsoft.VisualBasic;
+
+namespace BO;
+
+public enum Role
+{
+    Manager,
+    Volunteer
+}
+
+
+public enum Distance_Type
+{
+    Air,
+    Walk,
+    Drive
+}
+public enum Call_Type
+{
+    Take_Care_At_Home,
+    Take_Care_Out,
+    Physiotherapy
+}
+public enum Finish_Type
+{
+    Addressed,
+    SelfCancel,
+    ManageCancel,
+    Expired
+}
+public enum Finish_Call_Type
+{
+    Open,
+    InProcess,
+    Close,
+    OpenAtRisk,
+    Expired
+}
+
+public enum Volunteer_In_List_Fields
+{
+    Id,
+    Name,
+    IsActive,
+    NumCallsHanle,
+    NumCallsCancele,
+    NumCallsNotValid,
+    CallId,
+    Call_Type
+}
+public enum Call_In_List_Fields
+{
+    Id,
+    CallId,
+    CallType,
+    OpenTime,
+    MaxCloseTime,
+    LastVolunteerName,
+    TotalProcessingTime,
+    Status,
+    TotalAssignment
+}
+
+public enum Closed_Call_In_List_Fields
+{
+    Id,
+    CallType,
+    Addres,
+    OpenCallTime,
+    StartCallTime,
+    FinishCallTime,
+    Finish_Type
+}
+public enum Open_Call_In_List_Fields
+{
+     Id,
+    CallType ,
+    Address,
+    OpenTime ,
+    MaxCloseTime,
+    Distance
+}
+public enum Time_Unit
+{
+    Minute,
+    Hour,
+    Day,
+    Month,
+    Year
+}
