@@ -9,10 +9,10 @@ namespace BO
     public class Volunteer
     {
         public int Id { get; init; }
-        public string Name {  get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string Password {  get; set; }
+        public required string Name {  get; set; }
+        public required string Phone { get; set; }
+        public required string Email { get; set; }
+        public required string Password {  get; set; }
         public string? Address {  get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }

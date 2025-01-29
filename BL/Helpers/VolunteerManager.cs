@@ -10,13 +10,13 @@ namespace Helpers;
 internal static class VolunteerManager
 {
     private static IDal s_dal = Factory.Get;
-    static public bool CheckValidation(BO.Volunteer v)
+    static internal bool CheckValidation(BO.Volunteer v)
     {
         var trimmedEmail = v.Email.Trim();
 
         if (trimmedEmail.EndsWith("."))
         {
-            return false; // suggested by @TK-421
+            return false;
         }
         try
         {
@@ -83,19 +83,18 @@ internal static class VolunteerManager
 
     internal static async Task<(double? latitude, double? longitude)> GetCoordinatesAsync(string address)
     {
-        string apiKey = "API_KEY";
-        string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={Uri.EscapeDataString(address)}&key={apiKey}";
+        string url = $"https://nominatim.openstreetmap.org/search?q={Uri.EscapeDataString(address)}&format=json&limit=1";
 
         using (HttpClient client = new HttpClient())
         {
             var response = await client.GetStringAsync(url);
-            var json = JObject.Parse(response);
+            var jsonArray = JArray.Parse(response);
 
-            if (json["status"].ToString() == "OK")
+            if (jsonArray.Count > 0)
             {
-                var location = json["results"][0]["geometry"]["location"];
+                var location = jsonArray[0];
                 double latitude = (double)location["lat"];
-                double longitude = (double)location["lng"];
+                double longitude = (double)location["lon"];
                 return (latitude, longitude);
             }
         }
@@ -103,9 +102,40 @@ internal static class VolunteerManager
         return (null, null);
     }
 
-    internal  static void Create(DO.Volunteer volunteer)
+
+
+    internal static double CalculateDistance(double? lat1, double? lon1, double? lat2, double? lon2)
     {
-        s_dal.Volunteer.Create(volunteer);
+        const double EarthRadius = 6371.0;
+
+        if (lat1 is null || lon1 is null || lat2 is null || lon2 is null)
+            return 0;
+
+        double lat1Rad = lat1.Value * Math.PI / 180.0;
+        double lon1Rad = lon1.Value * Math.PI / 180.0;
+        double lat2Rad = lat2.Value * Math.PI / 180.0;
+        double lon2Rad = lon2.Value * Math.PI / 180.0;
+
+        double dlat = lat2Rad - lat1Rad;
+        double dlon = lon2Rad - lon1Rad;
+
+        double a = Math.Sin(dlat / 2) * Math.Sin(dlat / 2) +
+                   Math.Cos(lat1Rad) * Math.Cos(lat2Rad) *
+                   Math.Sin(dlon / 2) * Math.Sin(dlon / 2);
+        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+        return EarthRadius * c;
     }
+
+
+    internal static bool IsWithinRiskRange(DateTime maxClose)
+    {
+        DateTime now = ClockManager.Now;
+        TimeSpan range = AdminImplentation.RiskRange;
+        DateTime rangeStart = maxClose.Add(-range); 
+        return now >= rangeStart && now <= maxClose;
+    }
+
+
 
 }
