@@ -28,7 +28,7 @@ public record Volunteer
     Role Role = Role.Volunteer,
     Distance_Type Distance_Type = Distance_Type.Air,
     string? Password = null,
-    bool? IsActive = true
+    bool IsActive = true
     )
 {
     public Volunteer() : this(0, "no name", "000-000-0000", "email@gmail.com")

@@ -14,7 +14,6 @@ namespace DO;
 /// <param name="MaxCloseTime">when it has to be closed</param>
 public record Call
 (
-
  Call_Type Call_Type,
  string Address,
  double Latitude,

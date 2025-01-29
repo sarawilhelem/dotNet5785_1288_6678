@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using DalApi;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace Helpers;
 
@@ -33,7 +35,7 @@ internal static class VolunteerManager
             return false;
         if (!IsValidIdNumber(v.Id))
             return false;
-        if (!IsStrongPassword(v.Password))
+        if (v.Password is not null && !IsStrongPassword(v.Password))
             return false;
         return true;
     }
@@ -80,6 +82,16 @@ internal static class VolunteerManager
         return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar;
     }
 
+    public static string? HashPassword(string? password)
+    {
+        if (password == null)
+            return null;
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return BitConverter.ToString(bytes).Replace("-", "").ToLower(); // Convert byte array to hex string
+        }
+    }
 
     internal static async Task<(double? latitude, double? longitude)> GetCoordinatesAsync(string address)
     {
@@ -126,16 +138,6 @@ internal static class VolunteerManager
 
         return EarthRadius * c;
     }
-
-
-    internal static bool IsWithinRiskRange(DateTime maxClose)
-    {
-        DateTime now = ClockManager.Now;
-        TimeSpan range = AdminImplentation.RiskRange;
-        DateTime rangeStart = maxClose.Add(-range); 
-        return now >= rangeStart && now <= maxClose;
-    }
-
 
 
 }

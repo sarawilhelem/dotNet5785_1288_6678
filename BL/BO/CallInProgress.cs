@@ -17,16 +17,40 @@ namespace BO;
 
 public class CallInProgress
 {
-    public int Id { get; init; }
-    public int CallId { get; init; }
-    public Call_Type CallType { get; set; }
-    public string? Description { get; set; }
-    required public string Address { get; set; }
-    public DateTime OpenTime { get; init; }
-    public DateTime? MaxCloseTime { get; set; }
+    public int Id { get; }
+    public int CallId { get; }
+    public Call_Type Call_Type { get; }
+    public string Address { get; }
+    public double Distance { get; }
+    public DateTime OpenTime { get; }
+    public DateTime Insersion { get; }
+    public CallStatus Status { get; }
+    public string? Description { get; }
+    public DateTime? MaxCloseTime { get; }
 
-    public DateTime Insersion {  get; init;}
-    public double Distance { get; init; }
-    public CallStatus Status { get; set; }
+    public CallInProgress(
+        int id,
+        int callId,
+        Call_Type call_Type,
+        string address,
+        double distance,
+        DateTime openTime,
+        DateTime insersion,
+        CallStatus status,
+        string? description = null,
+        DateTime? maxCloseTime = null)
+    {
+        Id = id;
+        CallId = callId;
+        Call_Type = call_Type;
+        Address = address;
+        Distance = distance;
+        OpenTime = openTime;
+        Insersion = insersion;
+        Status = status;
+        Description = description;
+        MaxCloseTime = maxCloseTime;
+    }
 }
+
 
