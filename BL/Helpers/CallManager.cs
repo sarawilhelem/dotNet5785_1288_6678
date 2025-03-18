@@ -1,7 +1,9 @@
 ﻿
 
+using BlApi;
 using BO;
 using DalApi;
+using DO;
 using System.Diagnostics;
 
 namespace Helpers;
@@ -9,13 +11,20 @@ namespace Helpers;
 internal class CallManager
 {
     private static IDal s_dal = Factory.Get;
-
-    public static string? GetLastVolunteerName(DO.Call call)
+    public static IEnumerable<DO.Assignment> AssignmentsListForCall(int id)
     {
-     
-        var assignmentsList=s_dal.Assignment.ReadAll(a => a.CallId == call.Id).OrderByDescending(a => a.OpenTime);
+        var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId ==id);
+        return assignmentsList;
+    }
+    public static DO.Volunteer GetVolunteer(int id)
+    {
+        return s_dal.Volunteer.Read(v => v.Id == id);
+    }
+   public static string? GetLastVolunteerName(DO.Call call)
+    {
+        var assignmentsList= AssignmentsListForCall(call.Id).OrderByDescending(a => a.OpenTime);
         var lastAssignment= assignmentsList.FirstOrDefault();
-           var volunteer = s_dal.Volunteer.Read(v=>v.Id==lastAssignment.VolunteerId);
+           var volunteer = GetVolunteer(lastAssignment.VolunteerId);
         return volunteer.Name;
     }
     public static TimeSpan? RestTimeForCall(DO.Call call)
@@ -72,5 +81,17 @@ public static int GetAmountOfAssignments(DO.Call call)
     {
         var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == call.Id);
         return assignmentsList.Count();
+    }
+    public static void UpdateCall(DO.Call call)
+    {
+            s_dal.Call.Update(call);
+    }
+    public static void DeleteCall(int id)
+    {
+        s_dal.Call.Delete(id);
+    }
+    public static void CreateCall(DO.Call call)
+    {
+        s_dal.Call.Create(call);
     }
 }
