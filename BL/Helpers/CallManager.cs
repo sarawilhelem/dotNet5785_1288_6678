@@ -16,6 +16,11 @@ internal class CallManager
         var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId ==id);
         return assignmentsList;
     }
+    public static IEnumerable<DO.Assignment> AssignmentsListForVolunteer(int id)
+    {
+        var assignmentsList = s_dal.Assignment.ReadAll(a => a.VolunteerId == id);
+        return assignmentsList;
+    }
     public static DO.Volunteer GetVolunteer(int id)
     {
         return s_dal.Volunteer.Read(v => v.Id == id);
@@ -31,9 +36,10 @@ internal class CallManager
     {
         return DateTime.Now > call.MaxCloseTime ? (TimeSpan?)(call.MaxCloseTime - DateTime.Now) : null;
     }
-    public static FinishCallType GetCallStatus(DO.Call call)
+    public static FinishCallType GetCallStatus(int id)
     {
-        var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == call.Id);
+        var call= s_dal.Call.Read(a => a.Id == id);
+        var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == id);
         var Processed = assignmentsList.Select(a => a.FinishType == DO.FinishType.Processed);
         if (Processed!=null)
         {

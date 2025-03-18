@@ -1,8 +1,6 @@
 ﻿using BlApi;
-using BO;
-using DO;
-using System.Collections.Generic;
-using System.Net;
+using System.Globalization;
+
 
 
 namespace BlImplementation;
@@ -43,7 +41,7 @@ internal class CallImplentation : ICall
                 MaxCloseTime = Helpers.CallManager.RestTimeForCall(call),
                 LastVolunteerName = Helpers.CallManager.GetLastVolunteerName(call),
                 TotalProcessingTime = Helpers.CallManager.RestTimeForTreatment(call),
-                Status = Helpers.CallManager.GetCallStatus(call),
+                Status = Helpers.CallManager.GetCallStatus(call.Id),
                 AmountOfAssignments = Helpers.CallManager.GetAmountOfAssignments(call)
             });
         switch (sortBy)
@@ -112,7 +110,7 @@ internal class CallImplentation : ICall
             Longitude=DOCall.Longitude,
             OpenTime=DOCall.OpenTime,
             MaxCloseTime=DOCall.MaxCloseTime,
-            Status = Helpers.CallManager.GetCallStatus(DOCall),
+            Status = Helpers.CallManager.GetCallStatus(DOCall.Id),
             CallAssignList = assignments.Select(
             a => new BO.CallAssignInList 
             {
@@ -178,6 +176,62 @@ internal class CallImplentation : ICall
             Description = call.Description
         };
         Helpers.CallManager.CreateCall(callToAdd);
+    }
+    public IEnumerable<BO.ClosedCallInList> ReadAllVolunteerClosedCalls(int volunteerId, BO.Call_Type? callType = null, BO.Closed_Call_In_List_Fields? sort = null)
+    {
+        var closedCalls =Helpers.CallManager.AssignmentsListForVolunteer(volunteerId).Where(a=>
+            Helpers.CallManager.GetCallStatus(a.Id)==BO.FinishCallType.InProcessAtRisk||
+             Helpers.CallManager.GetCallStatus(a.Id) == BO.FinishCallType.InProcess||
+              Helpers.CallManager.GetCallStatus(a.Id) == BO.FinishCallType.Close||
+               Helpers.CallManager.GetCallStatus(a.Id) == BO.FinishCallType.Expired
+            ).Select(
+                        a => new BO.ClosedCallInList
+                        {
+                            Id = a.Id,
+                            CallType = (BO.Call_Type)(_dal.Call.Read(i=>i.Id==a.Id).Call_Type),
+                            Address = _dal.Call.Read(i => i.Id == a.Id).Address,
+                            OpenCallTime =_dal.Call.Read(i => i.Id == a.Id).OpenTime,
+                            StartCallTime = a.OpenTime,
+                            FinishCallTime = a.FinishTime,
+                            Finish_Type = a.FinishType
+                        }
+            );
+        if (callType!=null)
+        {
+            switch (callType)
+            {
+                case BO.Call_Type.Take_Care_At_Home:
+                    closedCalls = closedCalls.Where(call => call.CallType == BO.Call_Type.Take_Care_At_Home);
+                    break;
+                case BO.Call_Type.Take_Care_Out:
+                    closedCalls = closedCalls.Where(call => call.CallType == BO.Call_Type.Take_Care_At_Home);
+                    break;
+                case BO.Call_Type.Physiotherapy:
+                    closedCalls = closedCalls.Where(call => call.CallType == BO.Call_Type.Take_Care_At_Home);
+                    break;
+                    default:
+                    break;
+            }
+        }
+        switch (sort)
+        {
+            case BO.Closed_Call_In_List_Fields.FinishCallTime:
+                closedCalls = closedCalls.OrderBy(call => call.FinishCallTime);
+                break;
+            case BO.Closed_Call_In_List_Fields.OpenCallTime:
+                closedCalls = closedCalls.OrderBy(call => call.OpenCallTime);
+                break;
+            case BO.Closed_Call_In_List_Fields.StartCallTime:
+                closedCalls = closedCalls.OrderBy(call => call.StartCallTime);
+                break;
+            case BO.Closed_Call_In_List_Fields.Addres:
+                closedCalls = closedCalls.OrderBy(call => call.Address);
+                break;
+            default:
+                closedCalls = closedCalls.OrderBy(call => call.Id);
+                break;
+        }
+        return closedCalls;
     }
 }
 
