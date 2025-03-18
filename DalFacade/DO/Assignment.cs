@@ -15,9 +15,9 @@ public record Assignment
     (
     int CallId,
     int VolunteerId,
-    DateTime Insersion,
+    DateTime OpenTime,
     DateTime? FinishTime = null,
-    Finish_Type? FinishType = null
+    FinishType? FinishType = null
     )
 {
     public int Id { get; init; }

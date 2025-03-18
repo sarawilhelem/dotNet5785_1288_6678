@@ -36,12 +36,13 @@ public enum Finish_Type
     ManageCancel,
     Expired
 }
-public enum Finish_Call_Type
+public enum FinishCallType
 {
     Open,
     InProcess,
     Close,
     OpenAtRisk,
+    InProcessAtRisk,
     Expired
 }
 

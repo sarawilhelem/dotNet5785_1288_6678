@@ -1,12 +1,14 @@
 ﻿using BlApi;
-using BO;
-using DalApi;
+
+
 using Helpers;
 
 namespace BlImplementation;
 
 internal class CallImplentation:ICall
 {
+    private static readonly DalApi.IDal _dal = DalApi.Factory.Get;
+
     public int[] GetCountsGroupByStatus() 
     {
     
@@ -28,25 +30,43 @@ internal class CallImplentation:ICall
 
     public IEnumerable<BO.CallInList> ReadAll(BO.Call_In_List_Fields? filterBy = null, Object? filterParam = null, BO.Call_In_List_Fields? sortBy = null)
     {
-        IEnumerable<BO.CallInList> callList= CallManager.ReadAll();
-
-        if (filterParam != null)
-        {
-
-            if (filterBy != null)
+        IEnumerable<DO.Call> callList = _dal.Call.ReadAll();
+        IEnumerable<BO.CallInList> callListtoReturn = callList.Select(
+            call => new BO.CallInList
             {
-                var propertyInfo = typeof(BO.CallInList).GetProperty(filterBy.ToString());
-                if (propertyInfo != null)
-                {
+                Id = call.Id,
+                CallId = call.Id,
+                CallType = (BO.Call_Type)call.Call_Type,
+                OpenTime = call.OpenTime,
+                MaxCloseTime = Helpers.CallManager.RestTimeForCall(call),
+                LastVolunteerName = Helpers.CallManager.GetLastVolunteerName(call),
+                TotalProcessingTime = Helpers.CallManager.RestTimeForTreatment(call),
+                Status = Helpers.CallManager.GetCallStatus(call),
+                AmountOfAssignments = Helpers.CallManager.GetAmountOfAssignments(call)
+            });
 
-                    callList = callList.OrderBy(call => propertyInfo.GetValue(call)).ToList();
-                }
-            }
-        }
+}
+
+        //if (filterParam != null)
+        //{
+        //    if (filterBy != null)
+        //    {
+        //        var propertyInfo = typeof(BO.CallInList).GetProperty(filterBy.ToString());
+        //        if (propertyInfo != null)
+        //        {
+        //            callList = _dal.Call.ReadAll(call=>call);
+        //            //  callList = callList.Where(call => propertyInfo.GetValue(call)).ToList();
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    callList = _dal.Call.ReadAll();           
+        //}
     }
     public BO.Call? Read(int id)
     {
-        var list=_dal.Call.Read(i=>i.Id==id);
+       // var list=_dal.Call.Read(i=>i.Id==id);
         return null;
     //        public int Id { get; init; }
     //public Call_Type Type { get; set; }

@@ -21,10 +21,10 @@ public enum Call_Type
     Physiotherapy
 }
 
-public enum Finish_Type
+public enum FinishType
 {
-    Addressed,
+    Processed,
     SelfCancel,
-    ManageCancel,
+    ManagerCancel,
     Expired
 }
