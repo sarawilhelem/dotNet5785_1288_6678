@@ -80,7 +80,7 @@ public enum Closed_Call_In_List_Fields
     FinishCallTime,
     Finish_Type
 }
-public enum Open_Call_In_List_Fields
+public enum OpenCallInListFields
 {
      Id,
     CallType ,

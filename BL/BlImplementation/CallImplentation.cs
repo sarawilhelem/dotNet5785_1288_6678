@@ -249,16 +249,75 @@ internal class CallImplentation : ICall
                     OpenTime = _dal.Call.Read(i => i.Id == a.Id).OpenTime,
                     MaxCloseTime = _dal.Call.Read(i => i.Id == a.Id).MaxCloseTime,
                     Distance = Helpers.CallManager.DistanceBetweenVolunteerAndCall(volunteerId, a.Id)
-                }
-    //public int Id { get; init; }
-    //public Call_Type CallType { get; set; }
-    //required public string Address { get; set; }
-    //public DateTime OpenTime { get; init; }
-    //public DateTime? MaxCloseTime { get; set; }
-    //public double Distance { get; init; }
-
-    );
+                });
+        if (callType != null)
+        {
+            switch (callType)
+            {
+                case BO.Call_Type.Take_Care_At_Home:
+                    openedCalls = openedCalls.Where(call => call.CallType == BO.Call_Type.Take_Care_At_Home);
+                    break;
+                case BO.Call_Type.Take_Care_Out:
+                    openedCalls = openedCalls.Where(call => call.CallType == BO.Call_Type.Take_Care_At_Home);
+                    break;
+                case BO.Call_Type.Physiotherapy:
+                    openedCalls = openedCalls.Where(call => call.CallType == BO.Call_Type.Take_Care_At_Home);
+                    break;
+                default:
+                    break;
+            }
+        }
+        switch (sort)
+        {
+            case BO.OpenCallInListFields.Address:
+                openedCalls = openedCalls.OrderBy(call => call.Address).ToList();
+                break;
+            case BO.OpenCallInListFields.CallType:
+                openedCalls = openedCalls.OrderBy(call => call.CallType).ToList();
+                break;
+            case BO.OpenCallInListFields.OpenTime:
+                openedCalls = openedCalls.OrderBy(call => call.OpenTime).ToList();
+                break;
+            case BO.OpenCallInListFields.MaxCloseTime:
+                openedCalls = openedCalls.OrderBy(call => call.MaxCloseTime).ToList();
+                break;
+            case BO.OpenCallInListFields.Distance:
+                openedCalls = openedCalls.OrderBy(call => call.Distance).ToList();
+                break;
+            default:
+                openedCalls = openedCalls.OrderBy(call => call.Id).ToList();
+                break;
+        }
+        return openedCalls;
     }
+    public void FinishProcess(int volunteerId, int assignmentId)
+    {
+        var assignment=_dal.Assignment.Read(a=>a.Id == assignmentId);
+        if(assignment.VolunteerId == volunteerId&& assignment.FinishType==null&&assignment.FinishTime==null)
+        {
+            var assignmentToUpdate = new DO.Assignment
+            {
+                Id = assignmentId,
+                CallId = assignment.Id,
+                VolunteerId = volunteerId,
+                OpenTime = assignment.OpenTime,
+                FinishTime = DateTime.Now,
+                FinishType = DO.FinishType.Processed
+            };
+            Helpers.AssignmentManager.UpdateAssignment(assignmentToUpdate);
+        }
+        else
+        {
+            throw new Exception("לא ניתן לסיים את הטיפול");
+        }
+
+    }
+    public void CanceleProcess(int volunteerId, int assignmentId)
+    {
+
+    }
+    public void ChooseCall(int volunteerId, int callId)
+    { }
 }
 
 
