@@ -82,6 +82,13 @@ internal class CallManager
 
         
     }
+    public static double DistanceBetweenVolunteerAndCall(int volunteerId,int callId)
+    {
+        var volunteer = s_dal.Volunteer.Read(v => v.Id == volunteerId);
+        var call = s_dal.Call.Read(c => c.Id == callId);
+        var distance =Math.Sqrt (Math.Pow(((double)(volunteer.Latitude) - call.Latitude),2)+ Math.Pow(((double)(volunteer.Longitude)- call.Longitude),2));
+        return distance;
+    }
 
 public static int GetAmountOfAssignments(DO.Call call)
     {

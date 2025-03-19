@@ -216,22 +216,48 @@ internal class CallImplentation : ICall
         switch (sort)
         {
             case BO.Closed_Call_In_List_Fields.FinishCallTime:
-                closedCalls = closedCalls.OrderBy(call => call.FinishCallTime);
+                closedCalls = closedCalls.OrderBy(call => call.FinishCallTime).ToList();
                 break;
             case BO.Closed_Call_In_List_Fields.OpenCallTime:
-                closedCalls = closedCalls.OrderBy(call => call.OpenCallTime);
+                closedCalls = closedCalls.OrderBy(call => call.OpenCallTime).ToList();
                 break;
             case BO.Closed_Call_In_List_Fields.StartCallTime:
-                closedCalls = closedCalls.OrderBy(call => call.StartCallTime);
+                closedCalls = closedCalls.OrderBy(call => call.StartCallTime).ToList();
                 break;
             case BO.Closed_Call_In_List_Fields.Addres:
-                closedCalls = closedCalls.OrderBy(call => call.Address);
+                closedCalls = closedCalls.OrderBy(call => call.Address).ToList();
                 break;
             default:
-                closedCalls = closedCalls.OrderBy(call => call.Id);
+                closedCalls = closedCalls.OrderBy(call => call.Id).ToList();
                 break;
         }
         return closedCalls;
+    }
+    public IEnumerable<BO.OpenCallInList> ReadAllVolunteerOpenCalls(int volunteerId, BO.Call_Type? callType = null, BO.Open_Call_In_List_Fields? sort = null)
+    {
+        var openedCalls = Helpers.CallManager.AssignmentsListForVolunteer(volunteerId).Where(a =>
+    Helpers.CallManager.GetCallStatus(a.Id) == BO.FinishCallType.InProcessAtRisk ||
+     Helpers.CallManager.GetCallStatus(a.Id) == BO.FinishCallType.InProcess ||
+      Helpers.CallManager.GetCallStatus(a.Id) == BO.FinishCallType.Close ||
+       Helpers.CallManager.GetCallStatus(a.Id) == BO.FinishCallType.Expired
+    ).Select(
+                a => new BO.OpenCallInList
+                {
+                    Id = a.Id,
+                    CallType = (BO.Call_Type)(_dal.Call.Read(i => i.Id == a.Id).Call_Type),
+                    Address = _dal.Call.Read(i => i.Id == a.Id).Address,
+                    OpenTime = _dal.Call.Read(i => i.Id == a.Id).OpenTime,
+                    MaxCloseTime = _dal.Call.Read(i => i.Id == a.Id).MaxCloseTime,
+                    Distance = Helpers.CallManager.DistanceBetweenVolunteerAndCall(volunteerId, a.Id)
+                }
+    //public int Id { get; init; }
+    //public Call_Type CallType { get; set; }
+    //required public string Address { get; set; }
+    //public DateTime OpenTime { get; init; }
+    //public DateTime? MaxCloseTime { get; set; }
+    //public double Distance { get; init; }
+
+    );
     }
 }
 
