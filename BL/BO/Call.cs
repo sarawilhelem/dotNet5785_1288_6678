@@ -32,7 +32,7 @@ public class Call
     public double Longitude { get; set; }
     public DateTime OpenTime { get; init; }
     public DateTime MaxCloseTime { get; set; }
-    public Finish_Call_Type Status { get; set; }
+    public FinishCallType Status { get; set; }
     public List<BO.CallAssignInList>? CallAssignList {  get; set; }
     public Call(BO.Call_Type type, string address, DateTime openTime, DateTime maxCloseTime,
         string? description = null, Finish_Call_Type status = Finish_Call_Type.Open, 

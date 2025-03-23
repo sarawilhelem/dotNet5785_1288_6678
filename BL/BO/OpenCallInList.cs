@@ -17,7 +17,7 @@ namespace BO;
 public class OpenCallInList
 {
     public int Id { get; init; }
-    public CallType CallType { get; set; }
+    public Call_Type CallType { get; set; }
     required public string Address { get; set; }
     public DateTime OpenTime { get; init; }
     public DateTime? MaxCloseTime { get; set; }

@@ -20,9 +20,9 @@ public class CallInList
     public int CallId { get; set; }
     public Call_Type CallType { get; set; }
     public DateTime OpenTime { get; init; }
-    public DateTime? MaxCloseTime { get; set; }
+    public TimeSpan? MaxCloseTime { get; set; }
     public string? LastVolunteerName {get;set;}
     public TimeSpan? TotalProcessingTime {get; set; }
-    public Finish_Call_Type Status {get; set; }
-    public int TotalAssignment {get; set; }
+    public FinishCallType Status {get; set; }
+    public int AmountOfAssignments {get; set; }
 }

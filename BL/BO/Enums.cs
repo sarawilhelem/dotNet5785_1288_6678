@@ -29,19 +29,20 @@ public enum Call_Type
     Take_Care_Out,
     Physiotherapy
 }
-public enum Finish_Type
+public enum FinishType
 {
-    Addressed,
+    Processed,
     SelfCancel,
-    ManageCancel,
+    ManagerCancel,
     Expired
 }
-public enum Finish_Call_Type
+public enum FinishCallType
 {
     Open,
     InProcess,
     Close,
     OpenAtRisk,
+    InProcessAtRisk,
     Expired
 }
 
@@ -66,7 +67,7 @@ public enum Call_In_List_Fields
     LastVolunteerName,
     TotalProcessingTime,
     Status,
-    TotalAssignment
+    AmountOfAssignments
 }
 
 public enum Closed_Call_In_List_Fields
@@ -79,7 +80,7 @@ public enum Closed_Call_In_List_Fields
     FinishCallTime,
     Finish_Type
 }
-public enum Open_Call_In_List_Fields
+public enum OpenCallInListFields
 {
      Id,
     CallType ,
