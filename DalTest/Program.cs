@@ -246,7 +246,7 @@ namespace DalTest
             int id;
             while (!int.TryParse(idStr, out id))
             {
-                Console.WriteLine("id is invalid! enter id again!");
+                Console.WriteLine("id is illegal! enter id again!");
                 idStr = Console.ReadLine()!;
                 if (idStr == "")
                     return null;
@@ -264,7 +264,7 @@ namespace DalTest
             double latitude;
             while (!double.TryParse(latitudeStr, out latitude) && latitudeStr != "")
             {
-                Console.WriteLine("latitude is invalid! enter again!");
+                Console.WriteLine("latitude is illegal! enter again!");
                 latitudeStr = Console.ReadLine()!;
             }
             Console.Write("enter longitude: ");
@@ -272,7 +272,7 @@ namespace DalTest
             double longitude;
             while (!double.TryParse(longitudeStr, out longitude) && longitudeStr != "")
             {
-                Console.WriteLine("longitude is invalid! enter again!");
+                Console.WriteLine("longitude is illegal! enter again!");
                 longitudeStr = Console.ReadLine()!;
             }
             Console.Write("Enter max distance call: ");
@@ -280,7 +280,7 @@ namespace DalTest
             double maxDistance;
             while (!double.TryParse(maxDistanceStr, out maxDistance) && maxDistanceStr != "")
             {
-                Console.WriteLine("max distance is invalid! enter again!");
+                Console.WriteLine("max distance is illegal! enter again!");
                 maxDistanceStr = Console.ReadLine()!;
             }
             Console.Write("Enter role 0/1: ");
@@ -288,7 +288,7 @@ namespace DalTest
             Role role;
             while (!(Enum.TryParse(roleStr, out role) && Enum.IsDefined(typeof(Role), role)) && roleStr != "")
             {
-                Console.WriteLine("role is invalid! enter again");
+                Console.WriteLine("role is illegal! enter again");
                 roleStr = Console.ReadLine()!;
             }
             if (roleStr == "")
@@ -298,7 +298,7 @@ namespace DalTest
             Distance_Type distanceType;
             while (!(Enum.TryParse(distanceTypeStr, out distanceType) && Enum.IsDefined(typeof(Distance_Type), distanceType)) && distanceTypeStr != "")
             {
-                Console.WriteLine("role is invalid! enter again");
+                Console.WriteLine("role is illegal! enter again");
                 distanceTypeStr = Console.ReadLine()!;
             }
             if (distanceTypeStr == "")
@@ -310,12 +310,12 @@ namespace DalTest
             bool isActive;
             while (!bool.TryParse(isActiveStr, out isActive) && isActiveStr != "")
             {
-                Console.WriteLine("isActive is invalid! enter again!");
+                Console.WriteLine("isActive is illegal! enter again!");
                 isActiveStr = Console.ReadLine()!;
             }
             if (isActiveStr == "")
                 isActive = true;
-            Volunteer? newV = new(id, name, phone, email, address, latitude, longitude, maxDistance, role, distanceType, password, isActive);
+            Volunteer newV = new(id, name, phone, email, address, latitude, longitude, maxDistance, role, distanceType, password, isActive);
             return newV;
 
         }
@@ -333,7 +333,7 @@ namespace DalTest
             Call_Type type;
             while (!(Enum.TryParse(typeStr, out type) && Enum.IsDefined(typeof(Call_Type), type)))
             {
-                Console.WriteLine("call type is invalid! enter again");
+                Console.WriteLine("call type is illegal! enter again");
                 typeStr = Console.ReadLine()!;
             }
             Console.Write("Enter address: ");
@@ -341,26 +341,26 @@ namespace DalTest
             Console.Write("enter latitude: ");
             double latitude;
             while (!double.TryParse(Console.ReadLine(), out latitude))
-                Console.WriteLine("latitude is invalid! enter again");
+                Console.WriteLine("latitude is illegal! enter again");
             Console.Write("enter longitude: ");
             double longitude;
             while (!double.TryParse(Console.ReadLine(), out longitude))
-                Console.WriteLine("longitude is invalid! enter again");
+                Console.WriteLine("longitude is illegal! enter again");
             Console.Write("enter open time :");
             DateTime open;
             while (!DateTime.TryParse(Console.ReadLine(), out open))
-                Console.WriteLine("open time is invalid! enter again");
+                Console.WriteLine("open time is illegal! enter again");
             Console.Write("enter max close time :");
             string maxCloseStr = Console.ReadLine()!;
             DateTime maxClose;
             while (!DateTime.TryParse(maxCloseStr, out maxClose) && maxCloseStr != "" )
             {
-                Console.WriteLine("max close is invalid! enter again");
+                Console.WriteLine("max close is illegal! enter again");
                 maxCloseStr = Console.ReadLine()!;
             }
             Console.Write("enter description: ");
             string description = Console.ReadLine()!;
-            Call? newC = new(type, address, latitude, longitude, open, maxClose, description);
+            Call newC = new(type, address, latitude, longitude, open, maxClose, description);
             return newC;
         }
 
@@ -377,23 +377,23 @@ namespace DalTest
             int cId;
             while (!int.TryParse(cIdStr, out cId))
             {
-                Console.WriteLine("id is invalid! try again");
+                Console.WriteLine("id is illegal! try again");
                 cIdStr = Console.ReadLine()!;
             }
             Console.Write("enter volunteer id");
             int vId;
             while (!int.TryParse(Console.ReadLine(), out vId))
-                Console.WriteLine("id is invalid! try again");
+                Console.WriteLine("id is illegal! try again");
             Console.Write("enter insersion time: ");
             DateTime insersion;    
             while (!DateTime.TryParse(Console.ReadLine(), out insersion))
-                Console.WriteLine("insersion time is invalid! try agagin");
+                Console.WriteLine("insersion time is illegal! try agagin");
             Console.Write("Enter finish time: ");
             string finishTimeStr = Console.ReadLine()!;
             DateTime finishTime;
             while (!DateTime.TryParse(finishTimeStr, out finishTime) && finishTimeStr != "")
             {
-                Console.WriteLine("finish time is invalid! try again");
+                Console.WriteLine("finish time is illegal! try again");
                 finishTimeStr = Console.ReadLine()!;
             }
             Console.Write("Enter finish type: ");
@@ -401,10 +401,10 @@ namespace DalTest
             Finish_Type finishType;
             while (!(Enum.TryParse(finishTypeStr, out finishType) && Enum.IsDefined(typeof(Finish_Type), finishType)) && finishTypeStr != "")
             {
-                Console.WriteLine("finish type is invalid!");
+                Console.WriteLine("finish type is illegal!");
                 finishTypeStr = Console.ReadLine()!;
             }
-            Assignment? newA = new(cId, vId, insersion, finishTime, finishType);
+            Assignment newA = new(cId, vId, insersion, finishTime, finishType);
             return newA;
         }
 
@@ -551,7 +551,9 @@ namespace DalTest
                         break;
                     case Config_Menu.Update_Risk_Range:
                         Console.WriteLine("Enter risk range: ");
-                        TimeSpan range = TimeSpan.Parse(Console.ReadLine()!);
+                        TimeSpan range;
+                        while (!Enum.TryParse(Console.ReadLine(),out range))
+                            Console.WriteLine("Risk range illegal, enter again");
                         S_dal!.Config.RiskRange = range;
                         break;
                     case Config_Menu.Display_Risk_Range:

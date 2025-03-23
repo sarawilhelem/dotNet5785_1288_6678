@@ -25,7 +25,7 @@ namespace BO;
 public class Call
 {
     public int Id {  get; init; }
-    public Call_Type Type { get; set; }
+    public BO.Call_Type Type { get; set; }
     public string? Description { get; set; }
     public string Address {  get; set; }
     public double Latitude { get; set; }
@@ -34,5 +34,19 @@ public class Call
     public DateTime MaxCloseTime { get; set; }
     public Finish_Call_Type Status { get; set; }
     public List<BO.CallAssignInList>? CallAssignList {  get; set; }
-
+    public Call(BO.Call_Type type, string address, DateTime openTime, DateTime maxCloseTime,
+        string? description = null, Finish_Call_Type status = Finish_Call_Type.Open, 
+        double latitude = 0, double longitude = 0, List<BO.CallAssignInList>? callAssignList = null)
+    {
+        Id = 
+        Type = type;
+        Address = address;
+        Latitude = latitude;
+        Longitude = longitude;
+        OpenTime = openTime;
+        MaxCloseTime = maxCloseTime;
+        Status = status;
+        CallAssignList = callAssignList;
+        Description = description;
+    }
 }

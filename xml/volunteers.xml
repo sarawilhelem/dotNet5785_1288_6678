@@ -210,4 +210,32 @@
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
+  <Volunteer>
+    <Id>1</Id>
+    <Name>1</Name>
+    <Phone>1</Phone>
+    <Email>1</Email>
+    <Address>1</Address>
+    <Longitude>1</Longitude>
+    <Latitude>1</Latitude>
+    <MaxDistanceCall>1</MaxDistanceCall>
+    <Role>Volunteer</Role>
+    <DistanceType>Walk</DistanceType>
+    <Password>1</Password>
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>2</Id>
+    <Name>1</Name>
+    <Phone>1</Phone>
+    <Email>1</Email>
+    <Address>1</Address>
+    <Longitude>1</Longitude>
+    <Latitude>1</Latitude>
+    <MaxDistanceCall>1</MaxDistanceCall>
+    <Role>Volunteer</Role>
+    <DistanceType>Walk</DistanceType>
+    <Password>1</Password>
+    <IsActive>false</IsActive>
+  </Volunteer>
 </ArrayOfVolunteers>

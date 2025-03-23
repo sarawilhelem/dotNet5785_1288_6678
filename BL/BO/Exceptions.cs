@@ -2,40 +2,51 @@
 
 namespace BO;
 
-/// <summary>
-/// exception for when trying use not exist entity
-/// </summary>
-/// <param name="message">the string was throwed in the try</param>
+//}
 
+/// <summary>
+///  exception for when trying use not exist entity
+/// </summary>
 [Serializable]
-public class BlDoesNotExistException(string? message) : Exception(message)
+public class BlDoesNotExistException : Exception
 {
+    public BlDoesNotExistException(string? message) : base(message) { }
+    public BlDoesNotExistException(string message, Exception innerException)
+                : base(message, innerException) { }
 }
 
 /// <summary>
 /// exception for when trying to add exist entity
 /// </summary>
-/// <param name="message">the string was throwed in the try</param>[Serializable]
-public class BlAlreadyExistsException(string? message) : Exception(message)
+[Serializable]
+public class BlAlreadyExistsException : Exception
 {
+    public BlAlreadyExistsException(string? message) : base(message) { }
+    public BlAlreadyExistsException(string message, Exception innerException)
+                : base(message, innerException) { }
 }
 
 /// <summary>
 /// exception for when deleting is impossible
 /// </summary>
-/// <param name="message">the string was throwed in the try</param>[Serializable]
+
 [Serializable]
-public class BlDeleteImpossible(string? message) : Exception(message)
+public class BlDeleteImpossible : Exception
 {
+    public BlDeleteImpossible(string? message) : base(message) { }
+    public BlDeleteImpossible(string message, Exception innerException)
+                : base(message, innerException) { }
 }
 
 /// <summary>
 /// exception for when load create xml file is failed
 /// </summary>
-/// <param name="message">the string was throwed in the try</param>[Serializable]
-[Serializable]
-public class BlXMLFileLoadCreateException(string? message) : Exception(message)
-{ 
+[Serializable] 
+public class BlXMLFileLoadCreateException : Exception
+{
+    public BlXMLFileLoadCreateException(string? message) : base(message) { }
+    public BlXMLFileLoadCreateException(string message, Exception innerException)
+                : base(message, innerException) { }
 }
 
 [Serializable]
@@ -43,4 +54,31 @@ public class BlConfigException : Exception
 {
     public BlConfigException(string msg) : base(msg) { }
     public BlConfigException(string msg, Exception ex) : base(msg, ex) { }
+}
+
+/// <summary>
+/// Exception for when try using null object
+/// </summary>
+/// <param name="message">exception message</param>
+[Serializable]
+public class BlNullPropertyException(string? message) : Exception(message)
+{
+}
+
+/// <summary>
+/// Exception for when order between dates is illegal
+/// </summary>
+/// <param name="message">exception message</param>
+[Serializable]
+public class BlIllegalDatesOrder(string? message) : Exception(message)
+{
+}
+
+/// <summary>
+/// Exception for when fields values are illegal
+/// </summary>
+/// <param name="message">exception message</param>
+[Serializable]
+public class BlIllegalValues(string? message) : Exception(message)
+{
 }

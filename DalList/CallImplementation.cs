@@ -18,7 +18,6 @@ internal class CallImplementation : ICall
         int id = Config.NextCallId;
         Call newCall = item with { Id = id };
         DataSource.Calls.Add(newCall);
-
     }
 
     /// <summary>

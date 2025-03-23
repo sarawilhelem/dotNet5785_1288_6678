@@ -1,9 +1,5 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using DalApi;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Security.Cryptography;
 
@@ -11,7 +7,16 @@ namespace Helpers;
 
 internal static class VolunteerManager
 {
+    /// <summary>
+    /// A static field to approach the entities crud
+    /// </summary>
     private static IDal s_dal = Factory.Get;
+
+    /// <summary>
+    /// Checks the validation of the volunteer details
+    /// </summary>
+    /// <param name="v">a volunteer to check its details</param>
+    /// <returns>return true if all details valid, else- false</returns>
     static internal bool CheckValidation(BO.Volunteer v)
     {
         var trimmedEmail = v.Email.Trim();
@@ -39,6 +44,12 @@ internal static class VolunteerManager
             return false;
         return true;
     }
+
+    /// <summary>
+    /// Checks an Israeli id number validation
+    /// </summary>
+    /// <param name="id">an id to check if valid</param>
+    /// <returns>is the id valid</returns>
     private static bool IsValidIdNumber(int id)
     {
         string idStr = id.ToString();
@@ -62,6 +73,11 @@ internal static class VolunteerManager
         return (sum + lastDigit) % 10 == 0;
     }
 
+    /// <summary>
+    /// Checks if a password is strong - has at least 8 chars and contains: upper and little leters, numbers and special chars
+    /// </summary>
+    /// <param name="password">A password to check if strong</param>
+    /// <returns>Is the password strong</returns>
     private static bool IsStrongPassword(string password)
     {
         if (password.Length < 8)
@@ -82,6 +98,11 @@ internal static class VolunteerManager
         return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar;
     }
 
+    /// <summary>
+    /// Hash a password
+    /// </summary>
+    /// <param name="password">The password to encryp</param>
+    /// <returns>the cipherText</returns>
     public static string? HashPassword(string? password)
     {
         if (password == null)
@@ -93,6 +114,11 @@ internal static class VolunteerManager
         }
     }
 
+    /// <summary>
+    /// Calculate the longitude and latitude of an address
+    /// </summary>
+    /// <param name="address">An address to casculate latitude and longitude</param>
+    /// <returns>The latitude and longitude</returns>
     internal static async Task<(double? latitude, double? longitude)> GetCoordinatesAsync(string address)
     {
         string url = $"https://nominatim.openstreetmap.org/search?q={Uri.EscapeDataString(address)}&format=json&limit=1";
@@ -114,8 +140,14 @@ internal static class VolunteerManager
         return (null, null);
     }
 
-
-
+    /// <summary>
+    /// Calculate distance betweent 2 addresses
+    /// </summary>
+    /// <param name="lat1">The latitude of the first address</param>
+    /// <param name="lon1">The longitude of the first address</param>
+    /// <param name="lat2">The latitude of the second address</param>
+    /// <param name="lon2">The longitude of the second address</param>
+    /// <returns>The distance between the addresses</returns>
     internal static double CalculateDistance(double? lat1, double? lon1, double? lat2, double? lon2)
     {
         const double EarthRadius = 6371.0;
@@ -138,6 +170,4 @@ internal static class VolunteerManager
 
         return EarthRadius * c;
     }
-
-
 }

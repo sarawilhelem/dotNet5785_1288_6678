@@ -8,5 +8,5 @@ public interface IVolunteer
     public BO.Volunteer Read(int id);
     public void Update(int id, BO.Volunteer volunteer);
     public void Delete(int id);
-    public void Add(BO.Volunteer volunteer);
+    public void Create(BO.Volunteer volunteer);
 }

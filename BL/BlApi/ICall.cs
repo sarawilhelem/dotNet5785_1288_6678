@@ -9,11 +9,9 @@ public interface ICall
     public void Update(int id, BO.Call call);
     public void Delete(int id);
     public void Add(BO.Volunteer volunteer);
-    public IEnumerable<BO.Call> ReadAllVolunteerClosedCalls(int VolunteerId, BO.Call_Type? callType = null, BO.Closed_Call_In_List_Fields? sort=null);
+    public IEnumerable<BO.ClosedCallInList> ReadAllVolunteerClosedCalls(int VolunteerId, BO.Call_Type? callType = null, BO.Closed_Call_In_List_Fields? sort=null);
     public IEnumerable<BO.OpenCallInList> ReadAllVolunteerOpenCalls(int VolunteerId, BO.Call_Type? callType = null, BO.Open_Call_In_List_Fields? sort = null);
     public void FinishProcess(int volunteerId,int assignmentId);
     public void CanceleProcess(int volunteerId, int assignmentId);
     public void ChooseCall(int volunteerId, int callId);
-
-
 }
