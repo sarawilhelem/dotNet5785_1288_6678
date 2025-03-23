@@ -314,10 +314,51 @@ internal class CallImplentation : ICall
     }
     public void CanceleProcess(int volunteerId, int assignmentId)
     {
-
+        var volunteer=_dal.Volunteer.Read(v=>v.Id == volunteerId);
+        var assignment=_dal.Assignment.Read(a=> a.Id == assignmentId);
+        if (volunteer.Role==DO.Role.Manager||assignment.VolunteerId==volunteerId)
+        {
+            var finishType= volunteer.Role == DO.Role.Manager? DO.FinishType.ManagerCancel: DO.FinishType.SelfCancel;
+            if(assignment.FinishType==null&& assignment.FinishTime==null)
+            {
+                var newAssignment = new DO.Assignment
+                {
+                    Id=assignment.Id,
+                    VolunteerId=volunteerId,
+                    CallId=assignment.Id,
+                    OpenTime=assignment.OpenTime,
+                    FinishTime=DateTime.Now,
+                    FinishType=finishType
+                };
+                try
+                {
+                    Helpers.AssignmentManager.UpdateAssignment(newAssignment);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(" לא קיימת כזו הקצאה במערכת");
+                }               
+            }
+            else
+            {
+                throw new Exception("הביטול לא חוקי");
+            }
+        }
     }
     public void ChooseCall(int volunteerId, int callId)
-    { }
+    { 
+        var assignments=Helpers.CallManager.AssignmentsListForCall(callId).Where(a=>a.FinishType==null);
+        var call=_dal.Call.Read(call=>call.Id==callId);
+        if (assignments!=null&& Helpers.CallManager.RestTimeForCall(call)!=null)
+        {
+            Helpers.AssignmentManager.CreateAssignment(callId,volunteerId);
+        }
+        else
+        {
+            throw new Exception("הבקשה לא  חוקית- פג תוקף או...");
+        }
+        
+    }
 }
 
 
