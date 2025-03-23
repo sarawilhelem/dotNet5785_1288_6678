@@ -233,7 +233,7 @@ internal class CallImplentation : ICall
         }
         return closedCalls;
     }
-    public IEnumerable<BO.OpenCallInList> ReadAllVolunteerOpenCalls(int volunteerId, BO.Call_Type? callType = null, BO.Open_Call_In_List_Fields? sort = null)
+    public IEnumerable<BO.OpenCallInList> ReadAllVolunteerOpenCalls(int volunteerId, BO.Call_Type? callType = null, BO.OpenCallInListFields? sort = null)
     {
         var openedCalls = Helpers.CallManager.AssignmentsListForVolunteer(volunteerId).Where(a =>
     Helpers.CallManager.GetCallStatus(a.Id) == BO.FinishCallType.InProcessAtRisk ||
