@@ -6,7 +6,7 @@ namespace BO;
 /// </summary>
 /// <param name="Id">unique ID of the assinment</param>
 /// <param name="callId">ID of the call</param>
-/// <param name="Call_Type">type of call:Take_Care_At_Home/Take_Care_Out/Physiotherapy</param>
+/// <param name="CallType">type of call:TakeCareAtHome/TakeCareOut/Physiotherapy</param>
 /// <param name="Description">details abaut the call</param>
 /// <param name="Address">The call address</param>
 /// <param name="OpenTime">the time the call was opened volunteer</param>
@@ -19,7 +19,7 @@ public class CallInProgress
 {
     public int Id { get; }
     public int CallId { get; }
-    public Call_Type Call_Type { get; }
+    public CallType CallType { get; }
     public string Address { get; }
     public double Distance { get; }
     public DateTime OpenTime { get; }
@@ -31,7 +31,7 @@ public class CallInProgress
     public CallInProgress(
         int id,
         int callId,
-        Call_Type call_Type,
+        CallType callType,
         string address,
         double distance,
         DateTime openTime,
@@ -42,7 +42,7 @@ public class CallInProgress
     {
         Id = id;
         CallId = callId;
-        Call_Type = call_Type;
+        CallType = callType;
         Address = address;
         Distance = distance;
         OpenTime = openTime;
@@ -51,6 +51,8 @@ public class CallInProgress
         Description = description;
         MaxCloseTime = maxCloseTime;
     }
+    public override string ToString() => Helpers.Tools.ToStringProperty(this);
+
 }
 
 

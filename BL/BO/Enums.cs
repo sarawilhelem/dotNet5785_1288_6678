@@ -10,7 +10,7 @@ public enum Role
 }
 
 
-public enum Distance_Type
+public enum DistanceType
 {
     Air,
     Walk,
@@ -23,10 +23,10 @@ public enum CallStatus
     InProcessInRiskRange
 }
 
-public enum Call_Type
+public enum CallType
 {
-    Take_Care_At_Home,
-    Take_Care_Out,
+    TakeCareAtHome,
+    TakeCareOut,
     Physiotherapy
 }
 public enum FinishType
@@ -46,7 +46,7 @@ public enum FinishCallType
     Expired
 }
 
-public enum Volunteer_In_List_Fields
+public enum VolunteerInListFields
 {
     Id,
     Name,
@@ -55,9 +55,9 @@ public enum Volunteer_In_List_Fields
     NumCallsCancele,
     NumCallsNotValid,
     CallId,
-    Call_Type
+    CallType
 }
-public enum Call_In_List_Fields
+public enum CallInListFields
 {
     Id,
     CallId,
@@ -70,7 +70,7 @@ public enum Call_In_List_Fields
     AmountOfAssignments
 }
 
-public enum Closed_Call_In_List_Fields
+public enum ClosedCallInListFields
 {
     Id,
     CallType,
@@ -78,7 +78,7 @@ public enum Closed_Call_In_List_Fields
     OpenCallTime,
     StartCallTime,
     FinishCallTime,
-    Finish_Type
+    FinishType
 }
 public enum OpenCallInListFields
 {
@@ -89,7 +89,7 @@ public enum OpenCallInListFields
     MaxCloseTime,
     Distance
 }
-public enum Time_Unit
+public enum TimeUnit
 {
     Minute,
     Hour,

@@ -20,23 +20,23 @@ internal class AdminImplentaition : IAdmin
 
     }
 
-    public void AdvanceClock(BO.Time_Unit timeUnit)
+    public void AdvanceClock(BO.TimeUnit timeUnit)
     {
         switch (timeUnit)
         {
-            case BO.Time_Unit.Minute:
+            case BO.TimeUnit.Minute:
                 ClockManager.UpdateClock(ClockManager.Now.AddMinutes(1));
                 break;
-            case BO.Time_Unit.Hour:
+            case BO.TimeUnit.Hour:
                 ClockManager.UpdateClock(ClockManager.Now.AddHours(1));
                 break;
-            case BO.Time_Unit.Day:
+            case BO.TimeUnit.Day:
                 ClockManager.UpdateClock(ClockManager.Now.AddDays(1));
                 break;
-            case BO.Time_Unit.Month:
+            case BO.TimeUnit.Month:
                 ClockManager.UpdateClock(ClockManager.Now.AddMonths(1));
                 break;
-            case BO.Time_Unit.Year:
+            case BO.TimeUnit.Year:
                 ClockManager.UpdateClock(ClockManager.Now.AddYears(1));
                 break;
         }

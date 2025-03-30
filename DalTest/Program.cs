@@ -4,9 +4,9 @@ using DO;
 
 namespace DalTest
 {
-    internal enum Main_Menu { Exit, Volunteer_Menu, Call_Menu, Assignment_Menu, Config_Menu, Init_All, Display_All, Reset }
-    internal enum Entity_Menu { Exit, Create, Read, Read_All, Update, Delete, Delete_All }
-    internal enum Config_Menu { Exit, Add_Minute, Add_Hour, Add_Day, Add_Month, Display_Clock, Update_Risk_Range, Display_Risk_Range, Reset }
+    internal enum MainMenu { Exit, VolunteerMenu, CallMenu, AssignmentMenu, ConfigMenu, InitAll, DisplayAll, Reset }
+    internal enum EntityMenu { Exit, Create, Read, ReadAll, Update, Delete, DeleteAll }
+    internal enum ConfigMenu { Exit, AddMinute, AddHour, AddDay, AddMonth, DisplayClock, UpdateRiskRange, DisplayRiskRange, Reset }
     internal class Program
     {
         //static readonly IDal? S_dal = new DalList(); //Static field of DalList type which through it we approach to the implentations
@@ -23,7 +23,7 @@ namespace DalTest
         {
             try
             {
-                MainMenu();
+                DisplayMainMenu();
             }
             catch (Exception ex)
             {
@@ -34,40 +34,40 @@ namespace DalTest
         /// <summary>
         /// The main menu which offers entities menu and public actions
         /// </summary>
-        private static void MainMenu()
+        private static void DisplayMainMenu()
         {
             Console.WriteLine("Main menu:");
-            foreach (Main_Menu menu in Enum.GetValues(typeof(Main_Menu)))
+            foreach (MainMenu menu in Enum.GetValues(typeof(MainMenu)))
             {
                 //Print the menu
                 Console.WriteLine($"{(int)menu}: {menu}");
             }
-            Main_Menu choice;
-            while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(Main_Menu), choice))
+            MainMenu choice;
+            while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(MainMenu), choice))
                 Console.WriteLine("Wrong choice, try again");
-            while (choice != Main_Menu.Exit)
+            while (choice != MainMenu.Exit)
             {
                 switch (choice)
                 {
-                    case Main_Menu.Volunteer_Menu:
-                        EntityMenu("volunteer");
+                    case MainMenu.VolunteerMenu:
+                        DisplayEntityMenu("volunteer");
                         break;
-                    case Main_Menu.Call_Menu:
-                        EntityMenu("call");
+                    case MainMenu.CallMenu:
+                        DisplayEntityMenu("call");
                         break;
-                    case Main_Menu.Assignment_Menu:
-                        EntityMenu("assignment");
+                    case MainMenu.AssignmentMenu:
+                        DisplayEntityMenu("assignment");
                         break;
-                    case Main_Menu.Config_Menu:
-                        ConfigMenu();
+                    case MainMenu.ConfigMenu:
+                        DisplayConfigMenu();
                         break;
-                    case Main_Menu.Init_All:
+                    case MainMenu.InitAll:
                         Initialization.Do();
                         break;
-                    case Main_Menu.Display_All:
+                    case MainMenu.DisplayAll:
                         DisplayAll();
                         break;
-                    case Main_Menu.Reset:
+                    case MainMenu.Reset:
                         S_dal!.Volunteer.DeleteAll();
                         S_dal!.Call.DeleteAll();
                         S_dal!.Assignment.DeleteAll();
@@ -76,44 +76,44 @@ namespace DalTest
                 }
                 
                 Console.WriteLine("Main menu:");
-                foreach (Main_Menu menu in Enum.GetValues(typeof(Main_Menu)))
+                foreach (MainMenu menu in Enum.GetValues(typeof(MainMenu)))
                 {
                     //Printhin the menu
                     Console.WriteLine($"{(int)menu}: {menu}");
                 }
-                while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(Main_Menu), choice))
+                while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(MainMenu), choice))
                     Console.WriteLine("Wrong choice, try again");
             }
         }
-        private static void EntityMenu(string type)
+        private static void DisplayEntityMenu(string type)
         {
             //menue to each data entity (accept etity type as string
             Console.WriteLine($"{type} menu");
-            foreach (Entity_Menu menu in Enum.GetValues(typeof(Entity_Menu)))
+            foreach (EntityMenu menu in Enum.GetValues(typeof(EntityMenu)))
             {
                 //Printing the menu
                 Console.WriteLine($"{(int)menu}: {menu}");
             }
-            Entity_Menu choice;
-            while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(Entity_Menu), choice))
+            EntityMenu choice;
+            while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(EntityMenu), choice))
                 Console.WriteLine("Wrong choice, enter again");
-            while (choice != Entity_Menu.Exit)
+            while (choice != EntityMenu.Exit)
             {
                 switch (choice)
                 {
-                    case Entity_Menu.Create:
+                    case EntityMenu.Create:
                         CreateEntity(type);
                         break;
-                    case Entity_Menu.Read:
+                    case EntityMenu.Read:
                         Read(type);
                         break;
-                    case Entity_Menu.Read_All:
+                    case EntityMenu.ReadAll:
                         ReadAll(type);
                         break;
-                    case Entity_Menu.Update:
+                    case EntityMenu.Update:
                         UpdateEntity(type);
                         break;
-                    case Entity_Menu.Delete:
+                    case EntityMenu.Delete:
                         try
                         {
                             Delete(type);
@@ -123,18 +123,18 @@ namespace DalTest
                             Console.WriteLine(ex.ToString());
                         }
                         break;
-                    case Entity_Menu.Delete_All:
+                    case EntityMenu.DeleteAll:
                         DeleteAll(type);
                         break;
 
                 }
                 Console.WriteLine($"{type} menu");
-                foreach (Entity_Menu menu in Enum.GetValues(typeof(Entity_Menu)))
+                foreach (EntityMenu menu in Enum.GetValues(typeof(EntityMenu)))
                 {
                     //Printing the menu
                     Console.WriteLine($"{(int)menu}: {menu}");
                 }
-                while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(Entity_Menu), choice))
+                while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(EntityMenu), choice))
                     Console.WriteLine("Wrong choice, enter again");
             }
         }
@@ -295,14 +295,14 @@ namespace DalTest
                 role = Role.Volunteer;
             Console.Write("Enter distance type 0-2: ");
             string distanceTypeStr = Console.ReadLine()!;
-            Distance_Type distanceType;
-            while (!(Enum.TryParse(distanceTypeStr, out distanceType) && Enum.IsDefined(typeof(Distance_Type), distanceType)) && distanceTypeStr != "")
+            DistanceType distanceType;
+            while (!(Enum.TryParse(distanceTypeStr, out distanceType) && Enum.IsDefined(typeof(DistanceType), distanceType)) && distanceTypeStr != "")
             {
                 Console.WriteLine("role is illegal! enter again");
                 distanceTypeStr = Console.ReadLine()!;
             }
             if (distanceTypeStr == "")
-                distanceType = Distance_Type.Air;
+                distanceType = DistanceType.Air;
             Console.Write("Enter password: ");
             string password = Console.ReadLine()!;
             Console.Write("enter is active ('true' or 'false') :");
@@ -330,8 +330,8 @@ namespace DalTest
             string typeStr = Console.ReadLine()!;
             if (typeStr == "")
                 return null;
-            Call_Type type;
-            while (!(Enum.TryParse(typeStr, out type) && Enum.IsDefined(typeof(Call_Type), type)))
+            CallType type;
+            while (!(Enum.TryParse(typeStr, out type) && Enum.IsDefined(typeof(CallType), type)))
             {
                 Console.WriteLine("call type is illegal! enter again");
                 typeStr = Console.ReadLine()!;
@@ -398,8 +398,8 @@ namespace DalTest
             }
             Console.Write("Enter finish type: ");
             string finishTypeStr = Console.ReadLine()!;
-            Finish_Type finishType;
-            while (!(Enum.TryParse(finishTypeStr, out finishType) && Enum.IsDefined(typeof(Finish_Type), finishType)) && finishTypeStr != "")
+            FinishType finishType;
+            while (!(Enum.TryParse(finishTypeStr, out finishType) && Enum.IsDefined(typeof(FinishType), finishType)) && finishTypeStr != "")
             {
                 Console.WriteLine("finish type is illegal!");
                 finishTypeStr = Console.ReadLine()!;
@@ -518,60 +518,60 @@ namespace DalTest
         /// <summary>
         /// Offering and performing config's menue
         /// </summary>
-        private static void ConfigMenu()
+        private static void DisplayConfigMenu()
         {
             Console.WriteLine("Config menu");
             //Offers config menu
-            foreach (Config_Menu menu in Enum.GetValues(typeof(Config_Menu)))
+            foreach (ConfigMenu menu in Enum.GetValues(typeof(ConfigMenu)))
             {
                 //Printing the menu
                 Console.WriteLine($"{(int)menu}: {menu}");
             }
-            Config_Menu choice;
-            while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(Config_Menu), choice))
+            ConfigMenu choice;
+            while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(ConfigMenu), choice))
                 Console.WriteLine("Wrong choice, enter again");
-            while (choice != Config_Menu.Exit)
+            while (choice != ConfigMenu.Exit)
             {
                 switch (choice)
                 {
-                    case Config_Menu.Add_Minute:
+                    case ConfigMenu.AddMinute:
                         S_dal!.Config.Clock = S_dal!.Config.Clock.AddMinutes(1);
                         break;
-                    case Config_Menu.Add_Hour:
+                    case ConfigMenu.AddHour:
                         S_dal!.Config.Clock = S_dal!.Config.Clock.AddHours(1);
                         break;
-                    case Config_Menu.Add_Day:
+                    case ConfigMenu.AddDay:
                         S_dal!.Config.Clock = S_dal!.Config.Clock.AddDays(1);
                         break;
-                    case Config_Menu.Add_Month:
+                    case ConfigMenu.AddMonth:
                         S_dal!.Config.Clock = S_dal!.Config.Clock.AddMonths(1);
                         break;
-                    case Config_Menu.Display_Clock:
+                    case ConfigMenu.DisplayClock:
                         Console.WriteLine(S_dal!.Config.Clock);
                         break;
-                    case Config_Menu.Update_Risk_Range:
+                    case ConfigMenu.UpdateRiskRange:
                         Console.WriteLine("Enter risk range: ");
                         TimeSpan range;
                         while (!Enum.TryParse(Console.ReadLine(),out range))
                             Console.WriteLine("Risk range illegal, enter again");
                         S_dal!.Config.RiskRange = range;
                         break;
-                    case Config_Menu.Display_Risk_Range:
+                    case ConfigMenu.DisplayRiskRange:
                         Console.WriteLine(S_dal!.Config.RiskRange);
                         break;
-                    case Config_Menu.Reset:
+                    case ConfigMenu.Reset:
                         S_dal!.Config.Reset();
                         break;
 
                 }
 
                 Console.WriteLine("Config menu");
-                foreach (Config_Menu menu in Enum.GetValues(typeof(Config_Menu)))
+                foreach (ConfigMenu menu in Enum.GetValues(typeof(ConfigMenu)))
                 {
                     //Printing the menu
                     Console.WriteLine($"{(int)menu}: {menu}");
                 }
-                while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(Config_Menu), choice))
+                while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(ConfigMenu), choice))
                     Console.WriteLine("Wrong choice, enter again");
             }
         }

@@ -1,13 +1,42 @@
-﻿
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+
 namespace Helpers;
 
 static internal class Tools
 {
-    internal static bool IsWithinRiskRange(DateTime maxClose)
+    public static string ToStringProperty(object obj)
     {
-        DateTime now = ClockManager.Now;
-        TimeSpan range = AdminImplentation.RiskRange;
-        DateTime rangeStart = maxClose.Add(-range);
-        return now >= rangeStart && now <= maxClose;
+        if (obj == null)
+            return "Object is null";
+
+        Type objectType = obj.GetType();
+        PropertyInfo[] properties = objectType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        if (properties.Length == 0)
+            return "No public properties found";
+
+        string result = "";
+
+        foreach (var property in properties)
+        {
+            var value = property.GetValue(obj);
+            if (value is IList list)
+            {
+                result += $"{property.Name}:\n";
+                foreach (var item in list)
+                {
+                    result += $"  - {item}\n";
+                }
+            }
+            else
+            {
+                result += $"{property.Name}: {value}\n";
+            }
+        }
+
+        return result;
     }
+
 }

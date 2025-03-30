@@ -11,7 +11,7 @@
 /// <param name=" Role "> volunteer's role</param>
 /// <param name=" IsActive ">if volunteer is active he can procces</param>
 /// <param name=" MaxDistanceCall ">volunteer will get procceses according to the max distance he chose</param>
-/// <param name=" Distance_Type ">type of distance</param>
+/// <param name=" DistanceType ">type of distance</param>
 
 namespace DO;
 
@@ -26,7 +26,7 @@ public record Volunteer
     double? Longitude = null,
     double? MaxDistanceCall = null,
     Role Role = Role.Volunteer,
-    Distance_Type Distance_Type = Distance_Type.Air,
+    DistanceType DistanceType = DistanceType.Air,
     string? Password = null,
     bool IsActive = true
     )

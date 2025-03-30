@@ -3,14 +3,14 @@
 using BlApi;
 using BO;
 using DalApi;
-using DO;
-using System.Diagnostics;
+using System.Formats.Tar;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Helpers;
 
 internal class CallManager
 {
-    private static IDal s_dal = Factory.Get;
+    private static IDal s_dal = DalApi.Factory.Get;
     public static IEnumerable<DO.Assignment> AssignmentsListForCall(int id)
     {
         var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId ==id);
@@ -23,13 +23,16 @@ internal class CallManager
     }
     public static DO.Volunteer GetVolunteer(int id)
     {
-        return s_dal.Volunteer.Read(v => v.Id == id);
+        return s_dal.Volunteer.Read(v => v.Id == id) ??
+            throw new BO.BlDoesNotExistException($"Volunteer with id {id} does not exists");
     }
    public static string? GetLastVolunteerName(DO.Call call)
     {
         var assignmentsList= AssignmentsListForCall(call.Id).OrderByDescending(a => a.OpenTime);
         var lastAssignment= assignmentsList.FirstOrDefault();
-           var volunteer = GetVolunteer(lastAssignment.VolunteerId);
+        if (lastAssignment is null)
+            return null;
+        var volunteer = GetVolunteer(lastAssignment.VolunteerId);
         return volunteer.Name;
     }
     public static TimeSpan? RestTimeForCall(DO.Call call)
@@ -47,7 +50,7 @@ internal class CallManager
         }
         else
         {
-            if (RestTimeForCall(call) == null)
+            if (call is null || RestTimeForCall(call) == null)
             {
                 return FinishCallType.Expired;
             }
@@ -86,7 +89,7 @@ internal class CallManager
     {
         var volunteer = s_dal.Volunteer.Read(v => v.Id == volunteerId);
         var call = s_dal.Call.Read(c => c.Id == callId);
-        var distance =Math.Sqrt (Math.Pow(((double)(volunteer.Latitude) - call.Latitude),2)+ Math.Pow(((double)(volunteer.Longitude)- call.Longitude),2));
+        var distance =Math.Sqrt (Math.Pow(((double)(volunteer!.Latitude!).Value - call!.Latitude),2)+ Math.Pow(((double)(volunteer!.Longitude!).Value - call.Longitude),2));
         return distance;
     }
 

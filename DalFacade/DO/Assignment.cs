@@ -7,7 +7,7 @@ namespace DO;
 /// <param name="Id">unique ID (created automatically)</param>
 /// <param name="callId">ID of the call</param>
 /// <param name="volunteerId">ID of the volunteer</param>
-/// <param name="insersionTime">the date of the first time this volunteer chose this call</param>
+/// <param name="OpenTime">the date of the first time this volunteer chose this call</param>
 /// <param name="finishTime">the date the volunteer finish process this call</param>
 /// <param name="finishType">why the volunteer finish proces this call</param>
 

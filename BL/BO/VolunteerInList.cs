@@ -10,8 +10,8 @@ public class VolunteerInList
     public int NumCallsCancel { get; set; }
     public int NumCallsNotValid { get; set; }
     public int? CallId { get; set; }
-    public Call_Type? Call_Type { get; set; }
-    public VolunteerInList(int id, string name, bool isActive, int numCallsHandle, int numCallsCancel, int numCallsNotValid, int? callId, Call_Type? callType)
+    public CallType? CallType { get; set; }
+    public VolunteerInList(int id, string name, bool isActive, int numCallsHandle, int numCallsCancel, int numCallsNotValid, int? callId, CallType? callType)
     {
         Id = id;
         Name = name;
@@ -20,6 +20,8 @@ public class VolunteerInList
         NumCallsCancel = numCallsCancel;
         NumCallsNotValid = numCallsNotValid;
         CallId = callId;
-        Call_Type = callType;
+        CallType = callType;
     }
+    public override string ToString() => Helpers.Tools.ToStringProperty(this);
+
 }

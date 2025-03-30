@@ -22,8 +22,8 @@ public static class Initialization
     {
         const int COUNT_VOLUNTEERS = 16;
         int managerIndex = s_rand.Next(0, 20);
-        const int MIN_ID = 200000000;
-        const int MAX_ID = 400000000;
+        const int MIN_ID = 20000000;
+        const int MAX_ID = 40000000;
         string[] vNames =
             ["Dani Levy", "Eli Amar", "Yair Cohen", "Ariela Levin", "Dina Klein", "Shira Israelof", "Sarah Cohen", "Jacob Levi", "Leah Goldstein", "David Rosenberg", "Rachel Schwartz", "Isaac Cohen", "Rebecca Levy", "Aaron Friedman", "Miriam Cohen", "Benjamin Levy", "Esther Cohen", "Samuel Goldberg", "Hannah Levy", "Solomon Cohen"];
         string[] vStartsPhones = ["05041", "05271", "05341", "05484", "05567", "05832"];
@@ -51,13 +51,15 @@ public static class Initialization
         {
             int vId;
             do
-                vId = s_rand.Next(MIN_ID, MAX_ID);
+                vId = FullIdentityNumber(s_rand.Next(MIN_ID, MAX_ID));
             while (s_dal!.Volunteer!.Read(vId) != null);
 
             string vPhone = string.Concat(vStartsPhones[s_rand.Next(0, 6)], s_rand.Next(10000, 100000).ToString());
             string vEmail = string.Concat(vNames[i].Split(' ')[0], "@gmail.com");
             int maxDistance = s_rand.Next(10, 1000);
-            Role role = i == managerIndex ? Role.Manager : Role.Volunteer;
+            Role role =  Role.Volunteer;
+            if (i == managerIndex)
+                role = Role.Manager;
 
             Volunteer newV = new (vId, vNames[i], vPhone, vEmail, vAddresses[i], vLatitude[i], vLongitude[i], maxDistance, role);
             try
@@ -127,7 +129,7 @@ public static class Initialization
 
         for (int i = 0; i < COUNT_CALLS; i++)
         {
-            Call_Type type = (Call_Type)s_rand.Next(0, 3);
+            CallType type = (CallType)s_rand.Next(0, 3);
             DateTime open = startOpen.AddDays(s_rand.Next(0,range));
             DateTime endClose = i > 45
                 ? open.AddDays(3)
@@ -174,14 +176,52 @@ public static class Initialization
                 fTime = null;
             }
             
-            Finish_Type? fType = calls[i].MaxCloseTime < s_dal!.Config.Clock ? Finish_Type.Expired :
-                fTime != null ? (Finish_Type)s_rand.Next(0, 3) : null;
+            FinishType? fType = calls[i].MaxCloseTime < s_dal!.Config.Clock ? FinishType.Expired :
+                fTime != null ? (FinishType)s_rand.Next(0, 3) : null;
 
             Assignment newA = new(cId, vId, insersion, fTime, fType);
             s_dal!.Assignment.Create(newA);
         }
 
     }
+
+    /// <summary>
+    /// function to calculate the check digit in the identity number
+    /// </summary>
+    /// <param name="identityNumber">8 first digits in id</param>
+    /// <returns>all 9 digits of id</returns>
+    /// <exception cref="ArgumentException">if the given number is not 8 digits</exception>
+    public static int FullIdentityNumber(int identityNumber)
+    {
+        string identityString = identityNumber.ToString();
+
+        if (identityString.Length != 8)
+        {
+            throw new ArgumentException("Identity number must be 8 digits long.");
+        }
+
+        int sum = 0;
+        for (int i = 0; i < identityString.Length; i++)
+        {
+            int digit = int.Parse(identityString[i].ToString());
+            if (i % 2 == 0)
+            {
+                digit *= 2;
+                if (digit > 9) 
+                {
+                    digit -= 9;
+                }
+            }
+            sum += digit;
+        }
+
+        int checkDigit = (10 - (sum % 10)) % 10;
+
+        return int.Parse(identityString + checkDigit.ToString());
+    }
+
+    
+
 
     /// <summary>
     /// static function to call the function in order to init

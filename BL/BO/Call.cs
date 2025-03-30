@@ -9,7 +9,7 @@ namespace BO;
 /// Details of call that accepted
 /// </summary>
 ///<param name="Id">Id of call</param>
-///<param name="Type">type of call:Take_Care_At_Home/Take_Care_Out/Physiotherapy</param>
+///<param name="Type">type of call:TakeCareAtHome/TakeCareOut/Physiotherapy</param>
 ///<param name="Description">details about the call</param>
 ///<param name="Address">to where do they want volunteer</param>
 /// <param name="Latitude">vertical distance from the equator</param>
@@ -24,21 +24,20 @@ namespace BO;
 
 public class Call
 {
-    public int Id {  get; init; }
-    public BO.Call_Type Type { get; set; }
+    public int Id { get; init; }
+    public BO.CallType Type { get; set; }
     public string? Description { get; set; }
-    public string Address {  get; set; }
+    public string Address { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     public DateTime OpenTime { get; init; }
     public DateTime MaxCloseTime { get; set; }
     public FinishCallType Status { get; set; }
-    public List<BO.CallAssignInList>? CallAssignList {  get; set; }
-    public Call(BO.Call_Type type, string address, DateTime openTime, DateTime maxCloseTime,
-        string? description = null, Finish_Call_Type status = Finish_Call_Type.Open, 
+    public List<BO.CallAssignInList>? CallAssignList { get; set; }
+    public Call(BO.CallType type, string address, DateTime openTime, DateTime maxCloseTime,
+        string? description = null, FinishCallType status = FinishCallType.Open,
         double latitude = 0, double longitude = 0, List<BO.CallAssignInList>? callAssignList = null)
     {
-        Id = 
         Type = type;
         Address = address;
         Latitude = latitude;
@@ -49,4 +48,5 @@ public class Call
         CallAssignList = callAssignList;
         Description = description;
     }
+    public override string ToString() => Helpers.Tools.ToStringProperty(this);
 }

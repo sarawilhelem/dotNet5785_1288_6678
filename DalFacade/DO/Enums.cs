@@ -8,16 +8,16 @@ public enum Role
 }
 
 
-public enum Distance_Type
+public enum DistanceType
 {
     Air,
     Walk,
     Drive
 }
-public enum Call_Type
+public enum CallType
 {
-    Take_Care_At_Home,
-    Take_Care_Out,
+    TakeCareAtHome,
+    TakeCareOut,
     Physiotherapy
 }
 

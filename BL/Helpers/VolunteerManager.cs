@@ -170,4 +170,13 @@ internal static class VolunteerManager
 
         return EarthRadius * c;
     }
+
+    internal static bool IsWithinRiskRange(DateTime maxClose)
+    {
+        BlApi.IBl bl = BlApi.Factory.Get();
+        DateTime now = ClockManager.Now;
+        TimeSpan range = bl.Admin.GetRiskRange();
+        DateTime rangeStart = maxClose.Add(-range);
+        return now >= rangeStart && now <= maxClose;
+    }
 }

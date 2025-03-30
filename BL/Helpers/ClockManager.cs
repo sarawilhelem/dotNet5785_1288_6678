@@ -32,7 +32,7 @@ internal static class ClockManager //stage 4
         _dal.Config.Clock = newClock; //stage 4
 
         //TO_DO:
-        //Add calls here to any logic method that should be called periodically,
+        //Create calls here to any logic method that should be called periodically,
         //after each clock update
         //for example, Periodic students' updates:
         //Go through all students to update properties that are affected by the clock update
@@ -92,7 +92,7 @@ internal static class ClockManager //stage 4
 
             #region Stage 7
             //TO_DO:
-            //Add calls here to any logic simulation that was required in stage 7
+            //Create calls here to any logic simulation that was required in stage 7
             //for example: course registration simulation
             //StudentManager.SimulateCourseRegistrationAndGrade(); //stage 7
 

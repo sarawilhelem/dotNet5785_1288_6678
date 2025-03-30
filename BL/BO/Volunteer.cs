@@ -19,7 +19,7 @@ namespace BO
         public Role Role { get; set; } = Role.Volunteer;
         public bool IsActive { get; set; }
         public double? MaxDistance { get; set; }
-        public Distance_Type Distance_Type { get; set; } = Distance_Type.Air;
+        public DistanceType DistanceType { get; set; } = DistanceType.Air;
         public int NumCallsHandle { get; set; } = 0;
         public int NumCallsCancel { get; set; } = 0;
         public int NumCallsNotValid { get; set; } = 0;
@@ -37,7 +37,7 @@ namespace BO
             Role role = Role.Volunteer,
             bool isActive = true,
             double? maxDistance = null,
-            Distance_Type distanceType = Distance_Type.Air,
+            DistanceType distanceType = DistanceType.Air,
             int numCallsHandle = 0,
             int numCallsCancel = 0,
             int numCallsNotValid = 0,
@@ -54,12 +54,14 @@ namespace BO
             Role = role;
             IsActive = isActive;
             MaxDistance = maxDistance;
-            Distance_Type = distanceType;
+            DistanceType = distanceType;
             NumCallsHandle = numCallsHandle;
             NumCallsCancel = numCallsCancel;
             NumCallsNotValid = numCallsNotValid;
             Call = call;
         }
+        public override string ToString() => Helpers.Tools.ToStringProperty(this);
+
     }
 
 }

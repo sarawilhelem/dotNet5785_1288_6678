@@ -7,7 +7,7 @@ namespace BO;
 /// Details of an open call
 /// </summary>
 /// <param name="Id">ID of the call</param>
-/// <param name="Call_Type">type of call:Take_Care_At_Home/Take_Care_Out/Physiotherapy</param>
+/// <param name="CallType">type of call:TakeCareAtHome/TakeCareOut/Physiotherapy</param>
 /// <param name="Description">details abaut the call</param>
 /// <param name="Address">The call address</param>
 /// <param name="OpenTime">the time the call was opened volunteer</param>
@@ -17,9 +17,11 @@ namespace BO;
 public class OpenCallInList
 {
     public int Id { get; init; }
-    public Call_Type CallType { get; set; }
+    public CallType CallType { get; set; }
     required public string Address { get; set; }
     public DateTime OpenTime { get; init; }
     public DateTime? MaxCloseTime { get; set; }
     public double Distance { get; init; }
+    public override string ToString() => Helpers.Tools.ToStringProperty(this);
+
 }

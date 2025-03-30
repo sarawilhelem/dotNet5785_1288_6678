@@ -30,7 +30,7 @@ internal class VolunteerImplementation : IVolunteer
             Longitude = v.ToDoubleNullable("Longitude") ?? null,
             MaxDistanceCall = v.ToDoubleNullable("MaxDistanceCall") ?? null,
             Role = v.ToEnumNullable<Role>("Role") ?? DO.Role.Volunteer,
-            Distance_Type = v.ToEnumNullable<Distance_Type>("DistanceType") ?? Distance_Type.Air,
+            DistanceType = v.ToEnumNullable<DistanceType>("DistanceType") ?? DistanceType.Air,
             Password = (string?)v.Element("Password") ?? null,
             IsActive = (bool?)v.Element("IsActive") ?? false
         };
@@ -53,7 +53,7 @@ internal class VolunteerImplementation : IVolunteer
             new XElement("Latitude", v.Latitude),
             new XElement("MaxDistanceCall", v.MaxDistanceCall),
             new XElement("Role", v.Role),
-            new XElement("DistanceType", v.Distance_Type),
+            new XElement("DistanceType", v.DistanceType),
             new XElement("Password", v.Password),
             new XElement("IsActive", v.IsActive));
     }

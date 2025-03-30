@@ -12,6 +12,17 @@ namespace BO
         public string? Name { get; set; }
         public DateTime Insersion {  get; set; }
         public DateTime? FinishTime {  get; set; }
-        public Finish_Type? FinishType { get; set; }
+        public FinishType? FinishType { get; set; }
+
+        public CallAssignInList(int? volunteerId, string? name, DateTime insersion, DateTime? finishTime, FinishType? finishType)
+        {
+            VolunteerId = volunteerId;
+            Name = name;
+            Insersion = insersion;
+            FinishTime = finishTime;
+            FinishType = finishType;
+        }
+        public override string ToString() => Helpers.Tools.ToStringProperty(this);
+
     }
 }

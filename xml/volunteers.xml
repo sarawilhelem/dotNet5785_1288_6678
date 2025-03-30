@@ -1,121 +1,121 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteers>
   <Volunteer>
-    <Id>391913094</Id>
+    <Id>286914028</Id>
     <Name>Dani Levy</Name>
-    <Phone>0527152558</Phone>
+    <Phone>0548433998</Phone>
     <Email>Dani@gmail.com</Email>
     <Address>הרצל 10 כיכר המדינה ישראל</Address>
     <Longitude>32.093035</Longitude>
     <Latitude>34.77041</Latitude>
-    <MaxDistanceCall>244</MaxDistanceCall>
+    <MaxDistanceCall>591</MaxDistanceCall>
     <Role>Volunteer</Role>
     <DistanceType>Air</DistanceType>
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>346329597</Id>
+    <Id>282519124</Id>
     <Name>Eli Amar</Name>
-    <Phone>0527111670</Phone>
+    <Phone>0504139162</Phone>
     <Email>Eli@gmail.com</Email>
     <Address>דיזנגוף 48 תל אביב ישראל</Address>
     <Longitude>32.075237</Longitude>
     <Latitude>34.775382</Latitude>
-    <MaxDistanceCall>287</MaxDistanceCall>
+    <MaxDistanceCall>594</MaxDistanceCall>
     <Role>Volunteer</Role>
     <DistanceType>Air</DistanceType>
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>210007328</Id>
+    <Id>239596335</Id>
     <Name>Yair Cohen</Name>
-    <Phone>0504195514</Phone>
+    <Phone>0583254917</Phone>
     <Email>Yair@gmail.com</Email>
     <Address>הירקון 7 נמל תל אביב ישראל</Address>
     <Longitude>32.074741</Longitude>
     <Latitude>34.778712</Latitude>
-    <MaxDistanceCall>579</MaxDistanceCall>
+    <MaxDistanceCall>364</MaxDistanceCall>
     <Role>Volunteer</Role>
     <DistanceType>Air</DistanceType>
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>204227642</Id>
+    <Id>276236949</Id>
     <Name>Ariela Levin</Name>
-    <Phone>0527168917</Phone>
+    <Phone>0504175764</Phone>
     <Email>Ariela@gmail.com</Email>
     <Address>רוטשילד 22 תל אביב ישראל</Address>
     <Longitude>32.069773</Longitude>
     <Latitude>34.774574</Latitude>
-    <MaxDistanceCall>234</MaxDistanceCall>
+    <MaxDistanceCall>176</MaxDistanceCall>
     <Role>Volunteer</Role>
     <DistanceType>Air</DistanceType>
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>357085930</Id>
+    <Id>319715750</Id>
     <Name>Dina Klein</Name>
-    <Phone>0556790576</Phone>
+    <Phone>0548411684</Phone>
     <Email>Dina@gmail.com</Email>
     <Address>בן יהודה 15 נמל חיפה ישראל</Address>
     <Longitude>32.820103</Longitude>
     <Latitude>34.983579</Latitude>
-    <MaxDistanceCall>338</MaxDistanceCall>
+    <MaxDistanceCall>922</MaxDistanceCall>
     <Role>Volunteer</Role>
     <DistanceType>Air</DistanceType>
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>397823530</Id>
+    <Id>357177662</Id>
     <Name>Shira Israelof</Name>
-    <Phone>0504186201</Phone>
+    <Phone>0504147836</Phone>
     <Email>Shira@gmail.com</Email>
     <Address>המרכז 5 מרכז העיר חיפה ישראל</Address>
     <Longitude>32.820918</Longitude>
     <Latitude>34.98719</Latitude>
-    <MaxDistanceCall>221</MaxDistanceCall>
-    <Role>Volunteer</Role>
-    <DistanceType>Air</DistanceType>
-    <Password />
-    <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
-    <Id>332630008</Id>
-    <Name>Sarah Cohen</Name>
-    <Phone>0534132756</Phone>
-    <Email>Sarah@gmail.com</Email>
-    <Address>הגבעה 3 מושב חורפיש ישראל</Address>
-    <Longitude>32.820536</Longitude>
-    <Latitude>34.988004</Latitude>
-    <MaxDistanceCall>316</MaxDistanceCall>
+    <MaxDistanceCall>741</MaxDistanceCall>
     <Role>Manager</Role>
     <DistanceType>Air</DistanceType>
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>388098882</Id>
-    <Name>Jacob Levi</Name>
-    <Phone>0527111278</Phone>
-    <Email>Jacob@gmail.com</Email>
-    <Address>הצופים 12 הר הצופים ישראל</Address>
-    <Longitude>32.977347</Longitude>
-    <Latitude>34.742663</Latitude>
-    <MaxDistanceCall>586</MaxDistanceCall>
+    <Id>313501270</Id>
+    <Name>Sarah Cohen</Name>
+    <Phone>0504113173</Phone>
+    <Email>Sarah@gmail.com</Email>
+    <Address>הגבעה 3 מושב חורפיש ישראל</Address>
+    <Longitude>32.820536</Longitude>
+    <Latitude>34.988004</Latitude>
+    <MaxDistanceCall>489</MaxDistanceCall>
     <Role>Volunteer</Role>
     <DistanceType>Air</DistanceType>
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>288200393</Id>
+    <Id>257331792</Id>
+    <Name>Jacob Levi</Name>
+    <Phone>0534168596</Phone>
+    <Email>Jacob@gmail.com</Email>
+    <Address>הצופים 12 הר הצופים ישראל</Address>
+    <Longitude>32.977347</Longitude>
+    <Latitude>34.742663</Latitude>
+    <MaxDistanceCall>871</MaxDistanceCall>
+    <Role>Volunteer</Role>
+    <DistanceType>Air</DistanceType>
+    <Password />
+    <IsActive>true</IsActive>
+  </Volunteer>
+  <Volunteer>
+    <Id>331566522</Id>
     <Name>Leah Goldstein</Name>
-    <Phone>0548424119</Phone>
+    <Phone>0504128139</Phone>
     <Email>Leah@gmail.com</Email>
     <Address>הנחל 30 מושב כפר סבא ישראל</Address>
     <Longitude>32.175679</Longitude>
@@ -127,115 +127,101 @@
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>283041052</Id>
+    <Id>322679008</Id>
     <Name>David Rosenberg</Name>
-    <Phone>0583261606</Phone>
+    <Phone>0556779358</Phone>
     <Email>David@gmail.com</Email>
     <Address>האלון 4 גבעתיים ישראל</Address>
     <Longitude>32.07283</Longitude>
     <Latitude>34.79496</Latitude>
-    <MaxDistanceCall>847</MaxDistanceCall>
+    <MaxDistanceCall>187</MaxDistanceCall>
     <Role>Volunteer</Role>
     <DistanceType>Air</DistanceType>
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>218567032</Id>
+    <Id>282766927</Id>
     <Name>Rachel Schwartz</Name>
-    <Phone>0504188163</Phone>
+    <Phone>0527141221</Phone>
     <Email>Rachel@gmail.com</Email>
     <Address>הצבי 9 נחלת בנימין ישראל</Address>
     <Longitude>32.175537</Longitude>
     <Latitude>34.912181</Latitude>
-    <MaxDistanceCall>857</MaxDistanceCall>
+    <MaxDistanceCall>406</MaxDistanceCall>
     <Role>Volunteer</Role>
     <DistanceType>Air</DistanceType>
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>209317628</Id>
+    <Id>382977136</Id>
     <Name>Isaac Cohen</Name>
-    <Phone>0504168574</Phone>
+    <Phone>0534140198</Phone>
     <Email>Isaac@gmail.com</Email>
     <Address>היער 17 שכונת יערות ישראל</Address>
     <Longitude>32.07082</Longitude>
     <Latitude>34.799589</Latitude>
-    <MaxDistanceCall>645</MaxDistanceCall>
+    <MaxDistanceCall>308</MaxDistanceCall>
     <Role>Volunteer</Role>
     <DistanceType>Air</DistanceType>
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>308936474</Id>
+    <Id>367440109</Id>
     <Name>Rebecca Levy</Name>
-    <Phone>0534183303</Phone>
+    <Phone>0527155388</Phone>
     <Email>Rebecca@gmail.com</Email>
     <Address>הכרמל 6 כפר חסידים ישראל</Address>
     <Longitude>32.070131</Longitude>
     <Latitude>34.801429</Latitude>
-    <MaxDistanceCall>339</MaxDistanceCall>
+    <MaxDistanceCall>700</MaxDistanceCall>
     <Role>Volunteer</Role>
     <DistanceType>Air</DistanceType>
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>254053506</Id>
+    <Id>319065382</Id>
     <Name>Aaron Friedman</Name>
-    <Phone>0556727286</Phone>
+    <Phone>0534167833</Phone>
     <Email>Aaron@gmail.com</Email>
     <Address>האדמור 11 שכונת אדמורים ישראל</Address>
     <Longitude>32.074038</Longitude>
     <Latitude>34.790317</Latitude>
-    <MaxDistanceCall>414</MaxDistanceCall>
+    <MaxDistanceCall>88</MaxDistanceCall>
     <Role>Volunteer</Role>
     <DistanceType>Air</DistanceType>
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>350480683</Id>
+    <Id>382634550</Id>
     <Name>Miriam Cohen</Name>
-    <Phone>0556713224</Phone>
+    <Phone>0534139312</Phone>
     <Email>Miriam@gmail.com</Email>
     <Address>אלנבי 25 שינקין ישראל</Address>
     <Longitude>32.072976</Longitude>
     <Latitude>34.773367</Latitude>
-    <MaxDistanceCall>822</MaxDistanceCall>
+    <MaxDistanceCall>611</MaxDistanceCall>
     <Role>Volunteer</Role>
     <DistanceType>Air</DistanceType>
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
   <Volunteer>
-    <Id>1</Id>
-    <Name>1</Name>
-    <Phone>1</Phone>
-    <Email>1</Email>
-    <Address>1</Address>
-    <Longitude>1</Longitude>
-    <Latitude>1</Latitude>
-    <MaxDistanceCall>1</MaxDistanceCall>
+    <Id>302932450</Id>
+    <Name>Benjamin Levy</Name>
+    <Phone>0504132640</Phone>
+    <Email>Benjamin@gmail.com</Email>
+    <Address>שפע חיים 14 ירושלים ישראל</Address>
+    <Longitude>32.845631</Longitude>
+    <Latitude>34.325698</Latitude>
+    <MaxDistanceCall>850</MaxDistanceCall>
     <Role>Volunteer</Role>
-    <DistanceType>Walk</DistanceType>
-    <Password>1</Password>
+    <DistanceType>Air</DistanceType>
+    <Password />
     <IsActive>true</IsActive>
-  </Volunteer>
-  <Volunteer>
-    <Id>2</Id>
-    <Name>1</Name>
-    <Phone>1</Phone>
-    <Email>1</Email>
-    <Address>1</Address>
-    <Longitude>1</Longitude>
-    <Latitude>1</Latitude>
-    <MaxDistanceCall>1</MaxDistanceCall>
-    <Role>Volunteer</Role>
-    <DistanceType>Walk</DistanceType>
-    <Password>1</Password>
-    <IsActive>false</IsActive>
   </Volunteer>
 </ArrayOfVolunteers>
