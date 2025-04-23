@@ -1,5 +1,16 @@
-﻿
-namespace BO;
+﻿namespace BO;
+
+/// <summary>
+/// Volunteer in list
+/// </summary> 
+/// <param name=" Id "> Personal unique ID of the volunteer  </param> 
+/// <param name=" Name "> Private Name of the volunteer </param> 
+/// <param name=" IsActive ">if volunteer is active he can procces</param>
+/// <param name=" NumCallsHandle ">how many calls this volunteer handled</param>
+/// <param name=" NumCallsCancel ">how many calls this volunteer canceled</param>
+/// <param name=" NumCallsNotValid">how many calls assigned to this volunteer and expired</param>
+/// <param name=" CallId">a call id the volunteer process now</param>
+/// <param name=" CallType">the call type the volunteer process now</param>
 
 public class VolunteerInList
 {

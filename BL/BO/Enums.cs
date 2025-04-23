@@ -1,8 +1,4 @@
-﻿
-using Microsoft.VisualBasic;
-
-namespace BO;
-
+﻿namespace BO;
 public enum Role
 {
     Manager,
@@ -40,10 +36,10 @@ public enum FinishCallType
 {
     Open,
     InProcess,
-    Close,
-    OpenAtRisk,
-    InProcessAtRisk,
-    Expired
+    Close, 
+    OpenInRisk,
+    InProcessInRisk,
+    Expired 
 }
 
 public enum VolunteerInListFields

@@ -12,6 +12,7 @@
 	  <UseCommonOutputDirectory>true</UseCommonOutputDirectory>
   </PropertyGroup>
 
+
   <ItemGroup>
     <ProjectReference Include="..\BL\BL.csproj" />
   </ItemGroup>

@@ -18,23 +18,25 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <param name="volunteer">the volunteer to add</param>
     /// <exception cref="BO.BlIllegalValues">to when the volunteers' details are illegal</exception>
     /// <exception cref="BO.BlAlreadyExistsException">to when trying to add a volunteer with already exist id</exception>
-    public async void Create(BO.Volunteer volunteer)
+    public  void Create(BO.Volunteer volunteer)
     {
         if (VolunteerManager.CheckValidation(volunteer) == false)
             throw new BO.BlIllegalValues("Volunteer fields are illegal");
-        if (volunteer.Address != null)
-        {
-            var (latitude, longitude) = await VolunteerManager.GetCoordinatesAsync(volunteer.Address);
-            if (latitude != null && longitude != null)
+        
+            if (volunteer.Address is not null)
             {
-                volunteer.Latitude = latitude;
-                volunteer.Longitude = longitude;
+
+                var (latitude, longitude) =  Tools.GetCoordinates(volunteer.Address);
+                if (latitude != null && longitude != null)
+                {
+                    volunteer.Latitude = latitude;
+                    volunteer.Longitude = longitude;
+                }
+                else
+                    throw new BO.BlConfigException("Can't approach address");
+
             }
-            else
-                throw new BO.BlIllegalValues("Volunteer address is illegal");
-
-        }
-
+        
         DO.Volunteer doVolunteer = new(volunteer.Id, volunteer.Name, volunteer.Phone, volunteer.Email, volunteer.Address, volunteer.Latitude, volunteer.Longitude,
             volunteer.MaxDistance, (DO.Role)volunteer.Role, (DO.DistanceType)volunteer.DistanceType, VolunteerManager.HashPassword(volunteer.Password), volunteer.IsActive);
 
@@ -69,9 +71,16 @@ internal class VolunteerImplentation : BlApi.IVolunteer
         }
     }
 
+    /// <summary>
+    /// checks if password is correct (hashing it and compare to the hashed password in the db)
+    /// </summary>
+    /// <param name="name">volunteer's name</param>
+    /// <param name="password">volunteer's password</param>
+    /// <returns>volunteer's role</returns>
+    /// <exception cref="BO.BlDoesNotExistException">if there is not a volunteer with this name and this password - the entering failed</exception>
     public BO.Role EnterSystem(string name, string? password = null)
     {
-        DO.Volunteer volunteer = _dal.Volunteer.Read(v => v.Name == name && (v.Password == "" || v.Password == VolunteerManager.HashPassword(password))) ??
+        DO.Volunteer volunteer = _dal.Volunteer.Read(v => v.Name == name && (v.Password == "" || v.Password is null || v.Password == VolunteerManager.HashPassword(password))) ??
             throw new BO.BlDoesNotExistException($"Entering was not succeeded");
         return (BO.Role)volunteer.Role;
     }
@@ -114,30 +123,6 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <returns>a list of bo volunteers</returns>
     public IEnumerable<BO.VolunteerInList> ReadAll(bool? isActive = null, BO.VolunteerInListFields? sort = null)
     {
-        //sort ??= BO.VolunteerInListFields.Id;
-        //IEnumerable<DO.Volunteer> volunteers = _dal.Volunteer.ReadAll(isActive is null ? null : v => v.IsActive == isActive);
-        //var volunteersInList = volunteers.Select(v =>
-        //{
-        //    int? callId = _dal.Assignment.Read(a => a.VolunteerId == v.Id && a.FinishTime == null)?.CallId;
-        //    BO.CallType? callType = callId is null ? null : (BO.CallType?)_dal.Call.Read(callId.Value)!.CallType;
-        //    return new BO.VolunteerInList(
-        //    v.Id, v.Name, v.IsActive,
-        //    _dal.Assignment.ReadAll(a => a.VolunteerId == v.Id && a.FinishType == DO.FinishType.Addressed).Count(),
-        //    _dal.Assignment.ReadAll(a => a.VolunteerId == v.Id && (a.FinishType == DO.FinishType.ManageCancel || a.FinishType == DO.FinishType.SelfCancel)).Count(),
-        //    _dal.Assignment.ReadAll(a => a.VolunteerId == v.Id && a.FinishType == DO.FinishType.Expired).Count(),
-        //    callId, callType);
-        //}).ToList();
-
-
-
-        //var propertyInfo = typeof(BO.VolunteerInList).GetProperty(sort.Value.ToString());
-
-        //if (propertyInfo != null)
-        //{
-        //    volunteersInList = volunteersInList.OrderBy(v => propertyInfo.GetValue(v)).ToList();
-        //}
-
-        //return volunteersInList;
         var volunteersInList = from v in _dal.Volunteer.ReadAll(isActive is null ? null : v => v.IsActive == isActive)
                                join a in _dal.Assignment.ReadAll() on v.Id equals a.VolunteerId into assignments
                                let callId = assignments.FirstOrDefault(a => a.FinishTime == null)?.CallId
@@ -172,25 +157,25 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <param name="volunteer">the updated volunteer</param>
     /// <exception cref="BO.BlIllegalValues">if the volunteer details are illegal</exception>
     /// <exception cref="BO.BlDoesNotExistException">there is not any volunteer with the id like the parameter volunteer</exception>
-    public async void Update(int id, BO.Volunteer volunteer)
+    public void Update(int id, BO.Volunteer volunteer)
     {
         DO.Volunteer? requester = _dal.Volunteer.Read(id);
         if (requester is null || (volunteer.Id != id && requester.Role != DO.Role.Manager))
             return;
         if (!VolunteerManager.CheckValidation(volunteer))
             throw new BO.BlIllegalValues("Volunteer fields are illegal");
-        if (volunteer.Address != null)
-        {
-            var (latitude, longitude) = await VolunteerManager.GetCoordinatesAsync(volunteer.Address);
-            if (latitude != null && longitude != null)
+       
+            if (volunteer.Address != null)
             {
-                volunteer.Latitude = latitude;
-                volunteer.Longitude = longitude;
+                var (latitude, longitude) =  Tools.GetCoordinates(volunteer.Address);
+                if (latitude != null && longitude != null)
+                {
+                    volunteer.Latitude = latitude;
+                    volunteer.Longitude = longitude;
+                }
+                else
+                    throw new BO.BlCoordinatesException("Can't approag the address");
             }
-            else
-                throw new BO.BlIllegalValues("Volunteer address is illegal");
-        }
-
         try
         {
             DO.Volunteer? prevDoVolunteer = _dal.Volunteer.Read(volunteer.Id) ??
@@ -199,7 +184,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
                 volunteer.Role = (BO.Role)prevDoVolunteer.Role;
             DO.Volunteer updateDoVolunteer = new(volunteer.Id, volunteer.Name, volunteer.Phone, volunteer.Email, volunteer.Address,
                 volunteer.Latitude, volunteer.Longitude, volunteer.MaxDistance, (DO.Role)volunteer.Role,
-                (DO.DistanceType)volunteer.DistanceType, volunteer.Password, volunteer.IsActive);
+                (DO.DistanceType)volunteer.DistanceType, VolunteerManager.HashPassword(volunteer.Password), volunteer.IsActive);
             _dal.Volunteer.Update(updateDoVolunteer);
         }
         catch (BO.BlDoesNotExistException ex)
@@ -208,7 +193,3 @@ internal class VolunteerImplentation : BlApi.IVolunteer
         }
     }
 }
-
-
-
-

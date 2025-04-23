@@ -1,8 +1,10 @@
-﻿/// <summary>
+﻿namespace DO;
+/// <summary>
 /// Volunteer Entity represents a volunteer with all its props 
 /// </summary> 
 /// <param name=" Id "> Personal unique ID of the volunteer  </param> 
 /// <param name=" Name "> Private Name of the volunteer </param> 
+/// <param name=" Phone "> phone of the volunteer </param> 
 /// <param name=" Email "> email address of the volunteer </param> 
 /// <param name=" Password "> password of privte volunteer </param>
 /// <param name=" Address "> volunteer's address to know him area</param>
@@ -12,8 +14,6 @@
 /// <param name=" IsActive ">if volunteer is active he can procces</param>
 /// <param name=" MaxDistanceCall ">volunteer will get procceses according to the max distance he chose</param>
 /// <param name=" DistanceType ">type of distance</param>
-
-namespace DO;
 
 public record Volunteer
 (

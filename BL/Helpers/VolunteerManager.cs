@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using DalApi;
+﻿using DalApi;
 using System.Text;
 using System.Security.Cryptography;
 
@@ -114,31 +113,7 @@ internal static class VolunteerManager
         }
     }
 
-    /// <summary>
-    /// Calculate the longitude and latitude of an address
-    /// </summary>
-    /// <param name="address">An address to casculate latitude and longitude</param>
-    /// <returns>The latitude and longitude</returns>
-    internal static async Task<(double? latitude, double? longitude)> GetCoordinatesAsync(string address)
-    {
-        string url = $"https://nominatim.openstreetmap.org/search?q={Uri.EscapeDataString(address)}&format=json&limit=1";
-
-        using (HttpClient client = new HttpClient())
-        {
-            var response = await client.GetStringAsync(url);
-            var jsonArray = JArray.Parse(response);
-
-            if (jsonArray.Count > 0)
-            {
-                var location = jsonArray[0];
-                double latitude = (double)location["lat"];
-                double longitude = (double)location["lon"];
-                return (latitude, longitude);
-            }
-        }
-
-        return (null, null);
-    }
+    
 
     /// <summary>
     /// Calculate distance betweent 2 addresses
@@ -171,6 +146,11 @@ internal static class VolunteerManager
         return EarthRadius * c;
     }
 
+    /// <summary>
+    /// calculate if now is already in risk range to the given maxClose
+    /// </summary>
+    /// <param name="maxClose">the max close to check if now is in risk range to it</param>
+    /// <returns>true if now is in risk range and false if not</returns>
     internal static bool IsWithinRiskRange(DateTime maxClose)
     {
         BlApi.IBl bl = BlApi.Factory.Get();

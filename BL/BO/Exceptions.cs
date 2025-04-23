@@ -2,8 +2,6 @@
 
 namespace BO;
 
-//}
-
 /// <summary>
 ///  exception for when trying use not exist entity
 /// </summary>
@@ -80,5 +78,41 @@ public class BlIllegalDatesOrder(string? message) : Exception(message)
 /// <param name="message">exception message</param>
 [Serializable]
 public class BlIllegalValues(string? message) : Exception(message)
+{
+}
+
+/// <summary>
+/// Exception for when there is an exception when calculate latitude and longitude
+/// </summary>
+/// <param name="message">exception message</param>
+[Serializable]
+public class BlCoordinatesException(string? message) : Exception(message)
+{
+}
+
+/// <summary>
+/// Exception for when Finish assignment process is illegal
+/// </summary>
+/// <param name="message">exceotion mesage</param>
+[Serializable]
+public class BlFinishProcessIllegalException(string? message) : Exception(message)
+{
+}
+
+/// <summary>
+/// Exception for when Cancel assignment process is illegal
+/// </summary>
+/// <param name="message">exception message</param>
+[Serializable]
+public class BlCancelProcessIllegalException(string? message) : Exception(message)
+{
+}
+
+/// <summary>
+/// exception to when trying to chose a call when it is imposible
+/// </summary>
+/// <param name="message">exception message</param>
+[Serializable]
+public class BlIllegalChoseCallException(string? message) : Exception(message)
 {
 }

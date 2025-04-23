@@ -1,483 +1,503 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Call>
-    <CallType>TakeCareAtHome</CallType>
-    <Address>Har Safra St 1, Jerusalem</Address>
-    <Latitude>31.785228</Latitude>
-    <Longitude>35.224211</Longitude>
-    <OpenTime>2023-02-24T00:00:00</OpenTime>
-    <MaxCloseTime>2023-11-12T00:00:00</MaxCloseTime>
+    <CallType>TakeCareOut</CallType>
+    <Address>Meah Shearim St 10, Jerusalem</Address>
+    <Latitude>31.7857</Latitude>
+    <Longitude>35.225</Longitude>
+    <OpenTime>2023-06-15T00:00:00</OpenTime>
+    <MaxCloseTime>2023-07-30T00:00:00</MaxCloseTime>
     <Description>7 years old boy</Description>
     <Id>1000</Id>
   </Call>
   <Call>
     <CallType>TakeCareAtHome</CallType>
-    <Address>Mount Scopus St 4, Jerusalem</Address>
-    <Latitude>31.786335</Latitude>
-    <Longitude>35.219538</Longitude>
-    <OpenTime>2023-01-06T00:00:00</OpenTime>
-    <MaxCloseTime>2023-07-11T00:00:00</MaxCloseTime>
+    <Address>Chazon Ish St 6, Jerusalem</Address>
+    <Latitude>31.7924</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-12-16T00:00:00</OpenTime>
+    <MaxCloseTime>2024-03-16T00:00:00</MaxCloseTime>
     <Description>Disabled boy</Description>
     <Id>1001</Id>
   </Call>
   <Call>
     <CallType>TakeCareAtHome</CallType>
-    <Address>Keren Hayesod St 30, Jerusalem</Address>
-    <Latitude>31.769799</Latitude>
-    <Longitude>35.224968</Longitude>
-    <OpenTime>2023-07-14T00:00:00</OpenTime>
-    <MaxCloseTime>2023-10-13T00:00:00</MaxCloseTime>
+    <Address>Ramat Eshkol St 11, Jerusalem</Address>
+    <Latitude>31.797</Latitude>
+    <Longitude>35.2195</Longitude>
+    <OpenTime>2023-08-17T00:00:00</OpenTime>
+    <MaxCloseTime>2024-04-17T00:00:00</MaxCloseTime>
     <Description>Miserable and cute girl</Description>
     <Id>1002</Id>
   </Call>
   <Call>
     <CallType>TakeCareAtHome</CallType>
-    <Address>Neve Yaakov St 17, Jerusalem</Address>
-    <Latitude>31.773315</Latitude>
-    <Longitude>35.226063</Longitude>
-    <OpenTime>2023-07-07T00:00:00</OpenTime>
-    <MaxCloseTime>2023-08-30T00:00:00</MaxCloseTime>
+    <Address>Har Safra St 1, Jerusalem</Address>
+    <Latitude>31.778</Latitude>
+    <Longitude>35.213</Longitude>
+    <OpenTime>2023-02-02T00:00:00</OpenTime>
+    <MaxCloseTime>2023-11-11T00:00:00</MaxCloseTime>
     <Description>Have a brother's wedding</Description>
     <Id>1003</Id>
   </Call>
   <Call>
     <CallType>TakeCareAtHome</CallType>
-    <Address>Shmuel HaNavi St 12, Jerusalem</Address>
-    <Latitude>31.786812</Latitude>
-    <Longitude>35.219375</Longitude>
-    <OpenTime>2023-09-22T00:00:00</OpenTime>
-    <MaxCloseTime>2024-07-14T00:00:00</MaxCloseTime>
+    <Address>Mount Scopus St 4, Jerusalem</Address>
+    <Latitude>31.7947</Latitude>
+    <Longitude>35.243</Longitude>
+    <OpenTime>2023-10-28T00:00:00</OpenTime>
+    <MaxCloseTime>2024-08-08T00:00:00</MaxCloseTime>
     <Description>Need phisyothraphy 5 times a week</Description>
     <Id>1004</Id>
   </Call>
   <Call>
-    <CallType>TakeCareAtHome</CallType>
-    <Address>Yechiel St 3, Jerusalem</Address>
-    <Latitude>31.776216</Latitude>
-    <Longitude>35.213736</Longitude>
-    <OpenTime>2023-09-23T00:00:00</OpenTime>
-    <MaxCloseTime>2023-11-12T00:00:00</MaxCloseTime>
+    <CallType>TakeCareOut</CallType>
+    <Address>Keren Hayesod St 30, Jerusalem</Address>
+    <Latitude>31.7743</Latitude>
+    <Longitude>35.2225</Longitude>
+    <OpenTime>2023-11-19T00:00:00</OpenTime>
+    <MaxCloseTime>2024-09-19T00:00:00</MaxCloseTime>
     <Description>7 years old boy</Description>
     <Id>1005</Id>
   </Call>
   <Call>
     <CallType>Physiotherapy</CallType>
-    <Address>Rav Kook St 4, Jerusalem</Address>
-    <Latitude>31.773144</Latitude>
-    <Longitude>35.217712</Longitude>
-    <OpenTime>2023-02-13T00:00:00</OpenTime>
-    <MaxCloseTime>2023-07-23T00:00:00</MaxCloseTime>
+    <Address>Neve Yaakov St 17, Jerusalem</Address>
+    <Latitude>31.83</Latitude>
+    <Longitude>35.219</Longitude>
+    <OpenTime>2023-05-29T00:00:00</OpenTime>
+    <MaxCloseTime>2024-04-08T00:00:00</MaxCloseTime>
     <Description>Disabled boy</Description>
     <Id>1006</Id>
   </Call>
   <Call>
-    <CallType>Physiotherapy</CallType>
-    <Address>Talmud Torah St 8, Jerusalem</Address>
-    <Latitude>31.764577</Latitude>
-    <Longitude>35.229053</Longitude>
-    <OpenTime>2023-10-23T00:00:00</OpenTime>
-    <MaxCloseTime>2024-07-12T00:00:00</MaxCloseTime>
+    <CallType>TakeCareOut</CallType>
+    <Address>Shmuel HaNavi St 12, Jerusalem</Address>
+    <Latitude>31.7965</Latitude>
+    <Longitude>35.2205</Longitude>
+    <OpenTime>2023-08-26T00:00:00</OpenTime>
+    <MaxCloseTime>2024-04-27T00:00:00</MaxCloseTime>
     <Description>Miserable and cute girl</Description>
     <Id>1007</Id>
   </Call>
   <Call>
-    <CallType>Physiotherapy</CallType>
-    <Address>Sanhedria St 18, Jerusalem</Address>
-    <Latitude>31.767558</Latitude>
-    <Longitude>35.217509</Longitude>
-    <OpenTime>2023-03-30T00:00:00</OpenTime>
-    <MaxCloseTime>2023-12-28T00:00:00</MaxCloseTime>
+    <CallType>TakeCareOut</CallType>
+    <Address>Yechiel St 3, Jerusalem</Address>
+    <Latitude>31.7762</Latitude>
+    <Longitude>35.2255</Longitude>
+    <OpenTime>2023-06-18T00:00:00</OpenTime>
+    <MaxCloseTime>2023-11-07T00:00:00</MaxCloseTime>
     <Description>Have a brother's wedding</Description>
     <Id>1008</Id>
   </Call>
   <Call>
-    <CallType>TakeCareOut</CallType>
-    <Address>Kiryat Moshe St 6, Jerusalem</Address>
-    <Latitude>31.77428</Latitude>
-    <Longitude>35.220429</Longitude>
-    <OpenTime>2023-08-12T00:00:00</OpenTime>
-    <MaxCloseTime>2024-01-27T00:00:00</MaxCloseTime>
+    <CallType>TakeCareAtHome</CallType>
+    <Address>Rav Kook St 4, Jerusalem</Address>
+    <Latitude>31.7818</Latitude>
+    <Longitude>35.218</Longitude>
+    <OpenTime>2023-01-18T00:00:00</OpenTime>
+    <MaxCloseTime>2023-02-19T00:00:00</MaxCloseTime>
     <Description>Need phisyothraphy 5 times a week</Description>
     <Id>1009</Id>
   </Call>
   <Call>
-    <CallType>TakeCareAtHome</CallType>
-    <Address>Achad Ha'am St 2, Jerusalem</Address>
-    <Latitude>31.782129</Latitude>
-    <Longitude>35.222809</Longitude>
-    <OpenTime>2023-05-12T00:00:00</OpenTime>
-    <MaxCloseTime>2024-02-18T00:00:00</MaxCloseTime>
+    <CallType>Physiotherapy</CallType>
+    <Address>Talmud Torah St 8, Jerusalem</Address>
+    <Latitude>31.78</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-06-15T00:00:00</OpenTime>
+    <MaxCloseTime>2023-12-30T00:00:00</MaxCloseTime>
     <Description>7 years old boy</Description>
     <Id>1010</Id>
   </Call>
   <Call>
-    <CallType>Physiotherapy</CallType>
-    <Address>Bar Ilan St 7, Jerusalem</Address>
-    <Latitude>31.784256</Latitude>
-    <Longitude>35.222797</Longitude>
-    <OpenTime>2023-12-17T00:00:00</OpenTime>
-    <MaxCloseTime>2024-04-09T00:00:00</MaxCloseTime>
+    <CallType>TakeCareAtHome</CallType>
+    <Address>Sanhedria St 18, Jerusalem</Address>
+    <Latitude>31.7995</Latitude>
+    <Longitude>35.219</Longitude>
+    <OpenTime>2023-07-24T00:00:00</OpenTime>
+    <MaxCloseTime>2024-02-03T00:00:00</MaxCloseTime>
     <Description>Disabled boy</Description>
     <Id>1011</Id>
   </Call>
   <Call>
     <CallType>TakeCareAtHome</CallType>
-    <Address>City Center St 14, Jerusalem</Address>
-    <Latitude>31.779211</Latitude>
-    <Longitude>35.226436</Longitude>
-    <OpenTime>2023-06-27T00:00:00</OpenTime>
-    <MaxCloseTime>2023-10-18T00:00:00</MaxCloseTime>
+    <Address>Kiryat Moshe St 6, Jerusalem</Address>
+    <Latitude>31.7875</Latitude>
+    <Longitude>35.202</Longitude>
+    <OpenTime>2023-06-11T00:00:00</OpenTime>
+    <MaxCloseTime>2024-06-07T00:00:00</MaxCloseTime>
     <Description>Miserable and cute girl</Description>
     <Id>1012</Id>
   </Call>
   <Call>
-    <CallType>TakeCareAtHome</CallType>
-    <Address>Rechov Yechiel 3, Jerusalem</Address>
-    <Latitude>31.783858</Latitude>
-    <Longitude>35.221255</Longitude>
-    <OpenTime>2023-04-28T00:00:00</OpenTime>
-    <MaxCloseTime>2024-03-15T00:00:00</MaxCloseTime>
+    <CallType>Physiotherapy</CallType>
+    <Address>Achad Ha'am St 2, Jerusalem</Address>
+    <Latitude>31.7765</Latitude>
+    <Longitude>35.2205</Longitude>
+    <OpenTime>2023-04-07T00:00:00</OpenTime>
+    <MaxCloseTime>2024-01-02T00:00:00</MaxCloseTime>
     <Description>Have a brother's wedding</Description>
     <Id>1013</Id>
   </Call>
   <Call>
-    <CallType>TakeCareOut</CallType>
-    <Address>Giv'at Shaul St 7, Jerusalem</Address>
-    <Latitude>31.783022</Latitude>
-    <Longitude>35.220655</Longitude>
-    <OpenTime>2023-03-14T00:00:00</OpenTime>
-    <MaxCloseTime>2023-12-22T00:00:00</MaxCloseTime>
+    <CallType>TakeCareAtHome</CallType>
+    <Address>Bar Ilan St 7, Jerusalem</Address>
+    <Latitude>31.791</Latitude>
+    <Longitude>35.2195</Longitude>
+    <OpenTime>2023-01-13T00:00:00</OpenTime>
+    <MaxCloseTime>2023-04-09T00:00:00</MaxCloseTime>
     <Description>Need phisyothraphy 5 times a week</Description>
     <Id>1014</Id>
   </Call>
   <Call>
     <CallType>TakeCareOut</CallType>
-    <Address>Nachlaot St 7, Jerusalem</Address>
-    <Latitude>31.774607</Latitude>
-    <Longitude>35.229191</Longitude>
-    <OpenTime>2023-01-20T00:00:00</OpenTime>
-    <MaxCloseTime>2023-08-01T00:00:00</MaxCloseTime>
+    <Address>City Center St 14, Jerusalem</Address>
+    <Latitude>31.7805</Latitude>
+    <Longitude>35.215</Longitude>
+    <OpenTime>2023-10-30T00:00:00</OpenTime>
+    <MaxCloseTime>2024-08-04T00:00:00</MaxCloseTime>
     <Description>7 years old boy</Description>
     <Id>1015</Id>
   </Call>
   <Call>
-    <CallType>TakeCareAtHome</CallType>
-    <Address>Rav Kook St 5, Jerusalem</Address>
-    <Latitude>31.773122</Latitude>
-    <Longitude>35.222992</Longitude>
-    <OpenTime>2023-10-12T00:00:00</OpenTime>
-    <MaxCloseTime>2024-03-20T00:00:00</MaxCloseTime>
+    <CallType>TakeCareOut</CallType>
+    <Address>Rechov Yechiel 3, Jerusalem</Address>
+    <Latitude>31.7762</Latitude>
+    <Longitude>35.2255</Longitude>
+    <OpenTime>2023-10-06T00:00:00</OpenTime>
+    <MaxCloseTime>2024-07-19T00:00:00</MaxCloseTime>
     <Description>Disabled boy</Description>
     <Id>1016</Id>
   </Call>
   <Call>
-    <CallType>Physiotherapy</CallType>
-    <Address>Har Nof St 18, Jerusalem</Address>
-    <Latitude>31.782645</Latitude>
-    <Longitude>35.227074</Longitude>
-    <OpenTime>2023-04-17T00:00:00</OpenTime>
-    <MaxCloseTime>2023-08-25T00:00:00</MaxCloseTime>
+    <CallType>TakeCareAtHome</CallType>
+    <Address>Giv'at Shaul St 7, Jerusalem</Address>
+    <Latitude>31.7975</Latitude>
+    <Longitude>35.19</Longitude>
+    <OpenTime>2023-06-24T00:00:00</OpenTime>
+    <MaxCloseTime>2023-07-20T00:00:00</MaxCloseTime>
     <Description>Miserable and cute girl</Description>
     <Id>1017</Id>
   </Call>
   <Call>
-    <CallType>TakeCareOut</CallType>
-    <Address>Ramat Shlomo St 15, Jerusalem</Address>
-    <Latitude>31.783712</Latitude>
-    <Longitude>35.221162</Longitude>
-    <OpenTime>2023-02-08T00:00:00</OpenTime>
-    <MaxCloseTime>2023-05-08T00:00:00</MaxCloseTime>
+    <CallType>TakeCareAtHome</CallType>
+    <Address>Nachlaot St 7, Jerusalem</Address>
+    <Latitude>31.781</Latitude>
+    <Longitude>35.2155</Longitude>
+    <OpenTime>2023-10-07T00:00:00</OpenTime>
+    <MaxCloseTime>2023-10-18T00:00:00</MaxCloseTime>
     <Description>Have a brother's wedding</Description>
     <Id>1018</Id>
   </Call>
   <Call>
     <CallType>TakeCareOut</CallType>
-    <Address>Sderot Yitzhak Rabin St 5, Jerusalem</Address>
-    <Latitude>31.77377</Latitude>
-    <Longitude>35.227591</Longitude>
-    <OpenTime>2023-08-19T00:00:00</OpenTime>
-    <MaxCloseTime>2024-07-18T00:00:00</MaxCloseTime>
+    <Address>Rav Kook St 5, Jerusalem</Address>
+    <Latitude>31.7819</Latitude>
+    <Longitude>35.2185</Longitude>
+    <OpenTime>2023-12-27T00:00:00</OpenTime>
+    <MaxCloseTime>2024-12-25T00:00:00</MaxCloseTime>
     <Description>Need phisyothraphy 5 times a week</Description>
     <Id>1019</Id>
   </Call>
   <Call>
-    <CallType>TakeCareAtHome</CallType>
-    <Address>Har Hatzofim St 8, Jerusalem</Address>
-    <Latitude>31.779614</Latitude>
-    <Longitude>35.225712</Longitude>
-    <OpenTime>2023-06-21T00:00:00</OpenTime>
-    <MaxCloseTime>2023-07-15T00:00:00</MaxCloseTime>
+    <CallType>Physiotherapy</CallType>
+    <Address>Har Nof St 18, Jerusalem</Address>
+    <Latitude>31.773</Latitude>
+    <Longitude>35.17</Longitude>
+    <OpenTime>2023-03-15T00:00:00</OpenTime>
+    <MaxCloseTime>2023-10-20T00:00:00</MaxCloseTime>
     <Description>7 years old boy</Description>
     <Id>1020</Id>
   </Call>
   <Call>
-    <CallType>Physiotherapy</CallType>
-    <Address>Giv'at HaMivtar St 6, Jerusalem</Address>
-    <Latitude>31.767658</Latitude>
-    <Longitude>35.220829</Longitude>
-    <OpenTime>2023-03-20T00:00:00</OpenTime>
-    <MaxCloseTime>2023-10-03T00:00:00</MaxCloseTime>
+    <CallType>TakeCareOut</CallType>
+    <Address>Ramat Shlomo St 15, Jerusalem</Address>
+    <Latitude>31.81</Latitude>
+    <Longitude>35.23</Longitude>
+    <OpenTime>2023-04-24T00:00:00</OpenTime>
+    <MaxCloseTime>2023-05-08T00:00:00</MaxCloseTime>
     <Description>Disabled boy</Description>
     <Id>1021</Id>
   </Call>
   <Call>
-    <CallType>TakeCareOut</CallType>
-    <Address>Tefilat Yisrael St 14, Jerusalem</Address>
-    <Latitude>31.78507</Latitude>
-    <Longitude>35.223016</Longitude>
-    <OpenTime>2023-04-06T00:00:00</OpenTime>
-    <MaxCloseTime>2023-11-19T00:00:00</MaxCloseTime>
+    <CallType>Physiotherapy</CallType>
+    <Address>Sderot Yitzhak Rabin St 5, Jerusalem</Address>
+    <Latitude>31.7685</Latitude>
+    <Longitude>35.21</Longitude>
+    <OpenTime>2023-11-15T00:00:00</OpenTime>
+    <MaxCloseTime>2024-01-10T00:00:00</MaxCloseTime>
     <Description>Miserable and cute girl</Description>
     <Id>1022</Id>
   </Call>
   <Call>
-    <CallType>TakeCareAtHome</CallType>
-    <Address>Malkhei Yisrael St 10, Jerusalem</Address>
-    <Latitude>31.778488</Latitude>
-    <Longitude>35.219865</Longitude>
-    <OpenTime>2023-09-12T00:00:00</OpenTime>
-    <MaxCloseTime>2024-02-24T00:00:00</MaxCloseTime>
+    <CallType>Physiotherapy</CallType>
+    <Address>Har Hatzofim St 8, Jerusalem</Address>
+    <Latitude>31.794</Latitude>
+    <Longitude>35.2435</Longitude>
+    <OpenTime>2023-10-27T00:00:00</OpenTime>
+    <MaxCloseTime>2024-01-26T00:00:00</MaxCloseTime>
     <Description>Have a brother's wedding</Description>
     <Id>1023</Id>
   </Call>
   <Call>
-    <CallType>TakeCareAtHome</CallType>
-    <Address>Kiryat Tzahal St 6, Jerusalem</Address>
-    <Latitude>31.766734</Latitude>
-    <Longitude>35.230012</Longitude>
-    <OpenTime>2023-02-06T00:00:00</OpenTime>
-    <MaxCloseTime>2023-02-14T00:00:00</MaxCloseTime>
+    <CallType>Physiotherapy</CallType>
+    <Address>Giv'at HaMivtar St 6, Jerusalem</Address>
+    <Latitude>31.7978</Latitude>
+    <Longitude>35.219</Longitude>
+    <OpenTime>2023-07-21T00:00:00</OpenTime>
+    <MaxCloseTime>2024-01-25T00:00:00</MaxCloseTime>
     <Description>Need phisyothraphy 5 times a week</Description>
     <Id>1024</Id>
   </Call>
   <Call>
-    <CallType>Physiotherapy</CallType>
-    <Address>Nachal Noach St 17, Jerusalem</Address>
-    <Latitude>31.780314</Latitude>
-    <Longitude>35.220076</Longitude>
-    <OpenTime>2023-06-14T00:00:00</OpenTime>
-    <MaxCloseTime>2023-08-12T00:00:00</MaxCloseTime>
+    <CallType>TakeCareAtHome</CallType>
+    <Address>Tefilat Yisrael St 14, Jerusalem</Address>
+    <Latitude>31.7833</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-10-01T00:00:00</OpenTime>
+    <MaxCloseTime>2024-08-22T00:00:00</MaxCloseTime>
     <Description>7 years old boy</Description>
     <Id>1025</Id>
   </Call>
   <Call>
-    <CallType>TakeCareOut</CallType>
-    <Address>Maalot Dafna St 6, Jerusalem</Address>
-    <Latitude>31.783537</Latitude>
-    <Longitude>35.221336</Longitude>
-    <OpenTime>2023-03-26T00:00:00</OpenTime>
-    <MaxCloseTime>2023-12-22T00:00:00</MaxCloseTime>
+    <CallType>TakeCareAtHome</CallType>
+    <Address>Malkhei Yisrael St 10, Jerusalem</Address>
+    <Latitude>31.785</Latitude>
+    <Longitude>35.2205</Longitude>
+    <OpenTime>2023-05-10T00:00:00</OpenTime>
+    <MaxCloseTime>2024-03-01T00:00:00</MaxCloseTime>
     <Description>Disabled boy</Description>
     <Id>1026</Id>
   </Call>
   <Call>
-    <CallType>TakeCareAtHome</CallType>
-    <Address>Har HaMor St 3, Jerusalem</Address>
-    <Latitude>31.775809</Latitude>
-    <Longitude>35.2283</Longitude>
-    <OpenTime>2023-08-12T00:00:00</OpenTime>
-    <MaxCloseTime>2023-10-05T00:00:00</MaxCloseTime>
+    <CallType>TakeCareOut</CallType>
+    <Address>Kiryat Tzahal St 6, Jerusalem</Address>
+    <Latitude>31.7802</Latitude>
+    <Longitude>35.225</Longitude>
+    <OpenTime>2023-01-13T00:00:00</OpenTime>
+    <MaxCloseTime>2023-08-15T00:00:00</MaxCloseTime>
     <Description>Miserable and cute girl</Description>
     <Id>1027</Id>
   </Call>
   <Call>
     <CallType>TakeCareOut</CallType>
-    <Address>Ramat HaSharon St 2, Jerusalem</Address>
-    <Latitude>31.773657</Latitude>
-    <Longitude>35.221133</Longitude>
-    <OpenTime>2023-07-17T00:00:00</OpenTime>
-    <MaxCloseTime>2024-02-27T00:00:00</MaxCloseTime>
+    <Address>Nachal Noach St 17, Jerusalem</Address>
+    <Latitude>31.7935</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-05-01T00:00:00</OpenTime>
+    <MaxCloseTime>2024-01-17T00:00:00</MaxCloseTime>
     <Description>Have a brother's wedding</Description>
     <Id>1028</Id>
   </Call>
   <Call>
-    <CallType>TakeCareAtHome</CallType>
-    <Address>Yakar St 3, Jerusalem</Address>
-    <Latitude>31.781039</Latitude>
-    <Longitude>35.224713</Longitude>
-    <OpenTime>2023-08-20T00:00:00</OpenTime>
-    <MaxCloseTime>2023-09-01T00:00:00</MaxCloseTime>
+    <CallType>TakeCareOut</CallType>
+    <Address>Maalot Dafna St 6, Jerusalem</Address>
+    <Latitude>31.7945</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-09-20T00:00:00</OpenTime>
+    <MaxCloseTime>2024-04-09T00:00:00</MaxCloseTime>
     <Description>Need phisyothraphy 5 times a week</Description>
     <Id>1029</Id>
   </Call>
   <Call>
-    <CallType>TakeCareAtHome</CallType>
-    <Address>Rav Haim Ozer St 9, Jerusalem</Address>
-    <Latitude>31.779433</Latitude>
-    <Longitude>35.227271</Longitude>
-    <OpenTime>2023-01-26T00:00:00</OpenTime>
-    <MaxCloseTime>2023-11-25T00:00:00</MaxCloseTime>
+    <CallType>Physiotherapy</CallType>
+    <Address>Har HaMor St 3, Jerusalem</Address>
+    <Latitude>31.765</Latitude>
+    <Longitude>35.23</Longitude>
+    <OpenTime>2023-06-02T00:00:00</OpenTime>
+    <MaxCloseTime>2024-04-05T00:00:00</MaxCloseTime>
     <Description>7 years old boy</Description>
     <Id>1030</Id>
   </Call>
   <Call>
     <CallType>Physiotherapy</CallType>
-    <Address>Yehoshua Ben-Nun St 5, Jerusalem</Address>
-    <Latitude>31.771505</Latitude>
-    <Longitude>35.219754</Longitude>
-    <OpenTime>2023-10-06T00:00:00</OpenTime>
-    <MaxCloseTime>2023-11-18T00:00:00</MaxCloseTime>
+    <Address>Ramat HaSharon St 2, Jerusalem</Address>
+    <Latitude>31.793</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-03-29T00:00:00</OpenTime>
+    <MaxCloseTime>2023-09-17T00:00:00</MaxCloseTime>
     <Description>Disabled boy</Description>
     <Id>1031</Id>
   </Call>
   <Call>
-    <CallType>TakeCareOut</CallType>
-    <Address>Meir Schauer St 12, Jerusalem</Address>
-    <Latitude>31.770824</Latitude>
-    <Longitude>35.226358</Longitude>
-    <OpenTime>2023-10-15T00:00:00</OpenTime>
-    <MaxCloseTime>2024-09-30T00:00:00</MaxCloseTime>
+    <CallType>TakeCareAtHome</CallType>
+    <Address>Yakar St 3, Jerusalem</Address>
+    <Latitude>31.776</Latitude>
+    <Longitude>35.225</Longitude>
+    <OpenTime>2023-03-29T00:00:00</OpenTime>
+    <MaxCloseTime>2024-03-13T00:00:00</MaxCloseTime>
     <Description>Miserable and cute girl</Description>
     <Id>1032</Id>
   </Call>
   <Call>
     <CallType>TakeCareAtHome</CallType>
-    <Address>Meah Shearim St 10, Jerusalem</Address>
-    <Latitude>31.774722</Latitude>
-    <Longitude>35.225099</Longitude>
-    <OpenTime>2023-03-04T00:00:00</OpenTime>
-    <MaxCloseTime>2023-04-02T00:00:00</MaxCloseTime>
+    <Address>Rav Haim Ozer St 9, Jerusalem</Address>
+    <Latitude>31.7855</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-09-10T00:00:00</OpenTime>
+    <MaxCloseTime>2024-04-09T00:00:00</MaxCloseTime>
     <Description>Have a brother's wedding</Description>
     <Id>1033</Id>
   </Call>
   <Call>
-    <CallType>Physiotherapy</CallType>
-    <Address>Chazon Ish St 6, Jerusalem</Address>
-    <Latitude>31.776229</Latitude>
-    <Longitude>35.228086</Longitude>
-    <OpenTime>2023-07-10T00:00:00</OpenTime>
-    <MaxCloseTime>2024-03-28T00:00:00</MaxCloseTime>
+    <CallType>TakeCareOut</CallType>
+    <Address>Yehoshua Ben-Nun St 5, Jerusalem</Address>
+    <Latitude>31.7768</Latitude>
+    <Longitude>35.225</Longitude>
+    <OpenTime>2023-08-17T00:00:00</OpenTime>
+    <MaxCloseTime>2023-10-21T00:00:00</MaxCloseTime>
     <Description>Need phisyothraphy 5 times a week</Description>
     <Id>1034</Id>
   </Call>
   <Call>
-    <CallType>TakeCareOut</CallType>
-    <Address>Ramat Eshkol St 11, Jerusalem</Address>
-    <Latitude>31.77394</Latitude>
-    <Longitude>35.228418</Longitude>
-    <OpenTime>2023-09-13T00:00:00</OpenTime>
-    <MaxCloseTime>2024-03-08T00:00:00</MaxCloseTime>
+    <CallType>TakeCareAtHome</CallType>
+    <Address>Meir Schauer St 12, Jerusalem</Address>
+    <Latitude>31.7785</Latitude>
+    <Longitude>35.213</Longitude>
+    <OpenTime>2023-08-31T00:00:00</OpenTime>
+    <MaxCloseTime>2024-05-06T00:00:00</MaxCloseTime>
     <Description>7 years old boy</Description>
     <Id>1035</Id>
   </Call>
   <Call>
     <CallType>TakeCareOut</CallType>
     <Address>Menachem Begin St 11, Jerusalem</Address>
-    <Latitude>31.777524</Latitude>
-    <Longitude>35.222438</Longitude>
-    <OpenTime>2023-01-27T00:00:00</OpenTime>
-    <MaxCloseTime>2023-05-31T00:00:00</MaxCloseTime>
+    <Latitude>31.786</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-04-21T00:00:00</OpenTime>
+    <MaxCloseTime>2023-09-03T00:00:00</MaxCloseTime>
     <Description>Disabled boy</Description>
     <Id>1036</Id>
   </Call>
   <Call>
-    <CallType>TakeCareOut</CallType>
+    <CallType>TakeCareAtHome</CallType>
     <Address>Yisrael Yaakov St 13, Jerusalem</Address>
-    <Latitude>31.774912</Latitude>
-    <Longitude>35.221694</Longitude>
-    <OpenTime>2023-08-16T00:00:00</OpenTime>
-    <MaxCloseTime>2023-12-10T00:00:00</MaxCloseTime>
+    <Latitude>31.78</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-05-29T00:00:00</OpenTime>
+    <MaxCloseTime>2023-08-15T00:00:00</MaxCloseTime>
     <Description>Miserable and cute girl</Description>
     <Id>1037</Id>
   </Call>
   <Call>
-    <CallType>TakeCareAtHome</CallType>
+    <CallType>Physiotherapy</CallType>
     <Address>Ben Yehuda St 6, Jerusalem</Address>
-    <Latitude>31.770963</Latitude>
-    <Longitude>35.223145</Longitude>
-    <OpenTime>2023-01-24T00:00:00</OpenTime>
-    <MaxCloseTime>2023-04-19T00:00:00</MaxCloseTime>
+    <Latitude>31.779</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-10-31T00:00:00</OpenTime>
+    <MaxCloseTime>2023-11-11T00:00:00</MaxCloseTime>
     <Description>Have a brother's wedding</Description>
     <Id>1038</Id>
   </Call>
   <Call>
-    <CallType>Physiotherapy</CallType>
-    <Address>Sulam Yaakov St 10, Jerusalem</Address>
-    <Latitude>31.777611</Latitude>
-    <Longitude>35.221228</Longitude>
-    <OpenTime>2023-03-21T00:00:00</OpenTime>
-    <MaxCloseTime>2024-01-07T00:00:00</MaxCloseTime>
+    <CallType>TakeCareOut</CallType>
+    <Address>Hadar St 3, Jerusalem</Address>
+    <Latitude>31.7788</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-11-02T00:00:00</OpenTime>
+    <MaxCloseTime>2024-02-05T00:00:00</MaxCloseTime>
     <Description>Need phisyothraphy 5 times a week</Description>
     <Id>1039</Id>
   </Call>
   <Call>
-    <CallType>Physiotherapy</CallType>
-    <Address>Rambam St 29 Bne-Brack</Address>
-    <Latitude>31.776545</Latitude>
-    <Longitude>35.225721</Longitude>
-    <OpenTime>2023-12-18T00:00:00</OpenTime>
-    <MaxCloseTime>2024-08-16T00:00:00</MaxCloseTime>
+    <CallType>TakeCareOut</CallType>
+    <Address>Maharal St 8, Jerusalem</Address>
+    <Latitude>31.7765</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-12-06T00:00:00</OpenTime>
+    <MaxCloseTime>2024-12-04T00:00:00</MaxCloseTime>
     <Description>7 years old boy</Description>
     <Id>1040</Id>
   </Call>
   <Call>
     <CallType>Physiotherapy</CallType>
-    <Address> Chazon Ish St 15, Bne-Brack</Address>
-    <Latitude>31.771675</Latitude>
-    <Longitude>35.217133</Longitude>
-    <OpenTime>2023-03-05T00:00:00</OpenTime>
-    <MaxCloseTime>2023-08-14T00:00:00</MaxCloseTime>
+    <Address>Yosef Schwartz St 4, Jerusalem</Address>
+    <Latitude>31.774</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-03-15T00:00:00</OpenTime>
+    <MaxCloseTime>2023-11-02T00:00:00</MaxCloseTime>
     <Description>Disabled boy</Description>
     <Id>1041</Id>
   </Call>
   <Call>
-    <CallType>TakeCareOut</CallType>
-    <Address>Ktzot Hashen St 3, Kiryat-Sefer</Address>
-    <Latitude>31.767727</Latitude>
-    <Longitude>35.229169</Longitude>
-    <OpenTime>2023-03-04T00:00:00</OpenTime>
-    <MaxCloseTime>2023-08-18T00:00:00</MaxCloseTime>
+    <CallType>Physiotherapy</CallType>
+    <Address>Jabotinsky St 7, Jerusalem</Address>
+    <Latitude>31.771</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-12-05T00:00:00</OpenTime>
+    <MaxCloseTime>2024-05-13T00:00:00</MaxCloseTime>
     <Description>Miserable and cute girl</Description>
     <Id>1042</Id>
   </Call>
   <Call>
     <CallType>Physiotherapy</CallType>
-    <Address>Netivot Hamishpat St 15, Kiryat-Sefer</Address>
-    <Latitude>31.771267</Latitude>
-    <Longitude>35.230535</Longitude>
-    <OpenTime>2023-02-21T00:00:00</OpenTime>
-    <MaxCloseTime>2023-05-27T00:00:00</MaxCloseTime>
+    <Address>Shazar St 5, Jerusalem</Address>
+    <Latitude>31.7725</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-06-13T00:00:00</OpenTime>
+    <MaxCloseTime>2023-10-07T00:00:00</MaxCloseTime>
     <Description>Have a brother's wedding</Description>
     <Id>1043</Id>
   </Call>
   <Call>
-    <CallType>TakeCareOut</CallType>
-    <Address>HaRimon St 3, Telz-Stown</Address>
-    <Latitude>31.76852</Latitude>
-    <Longitude>35.225939</Longitude>
-    <OpenTime>2023-06-30T00:00:00</OpenTime>
-    <MaxCloseTime>2023-07-18T00:00:00</MaxCloseTime>
+    <CallType>Physiotherapy</CallType>
+    <Address>Gonenim St 12, Jerusalem</Address>
+    <Latitude>31.7735</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-08-15T00:00:00</OpenTime>
+    <MaxCloseTime>2024-06-07T00:00:00</MaxCloseTime>
     <Description>Need phisyothraphy 5 times a week</Description>
     <Id>1044</Id>
   </Call>
   <Call>
-    <CallType>Physiotherapy</CallType>
-    <Address>Nachal Sorek St 18, Bet-Shemesh</Address>
-    <Latitude>31.776597</Latitude>
-    <Longitude>35.22259</Longitude>
-    <OpenTime>2023-09-28T00:00:00</OpenTime>
-    <MaxCloseTime>2023-12-20T00:00:00</MaxCloseTime>
+    <CallType>TakeCareAtHome</CallType>
+    <Address>Talpiot St 14, Jerusalem</Address>
+    <Latitude>31.7745</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-06-20T00:00:00</OpenTime>
+    <MaxCloseTime>2024-06-13T00:00:00</MaxCloseTime>
     <Description>7 years old boy</Description>
     <Id>1045</Id>
   </Call>
   <Call>
-    <CallType>TakeCareAtHome</CallType>
-    <Address>Shefa Chaim St 18, Netanya</Address>
-    <Latitude>31.78504</Latitude>
-    <Longitude>35.222579</Longitude>
-    <OpenTime>2023-05-25T00:00:00</OpenTime>
-    <MaxCloseTime>2023-05-26T00:00:00</MaxCloseTime>
+    <CallType>Physiotherapy</CallType>
+    <Address>Bilu St 9, Jerusalem</Address>
+    <Latitude>31.775</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-12-23T00:00:00</OpenTime>
+    <MaxCloseTime>2023-12-24T00:00:00</MaxCloseTime>
     <Description>Disabled boy</Description>
     <Id>1046</Id>
   </Call>
   <Call>
-    <CallType>TakeCareAtHome</CallType>
-    <Address>Maymon St 30, Bne-Brack</Address>
-    <Latitude>31.772628</Latitude>
-    <Longitude>35.222869</Longitude>
-    <OpenTime>2023-09-22T00:00:00</OpenTime>
-    <MaxCloseTime>2023-09-23T00:00:00</MaxCloseTime>
+    <CallType>Physiotherapy</CallType>
+    <Address>Yovel St 2, Jerusalem</Address>
+    <Latitude>31.778</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-08-12T00:00:00</OpenTime>
+    <MaxCloseTime>2023-08-13T00:00:00</MaxCloseTime>
     <Description>Miserable and cute girl</Description>
     <Id>1047</Id>
+  </Call>
+  <Call>
+    <CallType>Physiotherapy</CallType>
+    <Address>Herzl St 3, Jerusalem</Address>
+    <Latitude>31.782</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-03-27T00:00:00</OpenTime>
+    <MaxCloseTime>2023-03-28T00:00:00</MaxCloseTime>
+    <Description>Have a brother's wedding</Description>
+    <Id>1048</Id>
+  </Call>
+  <Call>
+    <CallType>Physiotherapy</CallType>
+    <Address>Hashmonai St 6, Jerusalem</Address>
+    <Latitude>31.784</Latitude>
+    <Longitude>35.22</Longitude>
+    <OpenTime>2023-01-28T00:00:00</OpenTime>
+    <MaxCloseTime>2023-01-30T00:00:00</MaxCloseTime>
+    <Description>Need phisyothraphy 5 times a week</Description>
+    <Id>1049</Id>
   </Call>
 </ArrayOfCall>

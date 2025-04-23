@@ -40,6 +40,7 @@ namespace BlTest
         /// </summary>
         private static void DisplayMainMenu()
         {
+            Console.WriteLine("Pay attention!!! when you enter enums values, sometimes you have to enter the number and sometimes you have to enter the value:");
             Console.WriteLine("Main menu:");
             foreach (MainMenu menu in Enum.GetValues(typeof(MainMenu)))
             {
@@ -80,6 +81,7 @@ namespace BlTest
         /// </summary>
         private static void DisplayVolunteerMenu()
         {
+            Console.WriteLine("Pay attention!!! when you enter enums values, sometimes you have to enter the number and sometimes you have to enter the value:");
             Console.WriteLine("Volunteer menu");
             foreach (VolunteerMenu menu in Enum.GetValues(typeof(VolunteerMenu)))
             {
@@ -171,7 +173,9 @@ namespace BlTest
             Console.Write("Enter email: ");
             string email = Console.ReadLine()!;
             Console.Write("Enter address: ");
-            string address = Console.ReadLine()!;
+            string? address = Console.ReadLine();
+            if (address == "")
+                address = null;
             Console.Write("Enter max distance call: ");
             string maxDistanceStr = Console.ReadLine()!;
             double maxDistance;
@@ -201,7 +205,9 @@ namespace BlTest
             if (distanceTypeStr == "")
                 distanceType = BO.DistanceType.Air;
             Console.Write("Enter password: ");
-            string password = Console.ReadLine()!;
+            string? password = Console.ReadLine();
+            if (password == "")
+                password = null;
             Console.Write("enter is active ('true' or 'false') :");
             string isActiveStr = Console.ReadLine()!;
             bool isActive;
@@ -290,6 +296,7 @@ namespace BlTest
         /// <returns>void</returns>
         private static void DisplayCallMenu()
         {
+            Console.WriteLine("Pay attention!!! when you enter enums values, sometimes you have to enter the number and sometimes you have to enter the value:");
             Console.WriteLine("Call menu");
             foreach (CallMenu menu in Enum.GetValues(typeof(CallMenu)))
             {
@@ -299,96 +306,103 @@ namespace BlTest
             CallMenu choice;
             while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(CallMenu), choice))
                 Console.WriteLine("Wrong choice, enter again");
-            try
+            while (choice != CallMenu.Exit)
             {
-                switch (choice)
+                try
                 {
-                    case CallMenu.Create:
-                        BO.Call? newCall = InputCall();
-                        if (newCall is not null)
-                            s_bl.Call.Create(newCall);
-                        break;
-                    case CallMenu.Read:
-                        Console.Write("Enter id: ");
-                        int id;
-                        while (!int.TryParse(Console.ReadLine(), out id))
-                            Console.WriteLine("Id is illegal! enter again!");
-                        Console.WriteLine(s_bl.Call.Read(id));
-                        break;
-                    case CallMenu.ReadAll:
-                        ReadAllCalls();
-                        break;
-                    case CallMenu.Update:
-                        UpdateCall();
-                        break;
-                    case CallMenu.Delete:
-                        Console.Write("Enter id: ");
-                        int cId;
-                        while (!int.TryParse(Console.ReadLine(), out cId))
-                            Console.WriteLine("Id is illegal! enter again!");
-                        s_bl.Volunteer.Delete(cId);
-                        break;
-                    case CallMenu.GetCountsGroupByStatus:
-                        int[] countArr = s_bl.Call.GetCountsGroupByStatus();
-                        foreach (BO.CallStatus status in Enum.GetValues(typeof(BO.CallStatus)))
-                            Console.WriteLine($"{countArr[(int)status]} calls with {status} status");
-                        break;
-                    case CallMenu.ReadAllVolunteerClosedCalls:
-                        ReadAllVolunteerClosedCalls();
-                        break;
-                    case CallMenu.ReadAllVolunteerOpenCalls:
-                        ReadAllVolunteerOpenedCalls();
-                        break;
-                    case CallMenu.FinishProcess:
-                        Console.WriteLine("Enter your id:");
-                        int vId;
-                        while (!int.TryParse(Console.ReadLine(), out vId))
-                            Console.WriteLine("Id is illegal! enter again!");
-                        Console.WriteLine("Enter assignment id:");
-                        int aId;
-                        while (!int.TryParse(Console.ReadLine(), out aId))
-                            Console.WriteLine("Id is illegal! enter again!");
-                        s_bl.Call.FinishProcess(vId, aId);
-                        break;
-                    case CallMenu.CanceleProcess:
-                        Console.WriteLine("Enter your id:");
-                        int volId;
-                        while (!int.TryParse(Console.ReadLine(), out volId))
-                            Console.WriteLine("Id is illegal! enter again!");
-                        Console.WriteLine("Enter assignment id:");
-                        int assId;
-                        while (!int.TryParse(Console.ReadLine(), out assId))
-                            Console.WriteLine("Id is illegal! enter again!");
-                        s_bl.Call.CanceleProcess(volId, assId);
-                        break;
-                    case CallMenu.ChooseCall:
-                        Console.WriteLine("Enter your id:");
-                        int volunteerId;
-                        while (!int.TryParse(Console.ReadLine(), out volunteerId))
-                            Console.WriteLine("Id is illegal! enter again!");
-                        Console.WriteLine("Enter call id:");
-                        int callId;
-                        while (!int.TryParse(Console.ReadLine(), out callId))
-                            Console.WriteLine("Id is illegal! enter again!");
-                        s_bl.Call.ChooseCall(volunteerId, callId);
-                        break;
-                    default:
-                        break;
+                    switch (choice)
+                    {
+                        case CallMenu.Create:
+                            BO.Call? newCall = InputCall();
+                            if (newCall is not null)
+                                s_bl.Call.Create(newCall);
+                            break;
+                        case CallMenu.Read:
+                            Console.Write("Enter id: ");
+                            int id;
+                            while (!int.TryParse(Console.ReadLine(), out id))
+                                Console.WriteLine("Id is illegal! enter again!");
+                            var call = s_bl.Call.Read(id);
+                            if (call is not null)
+                                Console.WriteLine(call);
+                            else
+                                throw new BO.BlDoesNotExistException($"call with id {id} does not exists");
+                            break;
+                        case CallMenu.ReadAll:
+                            ReadAllCalls();
+                            break;
+                        case CallMenu.Update:
+                            UpdateCall();
+                            break;
+                        case CallMenu.Delete:
+                            Console.Write("Enter id: ");
+                            int cId;
+                            while (!int.TryParse(Console.ReadLine(), out cId))
+                                Console.WriteLine("Id is illegal! enter again!");
+                            s_bl.Call.Delete(cId);
+                            break;
+                        case CallMenu.GetCountsGroupByStatus:
+                            int[] countArr = s_bl.Call.GetCountsGroupByStatus();
+                            foreach (BO.FinishCallType status in Enum.GetValues(typeof(BO.FinishCallType)))
+                                Console.WriteLine($"{countArr[(int)status]} calls with {status} status");
+                            break;
+                        case CallMenu.ReadAllVolunteerClosedCalls:
+                            ReadAllVolunteerClosedCalls();
+                            break;
+                        case CallMenu.ReadAllVolunteerOpenCalls:
+                            ReadAllVolunteerOpenedCalls();
+                            break;
+                        case CallMenu.FinishProcess:
+                            Console.WriteLine("Enter your id:");
+                            int vId;
+                            while (!int.TryParse(Console.ReadLine(), out vId))
+                                Console.WriteLine("Id is illegal! enter again!");
+                            Console.WriteLine("Enter assignment id:");
+                            int aId;
+                            while (!int.TryParse(Console.ReadLine(), out aId))
+                                Console.WriteLine("Id is illegal! enter again!");
+                            s_bl.Call.FinishProcess(vId, aId);
+                            break;
+                        case CallMenu.CanceleProcess:
+                            Console.WriteLine("Enter your id:");
+                            int volId;
+                            while (!int.TryParse(Console.ReadLine(), out volId))
+                                Console.WriteLine("Id is illegal! enter again!");
+                            Console.WriteLine("Enter assignment id:");
+                            int assId;
+                            while (!int.TryParse(Console.ReadLine(), out assId))
+                                Console.WriteLine("Id is illegal! enter again!");
+                            s_bl.Call.CanceleProcess(volId, assId);
+                            break;
+                        case CallMenu.ChooseCall:
+                            Console.WriteLine("Enter your id:");
+                            int volunteerId;
+                            while (!int.TryParse(Console.ReadLine(), out volunteerId))
+                                Console.WriteLine("Id is illegal! enter again!");
+                            Console.WriteLine("Enter call id:");
+                            int callId;
+                            while (!int.TryParse(Console.ReadLine(), out callId))
+                                Console.WriteLine("Id is illegal! enter again!");
+                            s_bl.Call.ChooseCall(volunteerId, callId);
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
 
-            Console.WriteLine("Call menu");
-            foreach (VolunteerMenu menu in Enum.GetValues(typeof(CallMenu)))
-            {
-                // Printing the menu
-                Console.WriteLine($"{(int)menu}: {menu}");
+                Console.WriteLine("Call menu");
+                foreach (CallMenu menu in Enum.GetValues(typeof(CallMenu)))
+                {
+                    // Printing the menu
+                    Console.WriteLine($"{(int)menu}: {menu}");
+                }
+                while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(CallMenu), choice))
+                    Console.WriteLine("Wrong choice, enter again");
             }
-            while (!Enum.TryParse(Console.ReadLine(), out choice) || !Enum.IsDefined(typeof(CallMenu), choice))
-                Console.WriteLine("Wrong choice, enter again");
         }
 
         /// <summary>
@@ -409,6 +423,7 @@ namespace BlTest
             }
             Console.Write("Enter address: ");
             string address = Console.ReadLine()!;
+            Console.Write("Enter open time");
             DateTime open;
             while (!DateTime.TryParse(Console.ReadLine(), out open))
                 Console.WriteLine("open time is illegal! enter again");
@@ -447,7 +462,7 @@ namespace BlTest
             }
 
             Console.WriteLine("By which valud do you want to filter?");
-            Object? filterVal = Console.ReadLine()!;
+            string? filterVal = Console.ReadLine()!;
 
             Console.WriteLine("By which field do you want to sort?");
             foreach (BO.CallInListFields f in Enum.GetValues(typeof(BO.CallInListFields)))
@@ -460,8 +475,8 @@ namespace BlTest
                 Console.WriteLine("Wrong field, enter again");
                 sortFieldStr = Console.ReadLine()!;
             }
-
-            foreach (BO.CallInList v in s_bl!.Call.ReadAll(filterFieldStr == "" ? null : filterField, filterVal, sortFieldStr == "" ? null : sortField))
+            var calls = s_bl!.Call.ReadAll(filterFieldStr == "" ? null : filterField, filterVal, sortFieldStr == "" ? null : sortField).ToList();
+            foreach (BO.CallInList v in calls)
                 Console.WriteLine(v);
         }
 
@@ -476,7 +491,7 @@ namespace BlTest
             while (!int.TryParse(Console.ReadLine(), out cId))
                 Console.WriteLine("Wrong id, try again");
 
-            Console.WriteLine($"Call details: {s_bl!.Volunteer.Read(cId)}");
+            Console.WriteLine($"Call details: {s_bl!.Call.Read(cId)}");
             Console.WriteLine("If you want to update, enter details. else click ENTER ");
             BO.Call? call = InputCall(cId);
 
@@ -567,6 +582,7 @@ namespace BlTest
         /// <returns>void</returns>
         private static void DisplayAdminMenu()
         {
+            Console.WriteLine("Pay attention!!! when you enter enums values, sometimes you have to enter the number and sometimes you have to enter the value:");
             Console.WriteLine("Admin menu");
             foreach (AdminMenu menu in Enum.GetValues(typeof(AdminMenu)))
             {
@@ -586,7 +602,7 @@ namespace BlTest
                             Console.WriteLine(s_bl.Admin.GetClock());
                             break;
                         case AdminMenu.AdvanceClock:
-                            Console.Write("Enter time unit type to filter: ");
+                            Console.Write("Enter time unit type to advance to clock: ");
                             BO.TimeUnit unitTime;
                             while (!(Enum.TryParse(Console.ReadLine(), out unitTime) && Enum.IsDefined(typeof(BO.TimeUnit), unitTime)))
                                 Console.WriteLine("Unit time is illegal! enter again");

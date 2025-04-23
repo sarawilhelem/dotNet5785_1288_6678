@@ -1,113 +1,166 @@
-﻿
-
-using BlApi;
-using BO;
+﻿using BO;
 using DalApi;
-using System.Formats.Tar;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Helpers;
 
 internal class CallManager
 {
+    /// <summary>
+    /// a static field to access thad do crud
+    /// </summary>
     private static IDal s_dal = DalApi.Factory.Get;
+    /// <summary>
+    /// read assignments with the call
+    /// </summary>
+    /// <param name="id">the call id</param>
+    /// <returns>all assitnments with that call</returns>
     public static IEnumerable<DO.Assignment> AssignmentsListForCall(int id)
     {
-        var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId ==id);
+        var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == id);
         return assignmentsList;
     }
+
+    /// <summary>
+    /// read assignments with the volunteer
+    /// </summary>
+    /// <param name="id">the volunteer id</param>
+    /// <returns>all assignments with that volunteer</returns>
     public static IEnumerable<DO.Assignment> AssignmentsListForVolunteer(int id)
     {
         var assignmentsList = s_dal.Assignment.ReadAll(a => a.VolunteerId == id);
         return assignmentsList;
     }
+
+    /// <summary>
+    /// get the volunteer with that id
+    /// </summary>
+    /// <param name="id">the volunteer id</param>
+    /// <returns>the volunteer</returns>
+    /// <exception cref="BO.BlDoesNotExistException">if there is not volunteer with that id</exception>
     public static DO.Volunteer GetVolunteer(int id)
     {
         return s_dal.Volunteer.Read(v => v.Id == id) ??
             throw new BO.BlDoesNotExistException($"Volunteer with id {id} does not exists");
     }
-   public static string? GetLastVolunteerName(DO.Call call)
+    
+    /// <summary>
+    /// calculate how much time is rest to a call return timeSpan.zero if expired
+    /// </summary>
+    /// <param name="call">the call to check</param>
+    /// <returns>the time span rest</returns>
+    public static TimeSpan RestTimeForCall(DO.Call call)
     {
-        var assignmentsList= AssignmentsListForCall(call.Id).OrderByDescending(a => a.OpenTime);
-        var lastAssignment= assignmentsList.FirstOrDefault();
-        if (lastAssignment is null)
-            return null;
-        var volunteer = GetVolunteer(lastAssignment.VolunteerId);
-        return volunteer.Name;
+        return ClockManager.Now < call.MaxCloseTime ? (TimeSpan)(call.MaxCloseTime - ClockManager.Now) : TimeSpan.Zero;
     }
-    public static TimeSpan? RestTimeForCall(DO.Call call)
-    {
-        return DateTime.Now > call.MaxCloseTime ? (TimeSpan?)(call.MaxCloseTime - DateTime.Now) : null;
-    }
+
+    /// <summary>
+    /// the status of a call
+    /// </summary>
+    /// <param name="id">the call id</param>
+    /// <returns>the call status</returns>
     public static FinishCallType GetCallStatus(int id)
     {
-        var call= s_dal.Call.Read(a => a.Id == id);
+        var call = s_dal.Call.Read(c => c.Id == id);
         var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == id);
-        var Processed = assignmentsList.Select(a => a.FinishType == DO.FinishType.Processed);
-        if (Processed!=null)
+        var isProcesseds = assignmentsList.Any(a => a.FinishType == DO.FinishType.Processed);
+        if (isProcesseds)
         {
-            return FinishCallType.InProcess;
+            return FinishCallType.Close;
         }
         else
         {
-            if (call is null || RestTimeForCall(call) == null)
+            if (call is null || RestTimeForCall(call) == TimeSpan.Zero)
             {
                 return FinishCallType.Expired;
             }
             else
             {
-                var InProcess = assignmentsList.Select(a => a.FinishType == DO.FinishType.SelfCancel||a.FinishType== DO.FinishType.ManagerCancel);
-                
-                   if (assignmentsList != null&&InProcess==null)
-                    {
-                        if ((call.MaxCloseTime - DateTime.Now).TotalHours <= 50)
-                            return FinishCallType.OpenAtRisk;
-                        return FinishCallType.Open;
-                    }
-                
+                var isInProcess = assignmentsList.Any(a => a.FinishType == null);
+                if(isInProcess)
+                {
+                    if ((call.MaxCloseTime - ClockManager.Now) <= s_dal.Config.RiskRange)
+                        return FinishCallType.InProcessInRisk;
+                    return FinishCallType.InProcess;
+                }
+
                 else
                 {
-                    if ((call.MaxCloseTime - DateTime.Now).TotalHours <= 50)
-                        return FinishCallType.InProcessAtRisk;
-                    return FinishCallType.InProcess;
+                    if ((call.MaxCloseTime - ClockManager.Now) <= s_dal.Config.RiskRange)
+                        return FinishCallType.OpenInRisk;
+                    return FinishCallType.Open;
                 }
             }
         }
     }
+
+    /// <summary>
+    /// convert an Object to timeSpan   
+    /// </summary>
+    /// <param name="value">the object to convert</param>
+    /// <returns>the time span</returns>
+    /// <exception cref="BO.BlIllegalValues">if cannot convert this object to timeSpan</exception>
+    static public TimeSpan ConvertToTimeSpan(object value)
+    {
+        if (value is string timeString)
+        {
+            return TimeSpan.Parse(timeString);
+        }
+        else if (value is TimeSpan timeSpan)
+        {
+            return timeSpan;
+        }
+        else if (value is double hours)
+        {
+            return TimeSpan.FromHours(hours);
+        }
+        else
+        {
+            throw new BO.BlIllegalValues("Value cannot be converted to TimeSpan");
+        }
+    }
+
+    /// <summary>
+    /// calculate before how many time this call proccessed 
+    /// </summary>
+    /// <param name="call">the call</param>
+    /// <returns>before how many time, or null if never</returns>
     public static TimeSpan? RestTimeForTreatment(DO.Call call)
     {
-        var assignmentsProcessedList = s_dal.Assignment.Read(a => a.CallId == call.Id&&a.FinishType==DO.FinishType.Processed);
+        var assignmentsProcessedList = s_dal.Assignment.Read(a => a.CallId == call.Id && a.FinishType == DO.FinishType.Processed);
         if (assignmentsProcessedList != null)
-            return (TimeSpan?)(assignmentsProcessedList.FinishTime - DateTime.Now);
-
-
+            return (TimeSpan?)(assignmentsProcessedList.FinishTime - ClockManager.Now);
         return null;
-
-        
     }
-    public static double DistanceBetweenVolunteerAndCall(int volunteerId,int callId)
+
+    /// <summary>
+    /// calculate distance between volunteer and call
+    /// </summary>
+    /// <param name="volunteerId">the volunteer id</param>
+    /// <param name="callId">the call id</param>
+    /// <returns>the distance betweent volunteer and call, or 0 if volunteer lat or lon is null</returns>
+    /// <exception cref="BO.BlDoesNotExistException">if there is not a volunter of call with these ids</exception>
+    public static double DistanceBetweenVolunteerAndCall(int volunteerId, int callId)
     {
-        var volunteer = s_dal.Volunteer.Read(v => v.Id == volunteerId);
-        var call = s_dal.Call.Read(c => c.Id == callId);
-        var distance =Math.Sqrt (Math.Pow(((double)(volunteer!.Latitude!).Value - call!.Latitude),2)+ Math.Pow(((double)(volunteer!.Longitude!).Value - call.Longitude),2));
+        var volunteer = s_dal.Volunteer.Read(v => v.Id == volunteerId) ??
+            throw new BO.BlDoesNotExistException($"volunteer with id {volunteerId} does not exists");
+        var call = s_dal.Call.Read(c => c.Id == callId) ??
+            throw new BO.BlDoesNotExistException($"call with id {callId} does not exists");
+
+        if (volunteer.Latitude is null || volunteer.Longitude is null)
+            return 0;
+        var distance = Math.Sqrt(Math.Pow(((double)(volunteer.Latitude!) - call.Latitude), 2) + Math.Pow(((double)(volunteer.Longitude!) - call.Longitude), 2));
         return distance;
     }
 
-public static int GetAmountOfAssignments(DO.Call call)
+    /// <summary>
+    /// calculate how many assignments this call has
+    /// </summary>
+    /// <param name="call">the call</param>
+    /// <returns>how many assignments is has</returns>
+    public static int GetAmountOfAssignments(DO.Call call)
     {
         var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == call.Id);
         return assignmentsList.Count();
     }
-    public static void UpdateCall(DO.Call call)
-    {
-            s_dal.Call.Update(call);
-    }
-    public static void DeleteCall(int id)
-    {
-        s_dal.Call.Delete(id);
-    }
-    public static void CreateCall(DO.Call call)
-    {
-        s_dal.Call.Create(call);
-    }
+
 }

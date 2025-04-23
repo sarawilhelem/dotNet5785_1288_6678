@@ -26,7 +26,7 @@ internal class VolunteerImplementation : IVolunteer
             Phone = (string?)v.Element("Phone") ?? "",
             Email = (string?)v.Element("Email") ?? "",
             Address = (string?)v.Element("Address") ?? null,
-            Latitude = v.ToDoubleNullable("Langitude") ?? null,
+            Latitude = v.ToDoubleNullable("Latitude") ?? null,
             Longitude = v.ToDoubleNullable("Longitude") ?? null,
             MaxDistanceCall = v.ToDoubleNullable("MaxDistanceCall") ?? null,
             Role = v.ToEnumNullable<Role>("Role") ?? DO.Role.Volunteer,
