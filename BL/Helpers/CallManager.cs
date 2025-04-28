@@ -9,6 +9,8 @@ internal class CallManager
     /// a static field to access thad do crud
     /// </summary>
     private static IDal s_dal = DalApi.Factory.Get;
+
+    internal static ObserverManager Observers = new();
     /// <summary>
     /// read assignments with the call
     /// </summary>
@@ -50,7 +52,7 @@ internal class CallManager
     /// <returns>the time span rest</returns>
     public static TimeSpan RestTimeForCall(DO.Call call)
     {
-        return ClockManager.Now < call.MaxCloseTime ? (TimeSpan)(call.MaxCloseTime - ClockManager.Now) : TimeSpan.Zero;
+        return AdminManager.Now < call.MaxCloseTime ? (TimeSpan)(call.MaxCloseTime - AdminManager.Now) : TimeSpan.Zero;
     }
 
     /// <summary>
@@ -78,14 +80,14 @@ internal class CallManager
                 var isInProcess = assignmentsList.Any(a => a.FinishType == null);
                 if(isInProcess)
                 {
-                    if ((call.MaxCloseTime - ClockManager.Now) <= s_dal.Config.RiskRange)
+                    if ((call.MaxCloseTime - AdminManager.Now) <= s_dal.Config.RiskRange)
                         return FinishCallType.InProcessInRisk;
                     return FinishCallType.InProcess;
                 }
 
                 else
                 {
-                    if ((call.MaxCloseTime - ClockManager.Now) <= s_dal.Config.RiskRange)
+                    if ((call.MaxCloseTime - AdminManager.Now) <= s_dal.Config.RiskRange)
                         return FinishCallType.OpenInRisk;
                     return FinishCallType.Open;
                 }
@@ -128,7 +130,7 @@ internal class CallManager
     {
         var assignmentsProcessedList = s_dal.Assignment.Read(a => a.CallId == call.Id && a.FinishType == DO.FinishType.Processed);
         if (assignmentsProcessedList != null)
-            return (TimeSpan?)(assignmentsProcessedList.FinishTime - ClockManager.Now);
+            return (TimeSpan?)(assignmentsProcessedList.FinishTime - AdminManager.Now);
         return null;
     }
 

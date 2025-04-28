@@ -18,31 +18,27 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <param name="volunteer">the volunteer to add</param>
     /// <exception cref="BO.BlIllegalValues">to when the volunteers' details are illegal</exception>
     /// <exception cref="BO.BlAlreadyExistsException">to when trying to add a volunteer with already exist id</exception>
-    public  void Create(BO.Volunteer volunteer)
+    public void Create(BO.Volunteer volunteer)
     {
         if (VolunteerManager.CheckValidation(volunteer) == false)
             throw new BO.BlIllegalValues("Volunteer fields are illegal");
-        
-            if (volunteer.Address is not null)
-            {
 
-                var (latitude, longitude) =  Tools.GetCoordinates(volunteer.Address);
-                if (latitude != null && longitude != null)
-                {
-                    volunteer.Latitude = latitude;
-                    volunteer.Longitude = longitude;
-                }
-                else
-                    throw new BO.BlConfigException("Can't approach address");
+        if (volunteer.Address is not null)
+        {
 
-            }
-        
+            var (latitude, longitude) = Tools.GetCoordinates(volunteer.Address);
+
+            volunteer.Latitude = latitude;
+            volunteer.Longitude = longitude;
+        }
+
         DO.Volunteer doVolunteer = new(volunteer.Id, volunteer.Name, volunteer.Phone, volunteer.Email, volunteer.Address, volunteer.Latitude, volunteer.Longitude,
             volunteer.MaxDistance, (DO.Role)volunteer.Role, (DO.DistanceType)volunteer.DistanceType, VolunteerManager.HashPassword(volunteer.Password), volunteer.IsActive);
 
         try
         {
             _dal.Volunteer.Create(doVolunteer);
+            VolunteerManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalAlreadyExistsException ex)
         {
@@ -64,6 +60,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
         try
         {
             _dal.Volunteer.Delete(id);
+            VolunteerManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDeleteImpossible ex)
         {
@@ -164,18 +161,13 @@ internal class VolunteerImplentation : BlApi.IVolunteer
             return;
         if (!VolunteerManager.CheckValidation(volunteer))
             throw new BO.BlIllegalValues("Volunteer fields are illegal");
-       
-            if (volunteer.Address != null)
-            {
-                var (latitude, longitude) =  Tools.GetCoordinates(volunteer.Address);
-                if (latitude != null && longitude != null)
-                {
-                    volunteer.Latitude = latitude;
-                    volunteer.Longitude = longitude;
-                }
-                else
-                    throw new BO.BlCoordinatesException("Can't approag the address");
-            }
+
+        if (volunteer.Address != null)
+        {
+            var (latitude, longitude) = Tools.GetCoordinates(volunteer.Address);
+            volunteer.Latitude = latitude;
+            volunteer.Longitude = longitude;
+        }
         try
         {
             DO.Volunteer? prevDoVolunteer = _dal.Volunteer.Read(volunteer.Id) ??
@@ -192,4 +184,13 @@ internal class VolunteerImplentation : BlApi.IVolunteer
             throw new BO.BlDoesNotExistException($"volunteer with id {volunteer.Id} does not exist", ex);
         }
     }
+    public void AddObserver(Action listObserver) =>
+        VolunteerManager.Observers.AddListObserver(listObserver); //stage 5
+    public void AddObserver(int id, Action observer) =>
+        VolunteerManager.Observers.AddObserver(id, observer); //stage 5
+    public void RemoveObserver(Action listObserver) =>
+        VolunteerManager.Observers.RemoveListObserver(listObserver); //stage 5
+    public void RemoveObserver(int id, Action observer) =>
+        VolunteerManager.Observers.RemoveObserver(id, observer); //stage 5
+
 }

@@ -13,11 +13,11 @@ static internal class Tools
     /// </summary>
     /// <param name="address">An address to casculate latitude and longitude</param>
     /// <returns>The latitude and longitude</returns>
+    /// <exception cref="BO.BlCoordinatesException">If there is a problem when calculate coorcodination</exception>
     public static (double?, double?) GetCoordinates(string address)
     {
         const string apiKey = "PK.83B935C225DF7E2F9B1ee90A6B46AD86";
-        try
-        {
+        
             using var client = new HttpClient();
             string url = $"https://us1.locationiq.com/v1/search.php?key={apiKey}&q={Uri.EscapeDataString(address)}&format=json";
 
@@ -47,10 +47,7 @@ static internal class Tools
 
             return (latitude, longitude);
         }
-        catch
-        {
-            return (null, null);
-        }
+        
     }
     
 

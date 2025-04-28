@@ -1,7 +1,7 @@
 ﻿
 namespace BlApi;
 
-public interface IVolunteer
+public interface IVolunteer: IObservable
 {
     public BO.Role EnterSystem(string name, string? password = null);
     public IEnumerable<BO.VolunteerInList> ReadAll(bool? isActive=null ,BO.VolunteerInListFields? sort =null );

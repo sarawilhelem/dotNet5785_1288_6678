@@ -1,7 +1,7 @@
 ﻿
 namespace BlApi;
 
-public interface ICall
+public interface ICall: IObservable
 {
     public int[] GetCountsGroupByStatus();
     public IEnumerable<BO.CallInList> ReadAll(BO.CallInListFields? sort=null , Object? findVal = null, BO.CallInListFields? findField=null);

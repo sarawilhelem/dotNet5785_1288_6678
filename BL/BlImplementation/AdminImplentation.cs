@@ -14,7 +14,7 @@ internal class AdminImplentaition : IAdmin
     /// <returns>system's current clock</returns>
     public DateTime GetClock()
     {
-        return ClockManager.Now;
+        return AdminManager.Now;
     }
 
     /// <summary>
@@ -23,7 +23,7 @@ internal class AdminImplentaition : IAdmin
     public void Initialization()
     {
         DalTest.Initialization.Do();
-        ClockManager.UpdateClock(ClockManager.Now);
+        AdminManager.UpdateClock(AdminManager.Now);
 
     }
 
@@ -37,19 +37,19 @@ internal class AdminImplentaition : IAdmin
         switch (timeUnit)
         {
             case BO.TimeUnit.Minute:
-                ClockManager.UpdateClock(ClockManager.Now.AddMinutes(1));
+                AdminManager.UpdateClock(AdminManager.Now.AddMinutes(1));
                 break;
             case BO.TimeUnit.Hour:
-                ClockManager.UpdateClock(ClockManager.Now.AddHours(1));
+                AdminManager.UpdateClock(AdminManager.Now.AddHours(1));
                 break;
             case BO.TimeUnit.Day:
-                ClockManager.UpdateClock(ClockManager.Now.AddDays(1));
+                AdminManager.UpdateClock(AdminManager.Now.AddDays(1));
                 break;
             case BO.TimeUnit.Month:
-                ClockManager.UpdateClock(ClockManager.Now.AddMonths(1));
+                AdminManager.UpdateClock(AdminManager.Now.AddMonths(1));
                 break;
             case BO.TimeUnit.Year:
-                ClockManager.UpdateClock(ClockManager.Now.AddYears(1));
+                AdminManager.UpdateClock(AdminManager.Now.AddYears(1));
                 break;
         }
     }
@@ -69,7 +69,7 @@ internal class AdminImplentaition : IAdmin
     public void Reset()
     {
         _dal.ResetDB();
-        ClockManager.UpdateClock(ClockManager.Now);
+        AdminManager.UpdateClock(AdminManager.Now);
     }
 
     /// <summary>

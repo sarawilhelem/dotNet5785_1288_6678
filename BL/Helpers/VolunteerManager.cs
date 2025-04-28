@@ -11,6 +11,7 @@ internal static class VolunteerManager
     /// </summary>
     private static IDal s_dal = Factory.Get;
 
+    internal static ObserverManager Observers = new();
     /// <summary>
     /// Checks the validation of the volunteer details
     /// </summary>
@@ -154,7 +155,7 @@ internal static class VolunteerManager
     internal static bool IsWithinRiskRange(DateTime maxClose)
     {
         BlApi.IBl bl = BlApi.Factory.Get();
-        DateTime now = ClockManager.Now;
+        DateTime now = AdminManager.Now;
         TimeSpan range = bl.Admin.GetRiskRange();
         DateTime rangeStart = maxClose.Add(-range);
         return now >= rangeStart && now <= maxClose;

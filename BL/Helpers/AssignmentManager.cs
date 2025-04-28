@@ -5,6 +5,8 @@ namespace Helpers;
 internal class AssignmentManager
 {
     private static IDal s_dal = Factory.Get;
+
+    internal static ObserverManager Observers = new();
     /// <summary>
     /// create a new assignment between call and volunteer
     /// </summary>
@@ -16,11 +18,12 @@ internal class AssignmentManager
         {
             CallId = callId,
             VolunteerId = volunteerId,
-            OpenTime = ClockManager.Now,
+            OpenTime = AdminManager.Now,
             FinishTime = null, 
             FinishType = null
         };
         s_dal.Assignment.Create(assignment);
+        AssignmentManager.Observers.NotifyListUpdated();
     }
 
 }

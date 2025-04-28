@@ -55,7 +55,7 @@ internal class CallImplentation : ICall
             call =>
             {
                 var lastAssignment = assinments.Where(a => a.CallId == call.Id).
-                OrderByDescending(a=>a.OpenTime).FirstOrDefault();
+                OrderByDescending(a => a.OpenTime).FirstOrDefault();
                 int? id;
                 if (lastAssignment == null)
                     id = null;
@@ -68,7 +68,7 @@ internal class CallImplentation : ICall
                     CallType = (BO.CallType)call.CallType,
                     OpenTime = call.OpenTime,
                     MaxCloseTime = Helpers.CallManager.RestTimeForCall(call),
-                    LastVolunteerName = lastAssignment is not null? _dal.Volunteer.Read(lastAssignment.VolunteerId)!.Name : null,
+                    LastVolunteerName = lastAssignment is not null ? _dal.Volunteer.Read(lastAssignment.VolunteerId)!.Name : null,
                     TotalProcessingTime = Helpers.CallManager.RestTimeForTreatment(call),
                     Status = Helpers.CallManager.GetCallStatus(call.Id),
                     AmountOfAssignments = Helpers.CallManager.GetAmountOfAssignments(call)
@@ -138,7 +138,7 @@ internal class CallImplentation : ICall
             throw new BO.BlIllegalValues(ex.Message);
         }
         if (sortBy != null)
-           switch (sortBy)
+            switch (sortBy)
             {
                 case BO.CallInListFields.Id:
                     callsListToReturn = callsListToReturn.OrderBy(call => call.Id);
@@ -168,10 +168,10 @@ internal class CallImplentation : ICall
                     callsListToReturn = callsListToReturn.OrderBy(call => call.AmountOfAssignments);
                     break;
             }
-        
+
         return callsListToReturn;
     }
-    
+
     /// <summary>
     /// read a call
     /// </summary>
@@ -192,7 +192,7 @@ internal class CallImplentation : ICall
         };
         return call;
     }
-    
+
     /// <summary>
     /// update a call
     /// </summary>
@@ -201,13 +201,13 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlIllegalValues">if a field in the updated call is not legal</exception>
     /// <exception cref="BO.BlCoordinatesException">if there is an exception when calculate the lat and lon</exception>
     /// <exception cref="BO.BlDoesNotExistException">if there is not a call with that id</exception>
-    public  void Update(BO.Call call)
+    public void Update(BO.Call call)
     {
-        if (call.OpenTime > call.MaxCloseTime || call.MaxCloseTime < ClockManager.Now)
+        if (call.OpenTime > call.MaxCloseTime || call.MaxCloseTime < AdminManager.Now)
             throw new BO.BlIllegalDatesOrder("MaxCloseTime can't be before now or open time");
         if (call == null)
             throw new BO.BlIllegalValues("Address can not be null");
-        var (latitude, longitude) =  Tools.GetCoordinates(call.Address);
+        var (latitude, longitude) = Tools.GetCoordinates(call.Address);
         var callToUpdate = new DO.Call
         {
             CallType = (DO.CallType)call.Type,
@@ -222,6 +222,9 @@ internal class CallImplentation : ICall
         try
         {
             _dal.Call.Update(callToUpdate);
+            CallManager.Observers.NotifyItemUpdated(callToUpdate.Id);  
+            VolunteerManager.Observers.NotifyListUpdated();  
+
         }
         catch
         {
@@ -243,6 +246,7 @@ internal class CallImplentation : ICall
             try
             {
                 _dal.Call.Delete(id);
+                CallManager.Observers.NotifyListUpdated();
             }
             catch
             {
@@ -263,24 +267,25 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlIllegalValues">if a field in the new call is not legal</exception>
     /// <exception cref="BO.BlIllegalDatesOrder">if the dates order in the new call is illegal</exception>
     /// <exception cref="BO.BlCoordinatesException">if there is an exception when calculate the lat and lon</exception>
-    public  void Create(BO.Call call)
+    public void Create(BO.Call call)
     {
         if (call.Address is null)
             throw new BO.BlIllegalValues("address can not be null");
-        if (call.OpenTime > call.MaxCloseTime || call.MaxCloseTime < ClockManager.Now)
+        if (call.OpenTime > call.MaxCloseTime || call.MaxCloseTime < AdminManager.Now)
             throw new BO.BlIllegalDatesOrder("MaxCloseTime can't be before now or open time");
-        var (latitude, longitude) =  Tools.GetCoordinates(call.Address);
+        var (latitude, longitude) = Tools.GetCoordinates(call.Address);
         var callToAdd = new DO.Call
         {
             CallType = (DO.CallType)call.Type,
             Address = call.Address,
             Latitude = latitude ?? throw new BO.BlCoordinatesException("Can't approch address"),
             Longitude = longitude ?? throw new BO.BlCoordinatesException("Can't approch address"),
-            OpenTime = Helpers.ClockManager.Now,
+            OpenTime = Helpers.AdminManager.Now,
             MaxCloseTime = call.MaxCloseTime,
             Description = call.Description
         };
         _dal.Call.Create(callToAdd);
+        CallManager.Observers.NotifyListUpdated();
     }
 
     /// <summary>
@@ -293,14 +298,15 @@ internal class CallImplentation : ICall
     public IEnumerable<BO.ClosedCallInList> ReadAllVolunteerClosedCalls(int volunteerId, BO.CallType? callType = null, BO.ClosedCallInListFields? sort = null)
     {
 
-        var closedCalls = Helpers.CallManager.AssignmentsListForVolunteer(volunteerId).Where(a => {
+        var closedCalls = Helpers.CallManager.AssignmentsListForVolunteer(volunteerId).Where(a =>
+        {
             var status = Helpers.CallManager.GetCallStatus(a.CallId);
             return
             status == BO.FinishCallType.InProcessInRisk ||
              status == BO.FinishCallType.InProcess ||
               status == BO.FinishCallType.Close ||
                status == BO.FinishCallType.Expired;
-            }).Select(
+        }).Select(
                         a => new BO.ClosedCallInList
                         {
                             Id = a.CallId,
@@ -361,7 +367,7 @@ internal class CallImplentation : ICall
         };
         return openCallsToReturn;
     }
-    
+
     /// <summary>
     /// to update a volunteer went to the call
     /// </summary>
@@ -385,10 +391,13 @@ internal class CallImplentation : ICall
             CallId = assignment.CallId,
             VolunteerId = volunteerId,
             OpenTime = assignment.OpenTime,
-            FinishTime = ClockManager.Now,
+            FinishTime = AdminManager.Now,
             FinishType = DO.FinishType.Processed
         };
         _dal.Assignment.Update(assignmentToUpdate);
+        AssignmentManager.Observers.NotifyItemUpdated(assignmentToUpdate.Id);  
+        AssignmentManager.Observers.NotifyListUpdated();  
+
     }
 
     /// <summary>
@@ -415,13 +424,16 @@ internal class CallImplentation : ICall
                     VolunteerId = volunteerId,
                     CallId = assignment.CallId,
                     OpenTime = assignment.OpenTime,
-                    FinishTime = ClockManager.Now,
+                    FinishTime = AdminManager.Now,
                     FinishType = finishType
                 };
 
                 try
                 {
                     _dal.Assignment.Update(newAssignment);
+                    AssignmentManager.Observers.NotifyItemUpdated(newAssignment.Id);  //stage 5
+                    AssignmentManager.Observers.NotifyListUpdated();  //stage 5
+
                 }
                 catch
                 {
@@ -462,6 +474,16 @@ internal class CallImplentation : ICall
         }
 
     }
+
+    public void AddObserver(Action listObserver) =>
+        CallManager.Observers.AddListObserver(listObserver);
+    public void AddObserver(int id, Action observer) =>
+        CallManager.Observers.AddObserver(id, observer); 
+    public void RemoveObserver(Action listObserver) =>
+        CallManager.Observers.RemoveListObserver(listObserver); 
+    public void RemoveObserver(int id, Action observer) =>
+        CallManager.Observers.RemoveObserver(id, observer); 
+
 }
 
 
