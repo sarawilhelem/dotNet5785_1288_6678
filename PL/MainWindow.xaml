@@ -1,12 +1,67 @@
-﻿<Window x:Class="PL.MainWindow"
+﻿<Window x:Class="PL.Call.CallListWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL"
+        xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="CallListWindow"
+        Height="640"
+        Width="800">
 
+    <!--External Grid-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!--clock-->
+        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="date" HorizontalAlignment="Center"  VerticalAlignment="Center" Width="194"/>
+            <!--advance clock-->
+            <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="1" VerticalAlignment="Stretch" Width="auto">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Advance by minute" HorizontalAlignment="Center"  Grid.Column="0" VerticalAlignment="Center" Height="53" Width="122"/>
+                <Button Content="advance by hour" HorizontalAlignment="Center"  Grid.Column="1" VerticalAlignment="Center" Height="53" Width="122"/>
+                <Button Content="advance by day" HorizontalAlignment="Center"  Grid.Column="2" VerticalAlignment="Center" Height="53" Width="122"/>
+                <Button Content="advance by month" HorizontalAlignment="Center"  Grid.Column="3" VerticalAlignment="Center" Height="53" Width="122"/>
+                <Button Content="advance by year" HorizontalAlignment="Center"  Grid.Column="4" VerticalAlignment="Center" Height="53" Width="122"/>
+
+            </Grid>
+        </Grid>
+        <!--Risk Range-->
+        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="1" VerticalAlignment="Stretch" Width="auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox HorizontalAlignment="Center"  TextWrapping="Wrap" Text="TextBox" Grid.Column="0" VerticalAlignment="Center" Width="120"/>
+            <Button Content="Update Risk Range" HorizontalAlignment="Center"  Grid.Column="1" VerticalAlignment="Center" Height="53" Width="122"/>
+        </Grid>
+        <!--buttons-->
+        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="2" VerticalAlignment="Stretch" Width="auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Volunteers" HorizontalAlignment="Center"  Grid.Column="0" VerticalAlignment="Center" Height="53" Width="122"/>
+            <Button Content="Calls" HorizontalAlignment="Center"  Grid.Column="1" VerticalAlignment="Center" Height="53" Width="122"/>
+            <Button Content="Initialization" HorizontalAlignment="Center"  Grid.Column="2" VerticalAlignment="Center" Height="53" Width="122"/>
+            <Button Content="ResetDB" HorizontalAlignment="Center"  Grid.Column="3" VerticalAlignment="Center" Height="53" Width="122"/>
+        </Grid>
     </Grid>
 </Window>
+
