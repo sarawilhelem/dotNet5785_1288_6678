@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BO;
+using PL.Call;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +21,16 @@ namespace PL.Volunteer
     /// </summary>
     public partial class VolunteerListWindow : Window
     {
+        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+
+        public IEnumerable<BO.VolunteerInList> VolunteerList
+        {
+            get { return (IEnumerable<BO.VolunteerInList>)GetValue(VolunteerListProperty); }
+            set { SetValue(VolunteerListProperty, value); }
+        }
+
+        public static readonly DependencyProperty VolunteerListProperty =
+            DependencyProperty.Register("VolunteerList", typeof(IEnumerable<BO.VolunteerInList>), typeof(VolunteerInList), new PropertyMetadata(null));
         public VolunteerListWindow()
         {
             InitializeComponent();

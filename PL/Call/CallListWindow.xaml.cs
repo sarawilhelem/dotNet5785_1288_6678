@@ -19,6 +19,16 @@ namespace PL.Call
     /// </summary>
     public partial class CallListWindow : Window
     {
+        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+
+        public IEnumerable<BO.CallInList> CallList
+        {
+            get { return (IEnumerable<BO.CallInList>)GetValue(CallListProperty); }
+            set { SetValue(CallListProperty, value); }
+        }
+
+        public static readonly DependencyProperty CallListProperty =
+            DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(CallListWindow), new PropertyMetadata(null));
         public CallListWindow()
         {
             InitializeComponent();
