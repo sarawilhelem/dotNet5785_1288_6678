@@ -24,7 +24,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Content="Label" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Grid.Column="0"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource VolunteersCollectionKey}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource VolunteerInListFieldsCollectionKey}}"
+                Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Grid>
         <ListView Grid.Row="1" ItemsSource="{Binding Path=VolunteerList}">
             <ListView.View>

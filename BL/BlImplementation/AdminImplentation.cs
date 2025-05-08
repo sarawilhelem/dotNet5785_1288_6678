@@ -20,7 +20,7 @@ internal class AdminImplentaition : IAdmin
     /// <summary>
     /// Initialization db and clock
     /// </summary>
-    public void Initialization()
+    public void InitializationDB()
     {
         DalTest.Initialization.Do();
         AdminManager.UpdateClock(AdminManager.Now);
@@ -60,13 +60,13 @@ internal class AdminImplentaition : IAdmin
     /// <returns>risk range</returns>
     public TimeSpan GetRiskRange()
     {
-        return _dal.Config.RiskRange;
+        return AdminManager.RiskRange;
     }
 
     /// <summary>
     /// Reset db and clock
     /// </summary>
-    public void Reset()
+    public void ResetDB()
     {
         _dal.ResetDB();
         AdminManager.UpdateClock(AdminManager.Now);
@@ -78,6 +78,15 @@ internal class AdminImplentaition : IAdmin
     /// <param name="riskRange">the new risk range</param>
     public void SetRiskRange(TimeSpan riskRange)
     {
-        _dal.Config.RiskRange = riskRange;
+        AdminManager.RiskRange = riskRange;
     }
+
+    public void AddClockObserver(Action clockObserver) =>
+AdminManager.ClockUpdatedObservers += clockObserver;
+    public void RemoveClockObserver(Action clockObserver) =>
+    AdminManager.ClockUpdatedObservers -= clockObserver;
+    public void AddConfigObserver(Action configObserver) =>
+   AdminManager.ConfigUpdatedObservers += configObserver;
+    public void RemoveConfigObserver(Action configObserver) =>
+    AdminManager.ConfigUpdatedObservers -= configObserver;
 }

@@ -46,7 +46,7 @@ static internal class Tools
             }
 
             return (latitude, longitude);
-        }
+        
         
     }
     
@@ -87,5 +87,4 @@ static internal class Tools
 
         return result;
     }
-
 }

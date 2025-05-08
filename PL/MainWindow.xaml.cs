@@ -28,39 +28,39 @@ namespace PL
             set { SetValue(CurrentTimeProperty, value); }
         }
 
-        public static readonly DependencyProperty MaxYearsProperty =
-            DependencyProperty.Register("MaxYears", typeof(TimeSpan), typeof(MainWindow), new PropertyMetadata(TimeSpan.Zero));
+        public static readonly DependencyProperty RiskRangeProperty =
+            DependencyProperty.Register("RiskRange", typeof(TimeSpan), typeof(MainWindow));
 
 
-        public TimeSpan MaxYears
+        public TimeSpan RiskRange
         {
-            get { return (TimeSpan)GetValue(MaxYearsProperty); }
-            set { SetValue(MaxYearsProperty, value); }
+            get { return (TimeSpan)GetValue(RiskRangeProperty); }
+            set { SetValue(RiskRangeProperty, value); }
         }
 
-        private void AddOneMinuteByClick()
+        private void AddMinute_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.TimeUnit.Minute);
         }
-        private void AddOneHourByClick()
+        private void AddHour_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.TimeUnit.Hour);
         }
-        private void AddOneDayByClick()
+        private void AddDay_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.TimeUnit.Day);
         }
-        private void AddOneMonthByClick()
+        private void AddMonth_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.TimeUnit.Month);
         }
-        private void AddOneYearByClick()
+        private void AddYear_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.TimeUnit.Year);
         }
-        private void UpdateRiskRange()
+        private void UpdateRiskRange(object sender, RoutedEventArgs e)
         {
-            s_bl.Admin.SetRiskRange(MaxYears);
+            s_bl.Admin.SetRiskRange(RiskRange);
         }
         private void clockObserver()
         {
@@ -69,21 +69,20 @@ namespace PL
         }
         private void configObserver()
         {
-            MaxYears = s_bl.Admin.GetRiskRange();
-
+            RiskRange = s_bl.Admin.GetRiskRange();
         }
-      private void CloseWindow()
+      private void Window_Closed(object sender, EventArgs e)
         {
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
             this.Close();
         }
-        private void CallsListClick(object sender, RoutedEventArgs e)
+        private void CallsList_Click(object sender, RoutedEventArgs e)
         { new Call.CallListWindow().Show(); }
-        private void VolunteersListClick(object sender, RoutedEventArgs e)
+        private void VolunteersList_Click(object sender, RoutedEventArgs e)
         { new Volunteer.VolunteerListWindow().Show(); }
 
-        private void InitializationDBClick(object sender, RoutedEventArgs e)
+        private void InitializationDB_Click(object sender, RoutedEventArgs e)
         {
             
             if (MessageBox.Show("Are you sure you want to initialize the database?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -94,7 +93,7 @@ namespace PL
                 try
                 {
                     
-                    s_bl.Admin.InitializeDB();
+                    s_bl.Admin.InitializationDB();
 
                     
                     CloseAllWindowsExceptMain();
@@ -112,7 +111,7 @@ namespace PL
             }
         }
 
-        private void ResetDBClick(object sender, RoutedEventArgs e)
+        private void ResetDB_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to reset the database?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
@@ -147,14 +146,18 @@ namespace PL
         }
 
 
-        public MainWindow()
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             CurrentTime = s_bl.Admin.GetClock();
+            RiskRange = s_bl.Admin.GetRiskRange();
             s_bl.Admin.AddClockObserver(clockObserver);
             s_bl.Admin.AddConfigObserver(configObserver);
-            InitializeComponent();
             this.DataContext = this;
+        }
 
+        public MainWindow()
+        {
+            InitializeComponent();
         }
     }
 }

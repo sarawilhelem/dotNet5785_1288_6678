@@ -30,7 +30,7 @@ namespace PL.Volunteer
         }
 
         public static readonly DependencyProperty VolunteerListProperty =
-            DependencyProperty.Register("VolunteerList", typeof(IEnumerable<BO.VolunteerInList>), typeof(VolunteerInList), new PropertyMetadata(null));
+            DependencyProperty.Register("VolunteerList", typeof(IEnumerable<BO.VolunteerInList>), typeof(VolunteerInList));
         public VolunteerListWindow()
         {
             InitializeComponent();

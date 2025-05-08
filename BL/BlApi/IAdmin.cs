@@ -31,10 +31,15 @@ public interface IAdmin
     /// <summary>
     /// Reset db and clock
     /// </summary>
-    public void Reset();
+    public void ResetDB();
 
     /// <summary>
     /// Initialization db and clock
     /// </summary>
-    public void Initialization();
+    public void InitializationDB();
+
+    void AddConfigObserver(Action configObserver);
+    void RemoveConfigObserver(Action configObserver);
+    void AddClockObserver(Action clockObserver);
+    void RemoveClockObserver(Action clockObserver);
 }

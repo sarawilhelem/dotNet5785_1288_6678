@@ -4,7 +4,15 @@
              xmlns:local="clr-namespace:PL"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <local:VolunteersCollection x:Key="VolunteersCollectionKey" />
-        <local:CallsCollection x:Key="CallsCollectionKey" />
+        <local:VolunteerInListFieldsCollection x:Key="VolunteerInListFieldsCollectionKey" />
+        <local:CallInListFieldsCollection x:Key="CallInListFieldsCollectionKey" />
+        <local:OpenCallInListFieldsCollection x:Key="OpenCallInListFieldsCollectionKey" />
+        <local:ClosedCallInListFieldsCollection x:Key="ClosedCallInListFieldsCollectionKey" />
+        <local:FinishCallTypeCollection x:Key="FinishCallTypeCollectionKey" />
+        <local:FinishTypeCollection x:Key="FinishTypeCollectionKey" />
+        <local:CallTypeCollection x:Key="CallTypeCollectionKey" />
+        <local:CallStatusCollection x:Key="CallStatusCollectionKey" />
+        <local:DistanceTypeCollection x:Key="DistanceTypeCollectionKey" />
+        <local:RoleCollection x:Key="RoleCollectionKey" />
     </Application.Resources>
 </Application>

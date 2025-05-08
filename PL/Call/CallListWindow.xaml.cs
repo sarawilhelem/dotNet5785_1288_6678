@@ -28,7 +28,8 @@ namespace PL.Call
         }
 
         public static readonly DependencyProperty CallListProperty =
-            DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(CallListWindow), new PropertyMetadata(null));
+           DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(CallListWindow));
+
         public CallListWindow()
         {
             InitializeComponent();

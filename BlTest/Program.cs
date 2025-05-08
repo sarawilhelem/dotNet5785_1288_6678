@@ -619,10 +619,10 @@ namespace BlTest
                             s_bl.Admin.SetRiskRange(range);
                             break;
                         case AdminMenu.Reset:
-                            s_bl.Admin.Reset();
+                            s_bl.Admin.ResetDB();
                             break;
                         case AdminMenu.Initialization:
-                            s_bl.Admin.Initialization();
+                            s_bl.Admin.InitializationDB();
                             break;
                     }
                 }
