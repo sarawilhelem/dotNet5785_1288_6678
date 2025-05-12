@@ -1,17 +1,8 @@
-﻿using System;
+﻿using BO;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
 namespace PL.Call
 {
     /// <summary>
@@ -29,10 +20,57 @@ namespace PL.Call
 
         public static readonly DependencyProperty CallListProperty =
            DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(CallListWindow));
-
+        public BO.CallType SelectedCallType { get; set; } = BO.CallType.All;
         public CallListWindow()
         {
             InitializeComponent();
+        }
+        /// <summary>
+        /// Handles the selection change event to update the call list based on the selected filter.
+        /// </summary>
+        /// <param name="sender">The source of the event</param>
+        /// <param name="e">The event data that contains the new selection state.</param>
+        private void ChangeCallsListFilter(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateCallsList();
+        }
+        /// <summary>
+        /// Update the call list from bl
+        /// </summary>
+        private void UpdateCallsList()
+        {
+            CallList = (SelectedCallType == BO.CallType.All) ?
+                s_bl?.Call.ReadAll()! :
+                s_bl?.Call.ReadAll(BO.CallInListFields.CallType, SelectedCallType, null)!;
+        }
+
+        /// <summary>
+        /// update the call list
+        /// </summary>
+        private void CallListObserver()
+        {
+            UpdateCallsList();
+        }
+
+        /// <summary>
+        /// add the callListObserver to the observers list
+        /// </summary>
+        /// <param name="sender">The source of the event</param>
+        /// <param name="e">The event data that contains the new selection state.</param>
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            s_bl.Call.AddObserver(CallListObserver);
+        }
+
+        /// <summary>
+        /// remove the callListObserver from the observers list
+        /// </summary>
+        /// <param name="sender">The source of the event</param>
+        /// <param name="e">The event data that contains the new selection state.</param>
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            s_bl.Call.RemoveObserver(CallListObserver);
         }
     }
 }

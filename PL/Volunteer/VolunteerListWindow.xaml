@@ -3,12 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL.Call"
+        xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
-        Title="CallListWindow"
+        Title="VolunteerListWindow"
         Height="640"
         Width="800"
-         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        Loaded="Window_Loaded"
+        Closed="Window_Closed"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
 
     <!--External Grid-->
     <Grid>
@@ -25,12 +27,27 @@
             </Grid.ColumnDefinitions>
             <Label Content="Label" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Grid.Column="0"/>
             <ComboBox ItemsSource="{Binding Source={StaticResource VolunteerInListFieldsCollectionKey}}"
-                Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                      SelectedValue="{Binding SelectedSortField, Mode=TwoWay}"
+                      SelectionChanged="ChangeVolunteersListSort"
+                      Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Grid>
         <ListView Grid.Row="1" ItemsSource="{Binding Path=VolunteerList}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="Auto"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="Auto"/>
+                    <GridViewColumn Header="Is Active" Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsEnabled="False" IsChecked="{Binding Path=IsActive}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="NumCallsHandle" DisplayMemberBinding="{Binding NumCallsHandle}" Width="Auto"/>
+                    <GridViewColumn Header="NumCallsCancel" DisplayMemberBinding="{Binding NumCallsCancel}" Width="Auto"/>
+                    <GridViewColumn Header="NumCallsNotValid" DisplayMemberBinding="{Binding NumCallsNotValid}" Width="Auto"/>
+                    <GridViewColumn Header="CallId" DisplayMemberBinding="{Binding CallId}" Width="Auto"/>
+                    <GridViewColumn Header="CallType" DisplayMemberBinding="{Binding CallType}" Width="Auto"/>
                 </GridView>
             </ListView.View>
         </ListView>

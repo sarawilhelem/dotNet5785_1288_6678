@@ -8,6 +8,8 @@
         Title="CallListWindow"
         Height="640"
         Width="800"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
 
     <!--External Grid-->
@@ -24,12 +26,23 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Content="Label" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Grid.Column="0"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource CallInListFieldsCollectionKey}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}" 
+                      SelectedValue="{Binding Path=SelectedCallType, Mode=TwoWay}"
+                      SelectionChanged="ChangeCallsListFilter"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"/>
         </Grid>
         <ListView Grid.Row="1" ItemsSource="{Binding Path=CallList}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="Auto"/>
+                    <GridViewColumn Header="CallId" DisplayMemberBinding="{Binding CallId}" Width="Auto"/>
+                    <GridViewColumn Header="CallType" DisplayMemberBinding="{Binding CallType}" Width="Auto"/>
+                    <GridViewColumn Header="OpenTime" DisplayMemberBinding="{Binding OpenTime}" Width="Auto"/>
+                    <GridViewColumn Header="MaxCloseTime" DisplayMemberBinding="{Binding MaxCloseTime}" Width="Auto"/>
+                    <GridViewColumn Header="LastVolunteerName" DisplayMemberBinding="{Binding LastVolunteerName}" Width="Auto"/>
+                    <GridViewColumn Header="TotalProcessingTime" DisplayMemberBinding="{Binding TotalProcessingTime}" Width="Auto"/>
+                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="Auto"/>
+                    <GridViewColumn Header="AmountOfAssignments" DisplayMemberBinding="{Binding AmountOfAssignments}" Width="Auto"/>
                 </GridView>
             </ListView.View>
         </ListView>

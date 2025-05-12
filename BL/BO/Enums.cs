@@ -2,7 +2,8 @@
 public enum Role
 {
     Manager,
-    Volunteer
+    Volunteer,
+    All
 }
 
 
@@ -10,27 +11,31 @@ public enum DistanceType
 {
     Air,
     Walk,
-    Drive
+    Drive,
+    All
 }
 
 public enum CallStatus
 {
     InProcess,
-    InProcessInRiskRange
+    InProcessInRiskRange,
+    All
 }
 
 public enum CallType
 {
     TakeCareAtHome,
     TakeCareOut,
-    Physiotherapy
+    Physiotherapy,
+    All
 }
 public enum FinishType
 {
     Processed,
     SelfCancel,
     ManagerCancel,
-    Expired
+    Expired,
+    All
 }
 public enum FinishCallType
 {
@@ -39,7 +44,8 @@ public enum FinishCallType
     Close, 
     OpenInRisk,
     InProcessInRisk,
-    Expired 
+    Expired,
+    All
 }
 
 public enum VolunteerInListFields
@@ -51,7 +57,8 @@ public enum VolunteerInListFields
     NumCallsCancele,
     NumCallsNotValid,
     CallId,
-    CallType
+    CallType,
+    None
 }
 public enum CallInListFields
 {
@@ -63,7 +70,8 @@ public enum CallInListFields
     LastVolunteerName,
     TotalProcessingTime,
     Status,
-    AmountOfAssignments
+    AmountOfAssignments,
+    None
 }
 
 public enum ClosedCallInListFields
@@ -74,16 +82,18 @@ public enum ClosedCallInListFields
     OpenCallTime,
     StartCallTime,
     FinishCallTime,
-    FinishType
+    FinishType,
+    None
 }
 public enum OpenCallInListFields
 {
-     Id,
-    CallType ,
+    Id,
+    CallType,
     Address,
-    OpenTime ,
+    OpenTime,
     MaxCloseTime,
-    Distance
+    Distance,
+    None
 }
 public enum TimeUnit
 {

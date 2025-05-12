@@ -69,7 +69,7 @@ internal class CallImplentation : ICall
                     OpenTime = call.OpenTime,
                     MaxCloseTime = Helpers.CallManager.RestTimeForCall(call),
                     LastVolunteerName = lastAssignment is not null ? _dal.Volunteer.Read(lastAssignment.VolunteerId)!.Name : null,
-                    TotalProcessingTime = Helpers.CallManager.RestTimeForTreatment(call),
+                    TotalProcessingTime = Helpers.CallManager.CalculateAssignmentDuration(call),
                     Status = Helpers.CallManager.GetCallStatus(call.Id),
                     AmountOfAssignments = Helpers.CallManager.GetAmountOfAssignments(call)
                 };
@@ -96,30 +96,10 @@ internal class CallImplentation : ICall
                         callsListToReturn = callsListToReturn.Where(call => call.LastVolunteerName is not null && call.LastVolunteerName!.Equals(filterParam.ToString())).ToList();
                         break;
                     case BO.CallInListFields.CallType:
-                        if (filterParam is string strCallTypeParam)
-                        {
-                            if (Enum.TryParse<BO.CallType>(strCallTypeParam, true, out BO.CallType callTypeParam))
-                            {
-                                callsListToReturn = callsListToReturn.Where(call => call.CallType.Equals(callTypeParam)).ToList();
-                            }
-                            else
-                                throw new BO.BlIllegalValues($"{strCallTypeParam} is not a call type");
-                        }
-                        else
-                            throw new BO.BlIllegalValues("Can't read call type");
+                        callsListToReturn = callsListToReturn.Where(call => call.CallType.Equals(filterParam)).ToList();
                         break;
                     case BO.CallInListFields.Status:
-                        if (filterParam is string strFieldParam)
-                        {
-                            if (Enum.TryParse<BO.FinishCallType>(strFieldParam, true, out BO.FinishCallType statusParam))
-                            {
-                                callsListToReturn = callsListToReturn.Where(call => call.Status.Equals(statusParam)).ToList();
-                            }
-                            else
-                                throw new BO.BlIllegalValues($"{strFieldParam} is not a status");
-                        }
-                        else
-                            throw new BO.BlIllegalValues($"Can't read status");
+                        callsListToReturn = callsListToReturn.Where(call => call.Status.Equals(filterParam)).ToList();
                         break;
                     case BO.CallInListFields.AmountOfAssignments:
                         callsListToReturn = callsListToReturn.Where(call => call.AmountOfAssignments.Equals(Convert.ToInt32(filterParam))).ToList();
@@ -128,12 +108,10 @@ internal class CallImplentation : ICall
                         callsListToReturn = callsListToReturn.Where(call => call.TotalProcessingTime is not null
                             && call.TotalProcessingTime!.Equals(CallManager.ConvertToTimeSpan(filterParam!))).ToList();
                         break;
-                    default:
-                        break;
                 }
             }
         }
-        catch (Exception ex)
+        catch (BlIllegalValues ex)
         {
             throw new BO.BlIllegalValues(ex.Message);
         }

@@ -122,15 +122,15 @@ internal class CallManager
     }
 
     /// <summary>
-    /// calculate before how many time this call proccessed 
+    /// calculate how much time this call proccessed 
     /// </summary>
     /// <param name="call">the call</param>
     /// <returns>before how many time, or null if never</returns>
-    public static TimeSpan? RestTimeForTreatment(DO.Call call)
+    public static TimeSpan? CalculateAssignmentDuration(DO.Call call)
     {
-        var assignmentsProcessedList = s_dal.Assignment.Read(a => a.CallId == call.Id && a.FinishType == DO.FinishType.Processed);
-        if (assignmentsProcessedList != null)
-            return (TimeSpan?)(assignmentsProcessedList.FinishTime - AdminManager.Now);
+        var assignment = s_dal.Assignment.Read(a => a.CallId == call.Id && a.FinishType == DO.FinishType.Processed);
+        if (assignment != null)
+            return (TimeSpan?)(assignment.FinishTime - assignment.OpenTime);
         return null;
     }
 
