@@ -5,8 +5,94 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
-        Title="CallWindow" Height="450" Width="800">
+        Title="CallWindow" Height="500" Width="400"
+        Loaded="Window_Loaded" Closed="Window_Closed"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Id:" HorizontalAlignment="Right" Grid.Row="0"
+               Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+        <TextBox Text="{Binding CurrentCall.Id, Mode=TwoWay}" IsReadOnly="True" Width="200" Grid.Row="0" Grid.Column="1"
+                 Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+
+        <Label Content="Call Type:" HorizontalAlignment="Right" Grid.Row="1"/>
+        <ComboBox SelectedItem="{Binding CurrentCall.Type, Mode=TwoWay}" 
+            ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}" 
+            Width="200" Grid.Row="1" Grid.Column="1" />
+
+        <Label Content="Description:" HorizontalAlignment="Right" Grid.Row="2"/>
+        <TextBox Text="{Binding CurrentCall.Description, Mode=TwoWay}" Width="200" Grid.Row="2" Grid.Column="1"/>
+
+        <Label Content="Address:" HorizontalAlignment="Right" Grid.Row="3"/>
+        <TextBox Text="{Binding CurrentCall.Address, Mode=TwoWay}" Width="200" Grid.Row="3" Grid.Column="1"/>
+
+        <Label Content="Latitude:" HorizontalAlignment="Right" Grid.Row="4"
+            Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+        <TextBox Text="{Binding CurrentCall.Latitude, Mode=TwoWay}" IsReadOnly="true" Width="200" Grid.Row="4" Grid.Column="1"
+              Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+
+        <Label Content="Longitude:" HorizontalAlignment="Right" Grid.Row="5"
+            Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+        <TextBox Text="{Binding CurrentCall.Longitude, Mode=TwoWay}" IsReadOnly="True" Width="200" Grid.Row="5" Grid.Column="1"
+              Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+
+        <Label Content="Open Time:" HorizontalAlignment="Right" Grid.Row="6"
+               Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+        <DatePicker SelectedDate="{Binding CurrentCall.OpenTime, Mode=TwoWay}" Width="200" Grid.Row="6" Grid.Column="1" IsEnabled="False"
+                    Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+
+        <Label Content="Max Close Time:" HorizontalAlignment="Right" Grid.Row="7"/>
+        <DatePicker SelectedDate="{Binding CurrentCall.MaxCloseTime, Mode=TwoWay}" Width="200" Grid.Row="7" Grid.Column="1"/>
+
+        <Label Content="Status:" HorizontalAlignment="Right" Grid.Row="8"
+               Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+        <ComboBox SelectedItem="{Binding CurrentCall.Status, Mode=TwoWay}" 
+               ItemsSource="{Binding Source={StaticResource FinishCallTypeCollectionKey}}" 
+               Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"
+               IsEnabled="False" Width="200" Grid.Row="8" Grid.Column="1" />
+
+        <Label Content="Call Assign List:" HorizontalAlignment="Right" Grid.Row="9"
+            Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+
+        <ListView Grid.Row="9" Grid.Column="1" Width="200" ItemsSource="{Binding Path=CurrentCall.CallAssignList}"
+                  Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding VolunteerId, Mode=TwoWay}" Width="Auto"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name, Mode=TwoWay}" Width="Auto"/>
+                    <GridViewColumn Header="Insersion" Width="Auto">
+                        <GridViewColumn.DisplayMemberBinding>
+                            <Binding Path="Insersion" Converter="{StaticResource ConvertDateTimeKey}"/>
+                        </GridViewColumn.DisplayMemberBinding>
+                    </GridViewColumn>
+                    <GridViewColumn Header="FinishTime" Width="Auto">
+                        <GridViewColumn.DisplayMemberBinding>
+                            <Binding Path="FinishTime" Converter="{StaticResource ConvertDateTimeKey}"/>
+                        </GridViewColumn.DisplayMemberBinding>
+                    </GridViewColumn>
+                    <GridViewColumn Header="FinishType" DisplayMemberBinding="{Binding FinishType, Mode=TwoWay}" Width="Auto"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Button Content="{Binding ButtonText}" Click="BtnAddUpdate_Click" Width="150" Grid.Row="10" Margin="102,10,148,14" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

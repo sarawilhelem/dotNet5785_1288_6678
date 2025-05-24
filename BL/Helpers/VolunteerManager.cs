@@ -1,6 +1,8 @@
 ﻿using DalApi;
 using System.Text;
 using System.Security.Cryptography;
+using System;
+using System.IO;
 
 namespace Helpers;
 
@@ -10,6 +12,10 @@ internal static class VolunteerManager
     /// A static field to approach the entities crud
     /// </summary>
     private static IDal s_dal = Factory.Get;
+
+    private static readonly byte[] Key = Encoding.UTF8.GetBytes("f9tkb05nv8f4n6mb"); // Must be 16 bytes for AES-128
+    private static readonly byte[] IV = Encoding.UTF8.GetBytes("ngi6kg9fn5mbo98g"); // Must be 16 bytes
+
 
     internal static ObserverManager Observers = new();
     /// <summary>
@@ -40,7 +46,7 @@ internal static class VolunteerManager
             return false;
         if (!IsValidIdNumber(v.Id))
             return false;
-        if (v.Password is not null && !IsStrongPassword(v.Password))
+        if (v.Password is not null && v.Password != "" && !IsStrongPassword(v.Password))
             return false;
         return true;
     }
@@ -64,7 +70,8 @@ internal static class VolunteerManager
             if (i % 2 == 1)
             {
                 digit *= 2;
-                if (digit > 9) digit -= 9;
+                if (digit > 9)
+                    digit -= 9;
             }
             sum += digit;
         }
@@ -99,23 +106,49 @@ internal static class VolunteerManager
     }
 
     /// <summary>
-    /// Hash a password
+    /// Encrypt a password
     /// </summary>
-    /// <param name="password">The password to encryp</param>
+    /// <param name="plainText">The text to encryp</param>
     /// <returns>the cipherText</returns>
-    public static string? HashPassword(string? password)
+    public static string? Encrypt(string? plainText)
     {
-        if (password == null)
+        if (plainText == null)
             return null;
-        using (SHA256 sha256 = SHA256.Create())
+        using Aes aes = Aes.Create();
+        aes.Key = Key;
+        aes.IV = IV;
+
+        ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+        using MemoryStream ms = new();
+        using CryptoStream cs = new(ms, encryptor, CryptoStreamMode.Write);
+        using (StreamWriter sw = new(cs))
         {
-            byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return BitConverter.ToString(bytes).Replace("-", "").ToLower(); // Convert byte array to hex string
+            sw.Write(plainText);
         }
+        return Convert.ToBase64String(ms.ToArray());
+    }
+
+    /// <summary>
+    /// Decrypt a password
+    /// </summary>
+    /// <param name="cipherText">the text to decrypt</param>
+    /// <returns>the plainText</returns>
+    public static string? Decrypt(string? cipherText)
+    {
+        if (cipherText == null)
+            return null;
+        using Aes aes = Aes.Create();
+        aes.Key = Key;
+        aes.IV = IV;
+
+        ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+        using MemoryStream ms = new (Convert.FromBase64String(cipherText));
+        using CryptoStream cs = new (ms, decryptor, CryptoStreamMode.Read);
+        using StreamReader sr = new (cs);
+        return sr.ReadToEnd();
     }
 
     
-
     /// <summary>
     /// Calculate distance betweent 2 addresses
     /// </summary>

@@ -81,7 +81,7 @@ public static class Initialization
             }
             catch
             {
-                i--;            //This iteration in the for didn't succeed, so we do it again
+                i--; 
             }
         }
     }
@@ -219,13 +219,11 @@ public static class Initialization
         for (int i = 0; i < identityString.Length; i++)
         {
             int digit = int.Parse(identityString[i].ToString());
-            if (i % 2 == 0)
+            if (i % 2 == 1)
             {
                 digit *= 2;
                 if (digit > 9)
-                {
                     digit -= 9;
-                }
             }
             sum += digit;
         }

@@ -14,5 +14,9 @@
         <local:CallStatusCollection x:Key="CallStatusCollectionKey" />
         <local:DistanceTypeCollection x:Key="DistanceTypeCollectionKey" />
         <local:RoleCollection x:Key="RoleCollectionKey" />
+        <local:ConvertUpdateToTrue x:Key="ConvertUpdateToTrueKey" />
+        <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey" />
+        <local:ConvertAddToVisible x:Key="ConvertAddToVisibleKey" />
+        <local:ConvertDateTime x:Key="ConvertDateTimeKey" />
     </Application.Resources>
 </Application>

@@ -1,6 +1,7 @@
 ﻿using BO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 namespace PL.Volunteer
@@ -73,6 +74,20 @@ namespace PL.Volunteer
         private void Window_Closed(object sender, EventArgs e)
         {
             s_bl.Volunteer.RemoveObserver(VolunteerListObserver);
+        }
+
+        private void AddVolunteer_Click(object sender, RoutedEventArgs e)
+        {
+            new VolunteerWindow().Show();
+        }
+
+        private void Volunteer_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (sender is ListView listView)
+            {
+                int? id = (listView.SelectedItem as BO.VolunteerInList)?.Id; 
+                new VolunteerWindow(id ?? 0).Show();
+            }
         }
     }
 }

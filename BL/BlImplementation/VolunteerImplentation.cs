@@ -33,7 +33,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
         }
 
         DO.Volunteer doVolunteer = new(volunteer.Id, volunteer.Name, volunteer.Phone, volunteer.Email, volunteer.Address, volunteer.Latitude, volunteer.Longitude,
-            volunteer.MaxDistance, (DO.Role)volunteer.Role, (DO.DistanceType)volunteer.DistanceType, VolunteerManager.HashPassword(volunteer.Password), volunteer.IsActive);
+            volunteer.MaxDistance, (DO.Role)volunteer.Role, (DO.DistanceType)volunteer.DistanceType, VolunteerManager.Encrypt(volunteer.Password), volunteer.IsActive);
 
         try
         {
@@ -77,7 +77,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <exception cref="BO.BlDoesNotExistException">if there is not a volunteer with this name and this password - the entering failed</exception>
     public BO.Role EnterSystem(string name, string? password = null)
     {
-        DO.Volunteer volunteer = _dal.Volunteer.Read(v => v.Name == name && (v.Password == "" || v.Password is null || v.Password == VolunteerManager.HashPassword(password))) ??
+        DO.Volunteer volunteer = _dal.Volunteer.Read(v => v.Name == name && (v.Password == "" || v.Password is null || VolunteerManager.Decrypt(v.Password) == password)) ??
             throw new BO.BlDoesNotExistException($"Entering was not succeeded");
         return (BO.Role)volunteer.Role;
     }
@@ -103,7 +103,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
             VolunteerManager.IsWithinRiskRange(call.MaxCloseTime) ? BO.CallStatus.InProcessInRiskRange : BO.CallStatus.InProcess,
             call.Description, call.MaxCloseTime);
 
-        return new BO.Volunteer(id, doVolunteer.Name, doVolunteer.Phone, doVolunteer.Email, doVolunteer.Password,
+        return new BO.Volunteer(id, doVolunteer.Name, doVolunteer.Phone, doVolunteer.Email,VolunteerManager.Decrypt(doVolunteer.Password),
             doVolunteer.Address, doVolunteer.Latitude, doVolunteer.Longitude, (BO.Role)doVolunteer.Role, doVolunteer.IsActive,
             doVolunteer.MaxDistanceCall, (BO.DistanceType)doVolunteer.DistanceType,
             assignments.Count(a => a.FinishType.Equals(DO.FinishType.Processed)),
@@ -176,7 +176,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
                 volunteer.Role = (BO.Role)prevDoVolunteer.Role;
             DO.Volunteer updateDoVolunteer = new(volunteer.Id, volunteer.Name, volunteer.Phone, volunteer.Email, volunteer.Address,
                 volunteer.Latitude, volunteer.Longitude, volunteer.MaxDistance, (DO.Role)volunteer.Role,
-                (DO.DistanceType)volunteer.DistanceType, VolunteerManager.HashPassword(volunteer.Password), volunteer.IsActive);
+                (DO.DistanceType)volunteer.DistanceType, VolunteerManager.Encrypt(volunteer.Password), volunteer.IsActive);
             _dal.Volunteer.Update(updateDoVolunteer);
         }
         catch (BO.BlDoesNotExistException ex)
@@ -185,7 +185,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
         }
     }
     public void AddObserver(Action listObserver) =>
-        VolunteerManager.Observers.AddListObserver(listObserver); //stage 5
+        VolunteerManager.Observers.AddListObserver(listObserver); 
     public void AddObserver(int id, Action observer) =>
         VolunteerManager.Observers.AddObserver(id, observer); //stage 5
     public void RemoveObserver(Action listObserver) =>

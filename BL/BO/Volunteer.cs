@@ -46,10 +46,10 @@ public class Volunteer
     public BO.CallInProgress? Call { get; set; }
 
     public Volunteer(
-        int id,
-        string name,
-        string phone,
-        string email,
+        int id = 0,
+        string name = "",
+        string phone = "",
+        string email = "",
         string? password = null,
         string? address = null,
         double? latitude = null,

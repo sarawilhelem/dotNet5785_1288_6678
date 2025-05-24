@@ -31,7 +31,7 @@
                       SelectionChanged="ChangeCallsListFilter"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"/>
         </Grid>
-        <ListView Grid.Row="1" ItemsSource="{Binding Path=CallList}">
+        <ListView Grid.Row="1" ItemsSource="{Binding Path=CallList}" MouseDoubleClick="Call_MouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="Auto"/>
@@ -46,6 +46,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
+        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100" Click="AddCall_Click"/>
     </Grid>
 </Window>

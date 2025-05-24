@@ -1,4 +1,5 @@
 ﻿using BO;
+using PL.Volunteer;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -71,6 +72,19 @@ namespace PL.Call
         private void Window_Closed(object sender, EventArgs e)
         {
             s_bl.Call.RemoveObserver(CallListObserver);
+        }
+        private void AddCall_Click(object sender, RoutedEventArgs e)
+        {
+            new CallWindow().Show();
+        }
+
+        private void Call_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (sender is ListView listView)
+            {
+                int? id = (listView.SelectedItem as BO.CallInList)?.CallId;
+                new CallWindow(id ?? 0).Show();
+            }
         }
     }
 }
