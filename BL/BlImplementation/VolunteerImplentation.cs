@@ -39,6 +39,8 @@ internal class VolunteerImplentation : BlApi.IVolunteer
         {
             _dal.Volunteer.Create(doVolunteer);
             VolunteerManager.Observers.NotifyListUpdated();
+            VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);
+            CallManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalAlreadyExistsException ex)
         {
@@ -178,6 +180,9 @@ internal class VolunteerImplentation : BlApi.IVolunteer
                 volunteer.Latitude, volunteer.Longitude, volunteer.MaxDistance, (DO.Role)volunteer.Role,
                 (DO.DistanceType)volunteer.DistanceType, VolunteerManager.Encrypt(volunteer.Password), volunteer.IsActive);
             _dal.Volunteer.Update(updateDoVolunteer);
+            VolunteerManager.Observers.NotifyListUpdated();
+            VolunteerManager.Observers.NotifyItemUpdated(prevDoVolunteer.Id);
+            CallManager.Observers.NotifyListUpdated();
         }
         catch (BO.BlDoesNotExistException ex)
         {

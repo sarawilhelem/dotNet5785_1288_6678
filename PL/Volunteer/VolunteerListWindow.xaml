@@ -31,7 +31,7 @@
                       SelectionChanged="ChangeVolunteersListSort"
                       Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Grid>
-        <ListView Grid.Row="1" ItemsSource="{Binding Path=VolunteerList}" MouseDoubleClick="Volunteer_MouseDoubleClick">
+        <ListView Grid.Row="1" ItemsSource="{Binding Path=VolunteerList, Mode=TwoWay}" MouseDoubleClick="Volunteer_MouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="Auto"/>
@@ -39,15 +39,15 @@
                     <GridViewColumn Header="Is Active" Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsEnabled="False" IsChecked="{Binding Path=IsActive, Mode=TwoWay}" />
+                                <CheckBox IsEnabled="False" IsChecked="{Binding Path=IsActive}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="NumCallsHandle" DisplayMemberBinding="{Binding NumCallsHandle, Mode=TwoWay}" Width="Auto"/>
-                    <GridViewColumn Header="NumCallsCancel" DisplayMemberBinding="{Binding NumCallsCancel, Mode=TwoWay}" Width="Auto"/>
-                    <GridViewColumn Header="NumCallsNotValid" DisplayMemberBinding="{Binding NumCallsNotValid, Mode=TwoWay}" Width="Auto"/>
-                    <GridViewColumn Header="CallId" DisplayMemberBinding="{Binding CallId, Mode=TwoWay}" Width="Auto"/>
-                    <GridViewColumn Header="CallType" DisplayMemberBinding="{Binding CallType, Mode=TwoWay}" Width="Auto"/>
+                    <GridViewColumn Header="NumCallsHandle" DisplayMemberBinding="{Binding NumCallsHandle}" Width="Auto"/>
+                    <GridViewColumn Header="NumCallsCancel" DisplayMemberBinding="{Binding NumCallsCancel}" Width="Auto"/>
+                    <GridViewColumn Header="NumCallsNotValid" DisplayMemberBinding="{Binding NumCallsNotValid}" Width="Auto"/>
+                    <GridViewColumn Header="CallId" DisplayMemberBinding="{Binding CallId}" Width="Auto"/>
+                    <GridViewColumn Header="CallType" DisplayMemberBinding="{Binding CallType}" Width="Auto"/>
                 </GridView>
             </ListView.View>
         </ListView>

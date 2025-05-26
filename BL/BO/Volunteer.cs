@@ -22,6 +22,7 @@ namespace BO;
 /// <param name=" DistanceType ">type of distance</param>
 /// <param name=" NumCallsHandle ">how many calls this volunteer handled</param>
 /// <param name=" NumCallsCancel ">how many calls this volunteer canceled</param>
+/// <param name=" NumCallsNotValid">how many calls this volunteer are not valid - expired</param>
 /// <param name=" call ">a call the volunteer process now</param>
 
 

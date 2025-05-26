@@ -1,9 +1,9 @@
 ﻿using BO;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+
 namespace PL.Volunteer
 {
     /// <summary>
@@ -13,14 +13,12 @@ namespace PL.Volunteer
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
 
-        public IEnumerable<BO.VolunteerInList> VolunteerList
+        private ObservableCollection<BO.VolunteerInList> _volunteerList = new ObservableCollection<BO.VolunteerInList>();
+        public ObservableCollection<BO.VolunteerInList> VolunteerList
         {
-            get { return (IEnumerable<BO.VolunteerInList>)GetValue(VolunteerListProperty); }
-            set { SetValue(VolunteerListProperty, value); }
+            get { return _volunteerList; }
+            set { _volunteerList = value; }
         }
-
-        public static readonly DependencyProperty VolunteerListProperty =
-            DependencyProperty.Register("VolunteerList", typeof(IEnumerable<BO.VolunteerInList>), typeof(VolunteerInList));
 
         public BO.VolunteerInListFields SelectedSortField { get; set; } = BO.VolunteerInListFields.None;
 
@@ -28,6 +26,7 @@ namespace PL.Volunteer
         {
             InitializeComponent();
         }
+
         /// <summary>
         /// Handles the selection change event to update the volunteer list based on the selected sort field.
         /// </summary>
@@ -37,14 +36,21 @@ namespace PL.Volunteer
         {
             UpdateVolunteersList();
         }
+
         /// <summary>
         /// Update the volunteer list from bl
         /// </summary>
         private void UpdateVolunteersList()
         {
-            VolunteerList = (SelectedSortField == BO.VolunteerInListFields.None) ?
+            VolunteerList.Clear(); // Clear the old items
+            var volunteers = (SelectedSortField == BO.VolunteerInListFields.None) ?
                 s_bl?.Volunteer.ReadAll()! :
-                s_bl?.Volunteer.ReadAll(null,SelectedSortField)!;
+                s_bl?.Volunteer.ReadAll(null, SelectedSortField)!;
+
+            foreach (var volunteer in volunteers)
+            {
+                VolunteerList.Add(volunteer); // Add new items
+            }
         }
 
         /// <summary>
@@ -70,7 +76,6 @@ namespace PL.Volunteer
         /// </summary>
         /// <param name="sender">The source of the event</param>
         /// <param name="e">The event data that contains the new selection state.</param>
-
         private void Window_Closed(object sender, EventArgs e)
         {
             s_bl.Volunteer.RemoveObserver(VolunteerListObserver);
@@ -85,9 +90,14 @@ namespace PL.Volunteer
         {
             if (sender is ListView listView)
             {
-                int? id = (listView.SelectedItem as BO.VolunteerInList)?.Id; 
+                int? id = (listView.SelectedItem as BO.VolunteerInList)?.Id;
                 new VolunteerWindow(id ?? 0).Show();
             }
+        }
+
+        private void ListView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
         }
     }
 }

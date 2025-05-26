@@ -63,11 +63,18 @@ namespace PL.Call
                 if (CurrentCall == null)
                     throw new NullReferenceException("currentCall is null");
                 else if (ButtonText == "ADD")
+                {
                     s_bl.Call.Create(CurrentCall);
+                    MessageBox.Show($"Succeed to ADD Call", "success",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
                 else
+                {
                     s_bl.Call.Update(CurrentCall);
-                MessageBox.Show($"Succeed to {ButtonText} Call {CurrentCall.Id}", "success",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show($"Succeed to UPDATE Call {CurrentCall.Id}", "success",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                 
                 this.Close();
             }
             catch (Exception ex)
@@ -95,7 +102,7 @@ namespace PL.Call
         /// <param name="e">The event data that contains the new selection state.</param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            s_bl.Call.AddObserver(CallObserver);
+            s_bl.Call.AddObserver(CurrentCall!.Id, CallObserver);
         }
 
         /// <summary>

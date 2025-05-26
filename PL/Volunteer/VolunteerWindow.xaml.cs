@@ -91,7 +91,7 @@ public partial class VolunteerWindow : Window
     /// <param name="e">The event data that contains the new selection state.</param>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        s_bl.Volunteer.AddObserver(VolunteerObserver);
+        s_bl.Volunteer.AddObserver(CurrentVolunteer!.Id, VolunteerObserver);
     }
 
     /// <summary>

@@ -200,9 +200,9 @@ internal class CallImplentation : ICall
         try
         {
             _dal.Call.Update(callToUpdate);
-            CallManager.Observers.NotifyItemUpdated(callToUpdate.Id);  
-            VolunteerManager.Observers.NotifyListUpdated();  
-
+            VolunteerManager.Observers.NotifyListUpdated();
+            CallManager.Observers.NotifyListUpdated();
+            CallManager.Observers.NotifyItemUpdated(callToUpdate.Id);
         }
         catch
         {
