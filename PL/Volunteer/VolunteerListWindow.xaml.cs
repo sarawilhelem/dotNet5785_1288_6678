@@ -1,9 +1,11 @@
 ﻿using BO;
+using PL.Call;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 namespace PL.Volunteer
 {
     /// <summary>
@@ -23,6 +25,11 @@ namespace PL.Volunteer
             DependencyProperty.Register("VolunteerList", typeof(IEnumerable<BO.VolunteerInList>), typeof(VolunteerInList));
 
         public BO.VolunteerInListFields SelectedSortField { get; set; } = BO.VolunteerInListFields.None;
+        public BO.CallInList? SelectedVolunteer
+        {
+            get;
+            set;
+        }
 
         public VolunteerListWindow()
         {
@@ -85,8 +92,30 @@ namespace PL.Volunteer
         {
             if (sender is ListView listView)
             {
-                int? id = (listView.SelectedItem as BO.VolunteerInList)?.Id; 
-                new VolunteerWindow(id ?? 0).Show();
+                if (SelectedVolunteer != null)
+                {
+                    int? id = (listView.SelectedItem as BO.VolunteerInList)?.Id;
+                    new VolunteerWindow(id ?? 0).Show();
+                }
+
+            }
+        }
+        public ICommand DeleteCommand => new RelayCommand<BO.CallInList>(DeleteVolunteer);
+
+        private void DeleteVolunteer(BO.VolunteerInList item)
+        {
+            var result = MessageBox.Show("האם אתה בטוח שברצונך למחוק את המתנדב?", "אישור מחיקה", MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    s_bl.Volunteer.Delete((int)item.Id);
+                }
+                catch
+                {
+                    var failedErase = MessageBox.Show("המחיקה נכשלה");
+                }
             }
         }
     }
