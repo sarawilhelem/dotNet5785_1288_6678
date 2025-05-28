@@ -35,11 +35,12 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Content="Advance by minute" HorizontalAlignment="Center"  Grid.Column="0" VerticalAlignment="Center" Height="53" Width="122" Click="AddMinute_Click"/>
-                <Button Content="advance by hour" HorizontalAlignment="Center"  Grid.Column="1" VerticalAlignment="Center" Height="53" Width="122" Click="AddHour_Click"/>
-                <Button Content="advance by day" HorizontalAlignment="Center"  Grid.Column="2" VerticalAlignment="Center" Height="53" Width="122" Click="AddDay_Click"/>
-                <Button Content="advance by month" HorizontalAlignment="Center"  Grid.Column="3" VerticalAlignment="Center" Height="53" Width="122" Click="AddMonth_Click"/>
-                <Button Content="advance by year" HorizontalAlignment="Center"  Grid.Column="4" VerticalAlignment="Center" Height="53" Width="122" Click="AddYear_Click"/>
+                <Button Content="Advance by minute"  Foreground="White" Background="Red" HorizontalAlignment="Center" Grid.Column="0" VerticalAlignment="Center" Height="53" Width="122" Click="AddMinute_Click"/>
+                <Button Content="advance by hour"  Foreground="White" Background="Green" HorizontalAlignment="Center" Grid.Column="1" VerticalAlignment="Center" Height="53" Width="122" Click="AddHour_Click"/>
+                <Button Content="advance by day"  Foreground="White" Background="Blue" HorizontalAlignment="Center" Grid.Column="2" VerticalAlignment="Center" Height="53" Width="122" Click="AddDay_Click"/>
+                <Button Content="advance by month"  Foreground="White" Background="Orange" HorizontalAlignment="Center" Grid.Column="3" VerticalAlignment="Center" Height="53" Width="122" Click="AddMonth_Click"/>
+                <Button Content="advance by year"  Foreground="White" Background="Purple" HorizontalAlignment="Center" Grid.Column="4" VerticalAlignment="Center" Height="53" Width="122" Click="AddYear_Click"/>
+
 
             </Grid>
         </Grid>
@@ -60,10 +61,11 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Volunteers" HorizontalAlignment="Center"  Grid.Column="0" VerticalAlignment="Center" Height="53" Width="122" Click="VolunteersList_Click"/>
-            <Button Content="Calls" HorizontalAlignment="Center"  Grid.Column="1" VerticalAlignment="Center" Height="53" Width="122" Click="CallsList_Click"/>
-            <Button Content="InitializationDB" HorizontalAlignment="Center"  Grid.Column="2" VerticalAlignment="Center" Height="53" Width="122" Click="InitializationDB_Click"/>
-            <Button Content="ResetDB" HorizontalAlignment="Center"  Grid.Column="3" VerticalAlignment="Center" Height="53" Width="122" Click="ResetDB_Click"/>
+            <Button Content="Volunteers" Background="LightBlue" HorizontalAlignment="Center" Grid.Column="0" VerticalAlignment="Center" Height="53" Width="122" Click="VolunteersList_Click"/>
+            <Button Content="Calls" Background="LightGreen" HorizontalAlignment="Center" Grid.Column="1" VerticalAlignment="Center" Height="53" Width="122" Click="CallsList_Click"/>
+            <Button Content="InitializationDB" Background="LightCoral" HorizontalAlignment="Center" Grid.Column="2" VerticalAlignment="Center" Height="53" Width="122" Click="InitializationDB_Click"/>
+            <Button Content="ResetDB" Background="LightGoldenrodYellow" HorizontalAlignment="Center" Grid.Column="3" VerticalAlignment="Center" Height="53" Width="122" Click="ResetDB_Click"/>
+
         </Grid>
     </Grid>
 </Window>

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+
 namespace PL.Call
 {
     /// <summary>
@@ -18,6 +20,12 @@ namespace PL.Call
             get { return (IEnumerable<BO.CallInList>)GetValue(CallListProperty); }
             set { SetValue(CallListProperty, value); }
         }
+        public BO.CallInList? SelectedCall
+        {
+            get;
+            set;
+        }
+
 
         public static readonly DependencyProperty CallListProperty =
            DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(CallListWindow));
@@ -82,8 +90,28 @@ namespace PL.Call
         {
             if (sender is ListView listView)
             {
-                int? id = (listView.SelectedItem as BO.CallInList)?.CallId;
-                new CallWindow(id ?? 0).Show();
+                if (SelectedCall != null)
+                {
+                    int? id = (listView.SelectedItem as BO.CallInList)?.CallId;
+                    new CallWindow(id ?? 0).Show();
+                }
+            }
+        }
+        public ICommand DeleteCommand => new RelayCommand<BO.CallInList>(DeleteItem);
+
+        private void DeleteItem(BO.CallInList item)
+        {
+            var result = MessageBox.Show("האם אתה בטוח שברצונך למחוק את הפריט?", "אישור מחיקה", MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try {
+                    s_bl.Call.Delete((int)item.Id);
+                }
+                catch
+                {
+                    var failedErase = MessageBox.Show("המחיקה נכשלה");
+                }
             }
         }
     }

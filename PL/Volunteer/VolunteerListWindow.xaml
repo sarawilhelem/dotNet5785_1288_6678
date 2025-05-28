@@ -43,11 +43,18 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="NumCallsHandle" DisplayMemberBinding="{Binding NumCallsHandle}" Width="Auto"/>
-                    <GridViewColumn Header="NumCallsCancel" DisplayMemberBinding="{Binding NumCallsCancel}" Width="Auto"/>
-                    <GridViewColumn Header="NumCallsNotValid" DisplayMemberBinding="{Binding NumCallsNotValid}" Width="Auto"/>
-                    <GridViewColumn Header="CallId" DisplayMemberBinding="{Binding CallId}" Width="Auto"/>
-                    <GridViewColumn Header="CallType" DisplayMemberBinding="{Binding CallType}" Width="Auto"/>
+                    <GridViewColumn Header="NumCallsHandle" DisplayMemberBinding="{Binding NumCallsHandle, Mode=TwoWay}" Width="Auto"/>
+                    <GridViewColumn Header="NumCallsCancel" DisplayMemberBinding="{Binding NumCallsCancel, Mode=TwoWay}" Width="Auto"/>
+                    <GridViewColumn Header="NumCallsNotValid" DisplayMemberBinding="{Binding NumCallsNotValid, Mode=TwoWay}" Width="Auto"/>
+                    <GridViewColumn Header="CallId" DisplayMemberBinding="{Binding CallId, Mode=TwoWay}" Width="Auto"/>
+                    <GridViewColumn Header="CallType" DisplayMemberBinding="{Binding CallType, Mode=TwoWay}" Width="Auto"/>
+                    <GridViewColumn  Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
