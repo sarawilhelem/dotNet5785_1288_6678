@@ -2,6 +2,7 @@
 using PL.Call;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,15 +24,19 @@ namespace PL.Volunteer
         }
 
         public BO.VolunteerInListFields SelectedSortField { get; set; } = BO.VolunteerInListFields.None;
-        public BO.CallInList? SelectedVolunteer
+        public BO.VolunteerInList? SelectedVolunteer
         {
             get;
             set;
         }
+        public ICommand DeleteVolunteerCommand { get; }
+
 
         public VolunteerListWindow()
         {
             InitializeComponent();
+            DeleteVolunteerCommand = new RelayCommand<BO.VolunteerInList>(DeleteVolunteer);
+
         }
 
         /// <summary>
@@ -95,32 +100,30 @@ namespace PL.Volunteer
 
         private void Volunteer_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (sender is ListView listView)
-            {
-                if (SelectedVolunteer != null)
-                {
-                    int? id = (listView.SelectedItem as BO.VolunteerInList)?.Id;
-                    new VolunteerWindow(id ?? 0).Show();
-                }
 
-            }
+            int id = SelectedVolunteer?.Id
+        ?? throw new ArgumentNullException("No volunteer was accepted for deletion");
+            new VolunteerWindow(id).Show();
+
         }
-        public ICommand DeleteCommand => new RelayCommand<BO.CallInList>(DeleteVolunteer);
-
-        private void DeleteVolunteer(BO.VolunteerInList item)
+        private void DeleteVolunteer(BO.VolunteerInList volunteer)
         {
-            var result = MessageBox.Show("האם אתה בטוח שברצונך למחוק את המתנדב?", "אישור מחיקה", MessageBoxButton.YesNo);
-
-            if (result == MessageBoxResult.Yes)
+            try
             {
-                try
+                if (volunteer == null)
+                    throw new ArgumentNullException("No volunteer was accepted for deletion");
+
+                var result = MessageBox.Show("האם אתה בטוח שברצונך למחוק את המתנדב?", "אישור מחיקה", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
                 {
-                    s_bl.Volunteer.Delete((int)item.Id);
+                    int id = volunteer.Id;
+                    s_bl.Volunteer.Delete(id);
                 }
-                catch
-                {
-                    var failedErase = MessageBox.Show("המחיקה נכשלה");
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

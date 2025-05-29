@@ -89,77 +89,88 @@ public static class Initialization
     /// <summary>
     /// create 50 calls
     /// </summary>
-    private static void CreateCalls()
-    {
-        const int COUNT_CALLS = 50;
-        string[] cAddresses =
-            [    "Meah Shearim St 10, Jerusalem", "Chazon Ish St 6, Jerusalem", "Ramat Eshkol St 11, Jerusalem",
-    "Har Safra St 1, Jerusalem", "Mount Scopus St 4, Jerusalem", "Keren Hayesod St 30, Jerusalem",
-    "Neve Yaakov St 17, Jerusalem", "Shmuel HaNavi St 12, Jerusalem", "Yechiel St 3, Jerusalem",
-    "Rav Kook St 4, Jerusalem", "Talmud Torah St 8, Jerusalem", "Sanhedria St 18, Jerusalem",
-    "Kiryat Moshe St 6, Jerusalem", "Achad Ha'am St 2, Jerusalem", "Bar Ilan St 7, Jerusalem",
-    "City Center St 14, Jerusalem", "Rechov Yechiel 3, Jerusalem", "Giv'at Shaul St 7, Jerusalem",
-    "Nachlaot St 7, Jerusalem", "Rav Kook St 5, Jerusalem", "Har Nof St 18, Jerusalem",
-    "Ramat Shlomo St 15, Jerusalem", "Sderot Yitzhak Rabin St 5, Jerusalem", "Har Hatzofim St 8, Jerusalem",
-    "Giv'at HaMivtar St 6, Jerusalem", "Tefilat Yisrael St 14, Jerusalem", "Malkhei Yisrael St 10, Jerusalem",
-    "Kiryat Tzahal St 6, Jerusalem", "Nachal Noach St 17, Jerusalem", "Maalot Dafna St 6, Jerusalem",
-    "Har HaMor St 3, Jerusalem", "Ramat HaSharon St 2, Jerusalem", "Yakar St 3, Jerusalem",
-    "Rav Haim Ozer St 9, Jerusalem", "Yehoshua Ben-Nun St 5, Jerusalem", "Meir Schauer St 12, Jerusalem",
-    "Menachem Begin St 11, Jerusalem", "Yisrael Yaakov St 13, Jerusalem", "Ben Yehuda St 6, Jerusalem",
-    "Hadar St 3, Jerusalem", "Maharal St 8, Jerusalem", "Yosef Schwartz St 4, Jerusalem",
-    "Jabotinsky St 7, Jerusalem", "Shazar St 5, Jerusalem", "Gonenim St 12, Jerusalem",
-    "Talpiot St 14, Jerusalem", "Bilu St 9, Jerusalem", "Yovel St 2, Jerusalem",
-    "Herzl St 3, Jerusalem", "Hashmonai St 6, Jerusalem", "Ramot St 17, Jerusalem",
-    "Shalom Aleichem St 10, Jerusalem", "Eli Cohen St 4, Jerusalem", "Shlomo HaMelech St 7, Jerusalem"
-];
-        double[] cLatitudes =
-       [
-
-    31.7857, 31.7924, 31.7970, 31.7780, 31.7947, 31.7743,
-    31.8300, 31.7965, 31.7762, 31.7818, 31.7800, 31.7995,
-    31.7875, 31.7765, 31.7910, 31.7805, 31.7762, 31.7975,
-    31.7810, 31.7819, 31.7730, 31.8100, 31.7685, 31.7940,
-    31.7978, 31.7833, 31.7850, 31.7802, 31.7935, 31.7945,
-    31.7650, 31.7930, 31.7760, 31.7855, 31.7768, 31.7785,
-    31.7860, 31.7800, 31.7790, 31.7788, 31.7765, 31.7740,
-    31.7710, 31.7725, 31.7735, 31.7745, 31.7750, 31.7780,
-    31.7820, 31.7840, 31.7865, 31.7783, 31.7760
-        ];
-        double[] cLongitudes =
-       [
-            35.2250, 35.2200, 35.2195, 35.2130, 35.2430, 35.2225,
-    35.2190, 35.2205, 35.2255, 35.2180, 35.2200, 35.2190,
-    35.2020, 35.2205, 35.2195, 35.2150, 35.2255, 35.1900,
-    35.2155, 35.2185, 35.1700, 35.2300, 35.2100, 35.2435,
-    35.2190, 35.2200, 35.2205, 35.2250, 35.2200, 35.2200,
-    35.2300, 35.2200, 35.2250, 35.2200, 35.2250, 35.2130,
-    35.2200, 35.2200, 35.2200, 35.2200, 35.2200, 35.2200,
-    35.2200, 35.2200, 35.2200, 35.2200, 35.2200, 35.2200,
-    35.2200, 35.2200, 35.2200, 35.2200, 35.2200
-
-       ];
-        string[] cDescriptions = ["7 years old boy", "Disabled boy", "Miserable and cute girl", "Have a brother's wedding", "Need phisyothraphy 5 times a week"];
-        DateTime startOpen = s_dal!.Config.Clock.AddYears(-1);
-        int range = (int)(s_dal!.Config.Clock - startOpen).TotalDays;
-
-        for (int i = 0; i < COUNT_CALLS; i++)
+    
+        public static void CreateCalls()
         {
-            CallType type = (CallType)s_rand.Next(0, 3);
-            DateTime open = startOpen.AddDays(s_rand.Next(0, range));
-            DateTime endClose = i > 45
-                ? open.AddDays(3)
-                : open.AddYears(1);   //in order that part of the calls (45-50) probably will be expired
-            DateTime close = i > 45
-                ? endClose.AddDays(-s_rand.Next(0, 3))
-                : endClose.AddDays(-s_rand.Next(0, 365));
+            const int COUNT_CALLS = 50;
+            string[] cAddresses =
+            {
+                "Meah Shearim St 10, Jerusalem", "Chazon Ish St 6, Jerusalem", 
+                "Ramat Eshkol St 11, Jerusalem", "Har Safra St 1, Jerusalem", 
+                "Mount Scopus St 4, Jerusalem", "Keren Hayesod St 30, Jerusalem",
+                "Neve Yaakov St 17, Jerusalem", "Shmuel HaNavi St 12, Jerusalem", 
+                "Yechiel St 3, Jerusalem", "Rav Kook St 4, Jerusalem", 
+                "Talmud Torah St 8, Jerusalem", "Sanhedria St 18, Jerusalem",
+                "Kiryat Moshe St 6, Jerusalem", "Achad Ha'am St 2, Jerusalem", 
+                "Bar Ilan St 7, Jerusalem", "City Center St 14, Jerusalem", 
+                "Rechov Yechiel 3, Jerusalem", "Giv'at Shaul St 7, Jerusalem", 
+                "Nachlaot St 7, Jerusalem", "Rav Kook St 5, Jerusalem", 
+                "Har Nof St 18, Jerusalem", "Ramat Shlomo St 15, Jerusalem", 
+                "Sderot Yitzhak Rabin St 5, Jerusalem", "Har Hatzofim St 8, Jerusalem", 
+                "Giv'at HaMivtar St 6, Jerusalem", "Tefilat Yisrael St 14, Jerusalem", 
+                "Malkhei Yisrael St 10, Jerusalem", "Kiryat Tzahal St 6, Jerusalem", 
+                "Nachal Noach St 17, Jerusalem", "Maalot Dafna St 6, Jerusalem", 
+                "Har HaMor St 3, Jerusalem", "Ramat HaSharon St 2, Jerusalem", 
+                "Yakar St 3, Jerusalem", "Rav Haim Ozer St 9, Jerusalem", 
+                "Yehoshua Ben-Nun St 5, Jerusalem", "Meir Schauer St 12, Jerusalem", 
+                "Menachem Begin St 11, Jerusalem", "Yisrael Yaakov St 13, Jerusalem", 
+                "Ben Yehuda St 6, Jerusalem", "Hadar St 3, Jerusalem", 
+                "Maharal St 8, Jerusalem", "Yosef Schwartz St 4, Jerusalem", 
+                "Jabotinsky St 7, Jerusalem", "Shazar St 5, Jerusalem", 
+                "Gonenim St 12, Jerusalem", "Talpiot St 14, Jerusalem", 
+                "Bilu St 9, Jerusalem", "Yovel St 2, Jerusalem", 
+                "Herzl St 3, Jerusalem", "Hashmonai St 6, Jerusalem", 
+                "Ramot St 17, Jerusalem", "Shalom Aleichem St 10, Jerusalem", 
+                "Eli Cohen St 4, Jerusalem", "Shlomo HaMelech St 7, Jerusalem"
+            };
 
-            Call newC = new(type, cAddresses[i], cLatitudes[i], cLongitudes[i], open, close, cDescriptions[i % 5]);
+            double[] cLatitudes =
+            {
+                31.7857, 31.7924, 31.7970, 31.7780, 31.7947, 31.7743,
+                31.8300, 31.7965, 31.7762, 31.7818, 31.7800, 31.7995,
+                31.7875, 31.7765, 31.7910, 31.7805, 31.7762, 31.7975,
+                31.7810, 31.7819, 31.7730, 31.8100, 31.7685, 31.7940,
+                31.7978, 31.7833, 31.7850, 31.7802, 31.7935, 31.7945,
+                31.7650, 31.7930, 31.7760, 31.7855, 31.7768, 31.7785,
+                31.7860, 31.7800, 31.7790, 31.7788, 31.7765, 31.7740,
+                31.7710, 31.7725, 31.7735, 31.7745, 31.7750, 31.7780,
+                31.7820, 31.7840, 31.7865, 31.7783, 31.7760
+            };
 
+            double[] cLongitudes =
+            {
+                35.2250, 35.2200, 35.2195, 35.2130, 35.2430, 35.2225,
+                35.2190, 35.2205, 35.2255, 35.2180, 35.2200, 35.2190,
+                35.2020, 35.2205, 35.2195, 35.2150, 35.2255, 35.1900,
+                35.2155, 35.2185, 35.1700, 35.2300, 35.2100, 35.2435,
+                35.2190, 35.2200, 35.2205, 35.2250, 35.2200, 35.2200,
+                35.2300, 35.2200, 35.2250, 35.2200, 35.2250, 35.2130,
+                35.2200, 35.2200, 35.2200, 35.2200, 35.2200, 35.2200,
+                35.2200, 35.2200, 35.2200, 35.2200, 35.2200, 35.2200,
+                35.2200, 35.2200, 35.2200, 35.2200, 35.2200
+            };
 
-            s_dal!.Call.Create(newC);
+            string[] cDescriptions = 
+            {
+                "7 years old boy", "Disabled boy", "Miserable and cute girl", 
+                "Have a brother's wedding", "Need physiotherapy 5 times a week"
+            };
 
+            DateTime startOpen = DateTime.Now.AddYears(-1);
+            int range = (int)(DateTime.Now - startOpen).TotalDays;
+
+            for (int i = 0; i < COUNT_CALLS; i++)
+            {
+                CallType type = (CallType)s_rand.Next(0, 3);
+                DateTime open = startOpen.AddDays(s_rand.Next(0, range));
+
+                DateTime close = open.AddDays(s_rand.Next(1, 365)); 
+
+                Call newC = new Call(type, cAddresses[i], cLatitudes[i], cLongitudes[i], open, close, cDescriptions[i % cDescriptions.Length]);
+
+                s_dal!.Call.Create(newC);
+            }
         }
-    }
 
     /// <summary>
     /// create 50 assignments according to the rules

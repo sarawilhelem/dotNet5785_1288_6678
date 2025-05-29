@@ -56,13 +56,15 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <exception cref="BO.BlDeleteImpossible">to when there is not any volunteer with that id</exception>
     public void Delete(int id)
     {
-        if (_dal.Assignment.ReadAll().Any(a => a.VolunteerId == id && a.FinishTime is not null))
-            throw new BO.BlDeleteImpossible($"volunteer with Id {id} can't be deleted");
+        var assingments = _dal.Assignment.ReadAll();
+        if (assingments.Any(a => a.VolunteerId == id && a.FinishTime == null))
+            throw new BO.BlDeleteImpossible($"volunteer with Id {id} cannot be deleted because he is currently handling a call.");
 
         try
         {
             _dal.Volunteer.Delete(id);
             VolunteerManager.Observers.NotifyListUpdated();
+            CallManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDeleteImpossible ex)
         {

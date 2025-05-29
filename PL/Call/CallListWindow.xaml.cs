@@ -1,5 +1,4 @@
 ﻿using BO;
-using PL.Volunteer;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -30,9 +29,11 @@ namespace PL.Call
         public static readonly DependencyProperty CallListProperty =
            DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(CallListWindow));
         public BO.CallType SelectedCallType { get; set; } = BO.CallType.All;
+        public ICommand DeleteCallCommand { get; }
         public CallListWindow()
         {
             InitializeComponent();
+            DeleteCallCommand = new RelayCommand<BO.CallInList>(DeleteCall);
         }
         /// <summary>
         /// Handles the selection change event to update the call list based on the selected filter.
@@ -88,31 +89,34 @@ namespace PL.Call
 
         private void Call_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (sender is ListView listView)
-            {
-                if (SelectedCall != null)
-                {
-                    int? id = (listView.SelectedItem as BO.CallInList)?.CallId;
-                    new CallWindow(id ?? 0).Show();
-                }
-            }
+            int id = SelectedCall?.CallId ??
+                throw new ArgumentNullException("No call was accepted for deletion");
+            new CallWindow(id).Show();
         }
-        public ICommand DeleteCommand => new RelayCommand<BO.CallInList>(DeleteItem);
 
-        private void DeleteItem(BO.CallInList item)
+        private void DeleteCall(BO.CallInList call)
         {
-            var result = MessageBox.Show("האם אתה בטוח שברצונך למחוק את הפריט?", "אישור מחיקה", MessageBoxButton.YesNo);
-
-            if (result == MessageBoxResult.Yes)
+            try
             {
-                try {
-                    s_bl.Call.Delete((int)item.Id);
-                }
-                catch
+                if (call == null)
+                    throw new ArgumentNullException("No call was accepted for deletion");
+
+                var result = MessageBox.Show("האם אתה בטוח שברצונך למחוק את הפריט?", "אישור מחיקה", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
                 {
-                    var failedErase = MessageBox.Show("המחיקה נכשלה");
+                    int id = call.CallId;
+                    s_bl.Call.Delete(id);
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
+
+
+
     }
 }

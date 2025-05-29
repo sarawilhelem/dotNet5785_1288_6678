@@ -31,7 +31,7 @@
                       SelectionChanged="ChangeVolunteersListSort"
                       Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Grid>
-        <ListView Grid.Row="1" ItemsSource="{Binding Path=VolunteerList, Mode=TwoWay}" MouseDoubleClick="Volunteer_MouseDoubleClick">
+        <ListView Grid.Row="1" ItemsSource="{Binding Path=VolunteerList, Mode=TwoWay}" SelectedItem="{Binding SelectedVolunteer}" MouseDoubleClick="Volunteer_MouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="Auto"/>
@@ -51,7 +51,7 @@
                     <GridViewColumn  Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding}" />
+                                <Button Content="Delete" Command="{Binding DataContext.DeleteVolunteerCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"  />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

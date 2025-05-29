@@ -58,7 +58,7 @@ internal static class VolunteerManager
     /// <returns>is the id valid</returns>
     private static bool IsValidIdNumber(int id)
     {
-        string idStr = id.ToString();
+        string idStr = id.ToString().PadLeft(9, '0');
 
         if (idStr.Length != 9)
             return false;

@@ -43,10 +43,10 @@
                     <GridViewColumn Header="TotalProcessingTime" DisplayMemberBinding="{Binding TotalProcessingTime}" Width="Auto"/>
                     <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="Auto"/>
                     <GridViewColumn Header="AmountOfAssignments" DisplayMemberBinding="{Binding AmountOfAssignments}" Width="Auto"/>
-                    <GridViewColumn  Width="Auto">
+                    <GridViewColumn Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding}" />
+                                <Button Content="Delete" Command="{Binding DataContext.DeleteCallCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
