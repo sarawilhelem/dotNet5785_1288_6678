@@ -24,40 +24,38 @@ namespace PL.Volunteer
         }
 
         public BO.VolunteerInListFields SelectedSortField { get; set; } = BO.VolunteerInListFields.None;
-        public BO.VolunteerInList? SelectedVolunteer
-        {
-            get;
-            set;
-        }
+        public BO.VolunteerInList? SelectedVolunteer { get; set; }
         public ICommand DeleteVolunteerCommand { get; }
 
+        private bool? _isActiveFilter;
+        public bool? IsActiveFilter
+        {
+            get => _isActiveFilter;
+            set
+            {
+                _isActiveFilter = value;
+                UpdateVolunteersList();
+            }
+        }
 
         public VolunteerListWindow()
         {
             InitializeComponent();
             DeleteVolunteerCommand = new RelayCommand<BO.VolunteerInList>(DeleteVolunteer);
-
         }
 
-        /// <summary>
-        /// Handles the selection change event to update the volunteer list based on the selected sort field.
-        /// </summary>
-        /// <param name="sender">The source of the event</param>
-        /// <param name="e">The event data that contains the new selection state.</param>
         private void ChangeVolunteersListSort(object sender, SelectionChangedEventArgs e)
         {
             UpdateVolunteersList();
         }
 
-        /// <summary>
-        /// Update the volunteer list from bl
-        /// </summary>
         private void UpdateVolunteersList()
         {
             VolunteerList.Clear(); // Clear the old items
+
             var volunteers = (SelectedSortField == BO.VolunteerInListFields.None) ?
-                s_bl?.Volunteer.ReadAll()! :
-                s_bl?.Volunteer.ReadAll(null, SelectedSortField)!;
+                s_bl?.Volunteer.ReadAll(IsActiveFilter) :
+                s_bl?.Volunteer.ReadAll(IsActiveFilter, SelectedSortField)!;
 
             foreach (var volunteer in volunteers)
             {
@@ -65,29 +63,16 @@ namespace PL.Volunteer
             }
         }
 
-        /// <summary>
-        /// update the volunteer list
-        /// </summary>
         private void VolunteerListObserver()
         {
             UpdateVolunteersList();
         }
 
-        /// <summary>
-        /// add the volunteerListObserver to the observers list
-        /// </summary>
-        /// <param name="sender">The source of the event</param>
-        /// <param name="e">The event data that contains the new selection state.</param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             s_bl.Volunteer.AddObserver(VolunteerListObserver);
         }
 
-        /// <summary>
-        /// remove the volunteerListObserver from the observers list
-        /// </summary>
-        /// <param name="sender">The source of the event</param>
-        /// <param name="e">The event data that contains the new selection state.</param>
         private void Window_Closed(object sender, EventArgs e)
         {
             s_bl.Volunteer.RemoveObserver(VolunteerListObserver);
@@ -100,12 +85,10 @@ namespace PL.Volunteer
 
         private void Volunteer_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
-            int id = SelectedVolunteer?.Id
-        ?? throw new ArgumentNullException("No volunteer was accepted for deletion");
+            int id = SelectedVolunteer?.Id ?? throw new ArgumentNullException("No volunteer was accepted for deletion");
             new VolunteerWindow(id).Show();
-
         }
+
         private void DeleteVolunteer(BO.VolunteerInList volunteer)
         {
             try
@@ -125,6 +108,7 @@ namespace PL.Volunteer
             {
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
         }
     }
 }
