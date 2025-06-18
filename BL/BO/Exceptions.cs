@@ -109,6 +109,15 @@ public class BlCancelProcessIllegalException(string? message) : Exception(messag
 }
 
 /// <summary>
+/// Exception for when updating is illegal
+/// </summary>
+/// <param name="message">exception message</param>
+[Serializable]
+public class BlUpdateImpossibleException(string? message) : Exception(message)
+{
+}
+
+/// <summary>
 /// exception to when trying to chose a call when it is imposible
 /// </summary>
 /// <param name="message">exception message</param>

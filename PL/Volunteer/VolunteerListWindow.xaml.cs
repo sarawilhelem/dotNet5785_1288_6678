@@ -36,7 +36,6 @@ namespace PL.Volunteer
         {
             InitializeComponent();
             DeleteVolunteerCommand = new RelayCommand<BO.VolunteerInList>(DeleteVolunteer);
-
         }
 
         /// <summary>
@@ -126,5 +125,6 @@ namespace PL.Volunteer
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
     }
 }

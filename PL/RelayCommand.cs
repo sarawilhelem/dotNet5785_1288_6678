@@ -22,13 +22,13 @@ namespace PL
 
         public event EventHandler CanExecuteChanged
         {
-            add => CommandManager.RequerySuggested += value; // עדכון כשצריך
-            remove => CommandManager.RequerySuggested -= value; // הסרת המאזין
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value; 
         }
 
         public void RaiseCanExecuteChanged()
         {
-            CommandManager.InvalidateRequerySuggested(); // מבצע עדכון לגבי ההפעלה
+            CommandManager.InvalidateRequerySuggested();
         }
     }
 }

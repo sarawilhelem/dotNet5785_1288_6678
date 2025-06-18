@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerWindow" Height="550" Width="400"
+        Title="VolunteerWindow" Height="530" Width="400"
         Loaded="Window_Loaded" Closed="Window_Closed"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid>
@@ -15,8 +15,6 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -54,50 +52,40 @@
         <Label Content="Address:" HorizontalAlignment="Right" Grid.Row="5"/>
         <TextBox Text="{Binding CurrentVolunteer.Address, Mode=TwoWay}" Width="200" Grid.Row="5" Grid.Column="1"/>
 
-        <Label Content="Latitude:" HorizontalAlignment="Right" Grid.Row="6"
-               Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-        <TextBox Text="{Binding CurrentVolunteer.Latitude, Mode=TwoWay}" IsReadOnly="true" Width="200" Grid.Row="6" Grid.Column="1"
-                 Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+                <Label Content="Role:" HorizontalAlignment="Right" Grid.Row="6"/>
+        <ComboBox SelectedItem="{Binding CurrentVolunteer.Role, Mode=TwoWay}" Width="200" Grid.Row="6" Grid.Column="1" ItemsSource="{Binding Source={StaticResource RoleCollectionKey}}" />
 
-        <Label Content="Longitude:" HorizontalAlignment="Right" Grid.Row="7"
-               Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-        <TextBox Text="{Binding CurrentVolunteer.Longitude, Mode=TwoWay}" IsReadOnly="True" Width="200" Grid.Row="7" Grid.Column="1"
-                 Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+        <Label Content="Is Active:" HorizontalAlignment="Right" Grid.Row="7"/>
+        <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Width="200" Grid.Row="7" Grid.Column="1"/>
 
-        <Label Content="Role:" HorizontalAlignment="Right" Grid.Row="8"/>
-        <ComboBox SelectedItem="{Binding CurrentVolunteer.Role, Mode=TwoWay}" Width="200" Grid.Row="8" Grid.Column="1" ItemsSource="{Binding Source={StaticResource RoleCollectionKey}}" />
+        <Label Content="Max Distance:" HorizontalAlignment="Right" Grid.Row="8"/>
+        <TextBox Text="{Binding CurrentVolunteer.MaxDistance, Mode=TwoWay}" Width="200" Grid.Row="8" Grid.Column="1"/>
 
-        <Label Content="Is Active:" HorizontalAlignment="Right" Grid.Row="9"/>
-        <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Width="200" Grid.Row="9" Grid.Column="1"/>
-
-        <Label Content="Max Distance:" HorizontalAlignment="Right" Grid.Row="10"/>
-        <TextBox Text="{Binding CurrentVolunteer.MaxDistance, Mode=TwoWay}" Width="200" Grid.Row="10" Grid.Column="1"/>
-
-        <Label Content="Distance Type:" HorizontalAlignment="Right" Grid.Row="11"/>
+        <Label Content="Distance Type:" HorizontalAlignment="Right" Grid.Row="9"/>
         <ComboBox SelectedItem="{Binding CurrentVolunteer.DistanceType, Mode=TwoWay}" 
                   ItemsSource="{Binding Source={StaticResource DistanceTypeCollectionKey}}" 
-                  Width="200" Grid.Row="11" Grid.Column="1" />
+                  Width="200" Grid.Row="9" Grid.Column="1" />
 
-        <Label Content="Num Calls Handle:" HorizontalAlignment="Right" Grid.Row="12"
+        <Label Content="Num Calls Handle:" HorizontalAlignment="Right" Grid.Row="10"
                Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-        <TextBox Text="{Binding CurrentVolunteer.NumCallsHandle, Mode=TwoWay}" IsReadOnly="True" Width="200" Grid.Row="12" Grid.Column="1"
+        <TextBox Text="{Binding CurrentVolunteer.NumCallsHandle, Mode=TwoWay}" IsReadOnly="True" Width="200" Grid.Row="10" Grid.Column="1"
                  Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
 
-        <Label Content="Num Calls Cancel:" HorizontalAlignment="Right" Grid.Row="13"
+        <Label Content="Num Calls Cancel:" HorizontalAlignment="Right" Grid.Row="11"
                Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-        <TextBox Text="{Binding CurrentVolunteer.NumCallsCancel, Mode=TwoWay}" IsReadOnly="True" Width="200" Grid.Row="13" Grid.Column="1"
+        <TextBox Text="{Binding CurrentVolunteer.NumCallsCancel, Mode=TwoWay}" IsReadOnly="True" Width="200" Grid.Row="11" Grid.Column="1"
                  Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
 
-        <Label Content="Num Calls Not Valid:" HorizontalAlignment="Right" Grid.Row="14"
+        <Label Content="Num Calls Not Valid:" HorizontalAlignment="Right" Grid.Row="12"
                Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-        <TextBox Text="{Binding CurrentVolunteer.NumCallsNotValid, Mode=TwoWay}" IsReadOnly="True" Width="200" Grid.Row="14" Grid.Column="1"
+        <TextBox Text="{Binding CurrentVolunteer.NumCallsNotValid, Mode=TwoWay}" IsReadOnly="True" Width="200" Grid.Row="12" Grid.Column="1"
                  Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
 
-        <Label Content="Current Call:" HorizontalAlignment="Right" Grid.Row="15"
+        <Label Content="Current Call:" HorizontalAlignment="Right" Grid.Row="13"
                Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-        <TextBox Text="{Binding CurrentVolunteer.Call, Mode=TwoWay}" IsReadOnly="True" Width="200" Grid.Row="15" Grid.Column="1"
+        <TextBox Text="{Binding CurrentVolunteer.Call, Mode=TwoWay}" IsReadOnly="True" Width="200" Grid.Row="13" Grid.Column="1"
                  Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
 
-        <Button Content="{Binding ButtonText}" Click="BtnAddUpdate_Click" Width="150" Grid.Row="16" Margin="102,10,148,14" Grid.ColumnSpan="2"/>
+        <Button Content="{Binding ButtonText}" Click="BtnAddUpdate_Click" Width="150" Grid.Row="14" Margin="102,10,148,14" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

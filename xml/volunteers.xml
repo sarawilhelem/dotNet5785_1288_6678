@@ -224,4 +224,18 @@
     <Password />
     <IsActive>true</IsActive>
   </Volunteer>
+  <Volunteer>
+    <Id>327796678</Id>
+    <Name>Mali Gluskinus</Name>
+    <Phone>0583243808</Phone>
+    <Email>m0583243808@gmail.com</Email>
+    <Address>Sulam Yaakov 10, Jerusalem, Israel</Address>
+    <Longitude>35.1988672</Longitude>
+    <Latitude>31.8161619</Latitude>
+    <MaxDistanceCall />
+    <Role>Manager</Role>
+    <DistanceType>Air</DistanceType>
+    <Password>Bg9w1CyYj5rLYnTeaOEP3g==</Password>
+    <IsActive>true</IsActive>
+  </Volunteer>
 </ArrayOfVolunteers>
