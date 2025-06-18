@@ -84,5 +84,29 @@ namespace PL
         }
     }
 
+    public class BooleanToNullableConverter : IValueConverter
+    {
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool booleanValue)
+            {
+                return booleanValue ? true : (bool?) null;
+            }
+            return null; // In case of other types, return null
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool booleanValue)
+            {
+                return booleanValue; // Return the boolean as-is
+            }
+            if (value == null)
+            {
+                return false; // Null means false
+            }
+            return false; // Default to false if not boolean or null
+        }
+    }
 
 }

@@ -56,16 +56,31 @@ namespace PL
 
         private void VolunteersList_Click(object sender, RoutedEventArgs e)
         {
-            if (volunteerListWindow == null || !volunteerListWindow.IsVisible)
-            {
-                volunteerListWindow = new Volunteer.VolunteerListWindow();
-                volunteerListWindow.Show();
-            }
-            else
-            {
-                volunteerListWindow.Activate();
-            }
+            s_bl.Admin.AdvanceClock(BO.TimeUnit.Year);
         }
+        private void UpdateRiskRange(object sender, RoutedEventArgs e)
+        {
+            s_bl.Admin.SetRiskRange(RiskRange);
+        }
+        private void clockObserver()
+        {
+            CurrentTime = s_bl.Admin.GetClock();
+
+        }
+        private void configObserver()
+        {
+            RiskRange = s_bl.Admin.GetRiskRange();
+        }
+      private void Window_Closed(object sender, EventArgs e)
+        {
+            s_bl.Admin.RemoveClockObserver(clockObserver);
+            s_bl.Admin.RemoveConfigObserver(configObserver);
+            this.Close();
+        }
+        private void CallsList_Click(object sender, RoutedEventArgs e)
+        { new Call.CallListWindow().Show(); }
+        private void VolunteersList_Click(object sender, RoutedEventArgs e)
+        { new Volunteer.VolunteerListWindow().Show(); }
 
         private void InitializationDB_Click(object sender, RoutedEventArgs e)
         {
@@ -152,6 +167,5 @@ namespace PL
         {
             InitializeComponent();
         }
-
     }
 }

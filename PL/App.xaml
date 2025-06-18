@@ -18,5 +18,6 @@
         <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey" />
         <local:ConvertAddToVisible x:Key="ConvertAddToVisibleKey" />
         <local:ConvertDateTime x:Key="ConvertDateTimeKey" />
+        <local:BooleanToNullableConverter x:Key="BooleanToNullableConverter"/>
     </Application.Resources>
 </Application>

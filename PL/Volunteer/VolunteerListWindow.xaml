@@ -12,30 +12,43 @@
         Closed="Window_Closed"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
 
-    <!--External Grid-->
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="500*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="500*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <!--Internal, Upper Grid-->
-        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+
+        <!-- Upper Grid for Sorting and Filter -->
+        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto" Margin="10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="170" />
+                <ColumnDefinition Width="170" />
+                <ColumnDefinition Width="170" />
             </Grid.ColumnDefinitions>
-            <Label Content="Label" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Grid.Column="0"/>
+
+            <Label Content="Sort by:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
             <ComboBox ItemsSource="{Binding Source={StaticResource VolunteerInListFieldsCollectionKey}}"
                       SelectedValue="{Binding SelectedSortField, Mode=TwoWay}"
                       SelectionChanged="ChangeVolunteersListSort"
-                      Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                      Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+
+            <Label Content="Active Status:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,10,0" Grid.Column="2" />
+            <ComboBox SelectedValue="{Binding IsActiveFilter, Converter={StaticResource BooleanToNullableConverter}}"
+                      Grid.Column="3" Width="120">
+                <ComboBoxItem Content="All" Tag="{x:Null}"/>
+                <ComboBoxItem Content="Active" Tag="True"/>
+                <ComboBoxItem Content="Inactive" Tag="False"/>
+            </ComboBox>
         </Grid>
-        <ListView Grid.Row="1" ItemsSource="{Binding Path=VolunteerList, Mode=TwoWay}" SelectedItem="{Binding SelectedVolunteer}" MouseDoubleClick="Volunteer_MouseDoubleClick">
+
+        <ListView Grid.Row="1" ItemsSource="{Binding Path=VolunteerList, Mode=TwoWay}" 
+                  SelectedItem="{Binding SelectedVolunteer}" MouseDoubleClick="Volunteer_MouseDoubleClick">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="Auto"/>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="Auto"/>
+                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="Auto" />
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="Auto" />
                     <GridViewColumn Header="Is Active" Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -43,21 +56,22 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="NumCallsHandle" DisplayMemberBinding="{Binding NumCallsHandle, Mode=TwoWay}" Width="Auto"/>
-                    <GridViewColumn Header="NumCallsCancel" DisplayMemberBinding="{Binding NumCallsCancel, Mode=TwoWay}" Width="Auto"/>
-                    <GridViewColumn Header="NumCallsNotValid" DisplayMemberBinding="{Binding NumCallsNotValid, Mode=TwoWay}" Width="Auto"/>
-                    <GridViewColumn Header="CallId" DisplayMemberBinding="{Binding CallId, Mode=TwoWay}" Width="Auto"/>
-                    <GridViewColumn Header="CallType" DisplayMemberBinding="{Binding CallType, Mode=TwoWay}" Width="Auto"/>
-                    <GridViewColumn  Width="Auto">
+                    <GridViewColumn Header="NumCallsHandle" DisplayMemberBinding="{Binding NumCallsHandle, Mode=TwoWay}" Width="Auto" />
+                    <GridViewColumn Header="NumCallsCancel" DisplayMemberBinding="{Binding NumCallsCancel, Mode=TwoWay}" Width="Auto" />
+                    <GridViewColumn Header="NumCallsNotValid" DisplayMemberBinding="{Binding NumCallsNotValid, Mode=TwoWay}" Width="Auto" />
+                    <GridViewColumn Header="CallId" DisplayMemberBinding="{Binding CallId, Mode=TwoWay}" Width="Auto" />
+                    <GridViewColumn Header="CallType" DisplayMemberBinding="{Binding CallType, Mode=TwoWay}" Width="Auto" />
+                    <GridViewColumn Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Delete" Command="{Binding DataContext.DeleteVolunteerCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"  />
+                                <Button Content="Delete" Command="{Binding DataContext.DeleteVolunteerCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100" Click="AddVolunteer_Click"/>
+
+        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100" Click="AddVolunteer_Click" />
     </Grid>
 </Window>
