@@ -1,23 +1,28 @@
 ﻿<Application x:Class="PL.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:PL"
+             xmlns:pl="clr-namespace:PL"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              StartupUri="EnterSystemWindow.xaml">
     <Application.Resources>
-        <local:VolunteerInListFieldsCollection x:Key="VolunteerInListFieldsCollectionKey" />
-        <local:CallInListFieldsCollection x:Key="CallInListFieldsCollectionKey" />
-        <local:OpenCallInListFieldsCollection x:Key="OpenCallInListFieldsCollectionKey" />
-        <local:ClosedCallInListFieldsCollection x:Key="ClosedCallInListFieldsCollectionKey" />
-        <local:FinishCallTypeCollection x:Key="FinishCallTypeCollectionKey" />
-        <local:FinishTypeCollection x:Key="FinishTypeCollectionKey" />
-        <local:CallTypeCollection x:Key="CallTypeCollectionKey" />
-        <local:CallStatusCollection x:Key="CallStatusCollectionKey" />
-        <local:DistanceTypeCollection x:Key="DistanceTypeCollectionKey" />
-        <local:RoleCollection x:Key="RoleCollectionKey" />
-        <local:ConvertUpdateToTrue x:Key="ConvertUpdateToTrueKey" />
-        <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey" />
-        <local:ConvertAddToVisible x:Key="ConvertAddToVisibleKey" />
-        <local:ConvertDateTime x:Key="ConvertDateTimeKey" />
-        <local:BooleanToNullableConverter x:Key="BooleanToNullableConverter"/>
+        <sys:Int32 x:Key="UserIdKey" />
+        <pl:VolunteerInListFieldsCollection x:Key="VolunteerInListFieldsCollectionKey" />
+        <pl:CallInListFieldsCollection x:Key="CallInListFieldsCollectionKey" />
+        <pl:OpenCallInListFieldsCollection x:Key="OpenCallInListFieldsCollectionKey" />
+        <pl:ClosedCallInListFieldsCollection x:Key="ClosedCallInListFieldsCollectionKey" />
+        <pl:FinishCallTypeCollection x:Key="FinishCallTypeCollectionKey" />
+        <pl:FinishTypeCollection x:Key="FinishTypeCollectionKey" />
+        <pl:CallTypeCollection x:Key="CallTypeCollectionKey" />
+        <pl:CallStatusCollection x:Key="CallStatusCollectionKey" />
+        <pl:DistanceTypeCollection x:Key="DistanceTypeCollectionKey" />
+        <pl:RoleCollection x:Key="RoleCollectionKey" />
+        <pl:ConvertUpdateToTrue x:Key="ConvertUpdateToTrueKey" />
+        <pl:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey" />
+        <pl:ConvertAddToVisible x:Key="ConvertAddToVisibleKey" />
+        <pl:ConvertDateTime x:Key="ConvertDateTimeKey" />
+        <pl:BooleanToNullableConverter x:Key="BooleanToNullableConverterKey"/>
+        <pl:NullToVisibilityConverter x:Key="NullToVisibilityConverterKey"/>
+        <pl:DeleteableCallToVisibilityConverter x:Key="DeleteableCallToVisibilityConverterKey"/>
+        <pl:FilterFieldsCollection x:Key="FilterFieldCollectionKey"/>
     </Application.Resources>
 </Application>

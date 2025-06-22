@@ -44,7 +44,7 @@ namespace PL.Volunteer
             DeleteVolunteerCommand = new RelayCommand<BO.VolunteerInList>(DeleteVolunteer);
         }
 
-        private void ChangeVolunteersListSort(object sender, SelectionChangedEventArgs e)
+        private void ChangeVolunteersListSortOrFilter(object sender, SelectionChangedEventArgs e)
         {
             UpdateVolunteersList();
         }
@@ -53,11 +53,12 @@ namespace PL.Volunteer
         {
             VolunteerList.Clear(); // Clear the old items
 
+            // Check if IsActiveFilter is null, true, or false
             var volunteers = (SelectedSortField == BO.VolunteerInListFields.None) ?
                 s_bl?.Volunteer.ReadAll(IsActiveFilter) :
                 s_bl?.Volunteer.ReadAll(IsActiveFilter, SelectedSortField)!;
 
-            foreach (var volunteer in volunteers)
+            foreach (var volunteer in volunteers!)
             {
                 VolunteerList.Add(volunteer); // Add new items
             }
@@ -80,13 +81,28 @@ namespace PL.Volunteer
 
         private void AddVolunteer_Click(object sender, RoutedEventArgs e)
         {
-            new VolunteerWindow().Show();
+            try
+            {
+                new VolunteerWindow().Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to show volunteer window", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Volunteer_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            int id = SelectedVolunteer?.Id ?? throw new ArgumentNullException("No volunteer was accepted for deletion");
-            new VolunteerWindow(id).Show();
+            int id = SelectedVolunteer?.Id 
+                ?? throw new ArgumentNullException("No volunteer was accepted for deletion");
+            try
+            {
+                new VolunteerWindow(id).Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to show volunteer window", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void DeleteVolunteer(BO.VolunteerInList volunteer)

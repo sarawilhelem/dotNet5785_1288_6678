@@ -20,8 +20,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <exception cref="BO.BlAlreadyExistsException">to when trying to add a volunteer with already exist id</exception>
     public void Create(BO.Volunteer volunteer)
     {
-        if (VolunteerManager.CheckValidation(volunteer) == false)
-            throw new BO.BlIllegalValues("Volunteer fields are illegal");
+        VolunteerManager.CheckValidation(volunteer);
 
         if (volunteer.Address is not null)
         {
@@ -58,7 +57,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     {
         var assingments = _dal.Assignment.ReadAll();
         if (assingments.Any(a => a.VolunteerId == id && a.FinishTime == null))
-            throw new BO.BlDeleteImpossible($"volunteer with Id {id} cannot be deleted because he is currently handling a call.");
+            throw new BO.BlDeleteImpossible($"volunteer with Id {id} cannot be deleted because he is handling a call.");
 
         try
         {
@@ -79,11 +78,11 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <param name="password">volunteer's password</param>
     /// <returns>volunteer's role</returns>
     /// <exception cref="BO.BlDoesNotExistException">if there is not a volunteer with this name and this password - the entering failed</exception>
-    public BO.Role EnterSystem(string name, string? password = null)
+    public BO.Volunteer EnterSystem(string name, string? password = null)
     {
         DO.Volunteer volunteer = _dal.Volunteer.Read(v => v.Name == name && (v.Password == "" || v.Password is null || VolunteerManager.Decrypt(v.Password) == password)) ??
             throw new BO.BlDoesNotExistException($"Entering was not succeeded. no volunteer with that name and password");
-        return (BO.Role)volunteer.Role;
+        return Read(volunteer.Id);
     }
 
     /// <summary>
@@ -97,7 +96,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
         DO.Volunteer doVolunteer = _dal.Volunteer.Read(id) ??
             throw new BO.BlDoesNotExistException($"volunteer with Id {id} is not exist");
         IEnumerable<DO.Assignment> assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == id);
-        DO.Assignment? assignment = assignments.FirstOrDefault(a => a.FinishType is not null);
+        DO.Assignment? assignment = assignments.FirstOrDefault(a => a.FinishType is null);
         DO.Call? call = assignment is null ? null : _dal.Call.Read(assignment.CallId);
 
         BO.CallInProgress? callInProgress = call is null ? null :
@@ -112,7 +111,8 @@ internal class VolunteerImplentation : BlApi.IVolunteer
             doVolunteer.MaxDistanceCall, (BO.DistanceType)doVolunteer.DistanceType,
             assignments.Count(a => a.FinishType.Equals(DO.FinishType.Processed)),
             assignments.Count(a => a.FinishType.Equals(DO.FinishType.SelfCancel)),
-            assignments.Count(a => a.FinishType.Equals(DO.FinishType.Expired))
+            assignments.Count(a => a.FinishType.Equals(DO.FinishType.Expired)),
+            callInProgress
         );
     }
 
@@ -163,8 +163,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
         DO.Volunteer? requester = _dal.Volunteer.Read(id);
         if (requester is null || (volunteer.Id != id && requester.Role != DO.Role.Manager))
             return;
-        if (!VolunteerManager.CheckValidation(volunteer))
-            throw new BO.BlIllegalValues("Volunteer fields are illegal");
+        VolunteerManager.CheckValidation(volunteer);
 
         if (volunteer.Address != null)
         {

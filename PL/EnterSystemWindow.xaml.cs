@@ -40,11 +40,15 @@ public partial class EnterSystemWindow : Window
             if (string.IsNullOrEmpty(Name))
                 throw new NullReferenceException("No name inputted");
 
-            var role = s_bl.Volunteer.EnterSystem(Name, Password);
-            if (role == BO.Role.Manager)
+            var volunteer = s_bl.Volunteer.EnterSystem(Name, Password);
+
+            Application.Current.Resources["UserIdKey"] = volunteer.Id;
+            if (volunteer.Role == BO.Role.Manager)
                 new MainWindow().Show();
-            else
+            else if (volunteer.Role == BO.Role.Volunteer)
                 MessageBox.Show("Volunteer window has to be shown", "Window", MessageBoxButton.OK, MessageBoxImage.Information);
+            else
+                MessageBox.Show("Volunteer's role does not found", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             this.Close();
         }
         catch (Exception ex)

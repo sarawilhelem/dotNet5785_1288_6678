@@ -21,7 +21,7 @@ public static class Initialization
     private static void CreateVolunteers()
     {
         const int COUNT_VOLUNTEERS = 16;
-        int managerIndex = s_rand.Next(0, 20);
+        int managerIndex = s_rand.Next(0, COUNT_VOLUNTEERS);
         const int MIN_ID = 20000000;
         const int MAX_ID = 40000000;
         string[] vNames =
@@ -156,8 +156,8 @@ public static class Initialization
                 "Have a brother's wedding", "Need physiotherapy 5 times a week"
             };
 
-            DateTime startOpen = DateTime.Now.AddYears(-1);
-            int range = (int)(DateTime.Now - startOpen).TotalDays;
+            DateTime startOpen = s_dal!.Config.Clock.AddYears(-1);
+            int range = (int)(s_dal.Config.Clock - startOpen).TotalDays;
 
             for (int i = 0; i < COUNT_CALLS; i++)
             {
@@ -183,34 +183,28 @@ public static class Initialization
 
         for (int i = 0; i < COUNT_ASSIGNMENTS; i++)
         {
-            int cId = calls[i].Id;
-            int vId = i < 10
-                ? volunteers[s_rand.Next(0, 4)].Id
-                : volunteers[s_rand.Next(0, 14)].Id;   //in order that part of the volunteers (0-3) proccessed did many calls, part of them (4-13) some calls, and part of them (14-15) no calls
-            DateTime insersion = calls[i].OpenTime.AddDays(s_rand.Next(0, (int)(calls[i].MaxCloseTime - calls[i].OpenTime).TotalDays));
+            int cId = calls[i % calls.Count].Id;
+            int vId = volunteers[s_rand.Next(0, volunteers.Count)].Id; 
+            DateTime insersion = calls[i % calls.Count].OpenTime.AddDays(s_rand.Next(0, 30));
             DateTime? fTime;
-            try
-            {
-                //To cope the case that config.clock is before insersion (It can be because the user can set the clock
-                fTime = calls[i].MaxCloseTime < s_dal!.Config.Clock
-                ? calls[i].MaxCloseTime : i > 10
-                    ? insersion.AddDays(s_rand.Next(0, (int)(s_dal!.Config.Clock - insersion).TotalDays))
-                    : null;
-            }
-            catch
+            if (s_rand.Next(0, 10) == 1 && calls[i % calls.Count].MaxCloseTime > s_dal.Config.Clock) 
             {
                 fTime = null;
             }
+            else
+            {
+                fTime = insersion.AddDays(s_rand.Next(1, 300));
+                if(fTime > s_dal!.Config.Clock) 
+                    fTime = null;
+            }
+            FinishType? fType = fTime == null ? null :
+                fTime < s_dal.Config.Clock ? FinishType.Expired :
+                (FinishType)s_rand.Next(0, 3); 
 
-            FinishType? fType = calls[i].MaxCloseTime < s_dal!.Config.Clock ? FinishType.Expired :
-                fTime != null ? (FinishType)s_rand.Next(0, 3) : null;
-
-            Assignment newA = new(cId, vId, insersion, fTime, fType);
+            Assignment newA = new Assignment(cId, vId, insersion, fTime, fType);
             s_dal!.Assignment.Create(newA);
         }
-
     }
-
     /// <summary>
     /// function to calculate the check digit in the identity number
     /// </summary>

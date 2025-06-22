@@ -19,7 +19,7 @@ static internal class Config
     private static int nextAssignmentId = startAssigmentId;
     internal static int NextAssignmentId { get => nextAssignmentId++; }
 
-    internal static DateTime Clock { get; set; } = new DateTime(2024, 1, 1, 0, 0, 0);
+    internal static DateTime Clock { get; set; } = new DateTime(2024, 1, 1);
     public static TimeSpan RiskRange { get; set; }
 
     internal static void Reset()

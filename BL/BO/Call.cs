@@ -34,7 +34,7 @@ public class Call
     public DateTime MaxCloseTime { get; set; }
     public FinishCallType Status { get; set; }
     public List<BO.CallAssignInList>? CallAssignList { get; set; }
-    public Call(BO.CallType type = CallType.All, string address ="", DateTime openTime = default(DateTime), DateTime maxCloseTime = default(DateTime),
+    public Call(BO.CallType type = CallType.All, string address ="", DateTime openTime = default, DateTime maxCloseTime = default,
         string? description = null, FinishCallType status = FinishCallType.Open,
         double latitude = 0, double longitude = 0, List<BO.CallAssignInList>? callAssignList = null)
     {

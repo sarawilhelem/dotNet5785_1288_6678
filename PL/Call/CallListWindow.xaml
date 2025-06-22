@@ -6,32 +6,44 @@
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
         Title="CallListWindow"
-        Height="640"
-        Width="800"
+        Height="800"
+        Width="1050"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
-    <!--External Grid-->
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40*"/>
+            <RowDefinition Height="25*"/>
             <RowDefinition Height="500*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <!--Internal, Upper Grid-->
-        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+
+        <Grid HorizontalAlignment="Stretch" Height="Auto" Grid.Row="0" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Content="Label" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Grid.Column="0"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}" 
-                      SelectedValue="{Binding Path=SelectedCallType, Mode=TwoWay}"
-                      SelectionChanged="ChangeCallsListFilter"
-                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"/>
+
+            <Label Content="Filter By:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource FilterFieldCollectionKey}}" 
+                      SelectedItem="{Binding SelectedFilterField}" 
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" VerticalContentAlignment="Center"/>
+            <Label Content="Filter Value:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2"/>
+            <ContentControl Content="{Binding CurrentFilterValueControl}" Grid.Column="3" 
+                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                            VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
+            <Label Content="Sort By:" HorizontalAlignment="Center"  VerticalAlignment="Center" Grid.Column="4"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource CallInListFieldsCollectionKey}}" 
+                SelectedItem="{Binding SelectedSortField}" VerticalContentAlignment="Center"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="5"/>
         </Grid>
-        <ListView Grid.Row="1" ItemsSource="{Binding Path=CallList}" SelectedItem="{Binding SelectedCall}" MouseDoubleClick="Call_MouseDoubleClick">
+
+        <ListView Grid.Row="1" ItemsSource="{Binding CallList}" SelectedItem="{Binding SelectedCall}" MouseDoubleClick="Call_MouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="Auto"/>
@@ -46,13 +58,24 @@
                     <GridViewColumn Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Delete" Command="{Binding DataContext.DeleteCallCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" />
+                                <Button Content="Delete" 
+                                        Command="{Binding DataContext.DeleteCallCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                        CommandParameter="{Binding}" 
+                                        Visibility="{Binding Converter={StaticResource DeleteableCallToVisibilityConverterKey}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Cancel Assignment" Command="{Binding DataContext.CancelAssignmentCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
+
         <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100" Click="AddCall_Click"/>
     </Grid>
 </Window>

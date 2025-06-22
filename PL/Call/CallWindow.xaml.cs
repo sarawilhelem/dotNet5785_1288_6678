@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,7 +48,7 @@ namespace PL.Call
                 InitializeComponent();
                 CurrentCall = (id != 0) ?
                     s_bl.Call.Read(id)! :
-                    new BO.Call();
+                    new BO.Call() { MaxCloseTime = s_bl.Admin.GetClock() };
             }
             catch (Exception ex)
             {
@@ -93,6 +94,13 @@ namespace PL.Call
             int id = CurrentCall!.Id;
             CurrentCall = null;
             CurrentCall = s_bl.Call.Read(id);
+        }
+
+        private void NumberTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Regex to check if the input is a number
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
 
         /// <summary>

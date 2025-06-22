@@ -18,37 +18,40 @@ internal static class VolunteerManager
 
 
     internal static ObserverManager Observers = new();
+
     /// <summary>
     /// Checks the validation of the volunteer details
     /// </summary>
     /// <param name="v">a volunteer to check its details</param>
-    /// <returns>return true if all details valid, else- false</returns>
-    static internal bool CheckValidation(BO.Volunteer v)
+    /// <exception cref="BO.BlIllegalValues">throwen where there is a illegal detail</exception>
+    static internal void CheckValidation(BO.Volunteer v)
     {
         var trimmedEmail = v.Email.Trim();
 
         if (trimmedEmail.EndsWith("."))
         {
-            return false;
+            throw new BO.BlIllegalValues("Email cannot end with a period.");
         }
+
         try
         {
             var addr = new System.Net.Mail.MailAddress(v.Email);
             if (addr.Address != trimmedEmail)
-                return false;
+                throw new BO.BlIllegalValues("Invalid email format.");
         }
         catch
         {
-            return false;
+            throw new BO.BlIllegalValues("Invalid email address.");
         }
 
         if (!decimal.TryParse(v.Phone, out decimal phoneInt) || v.Phone[0] != '0' || v.Phone.Length != 10)
-            return false;
+            throw new BO.BlIllegalValues("Phone number must start with '0' and be exactly 10 digits long.");
+
         if (!IsValidIdNumber(v.Id))
-            return false;
+            throw new BO.BlIllegalValues("Invalid ID number.");
+
         if (v.Password is not null && v.Password != "" && !IsStrongPassword(v.Password))
-            return false;
-        return true;
+            throw new BO.BlIllegalValues("Password must be at least 8 characters long and contain upper and lower case letters, numbers, and special characters.");
     }
 
     /// <summary>
@@ -58,10 +61,13 @@ internal static class VolunteerManager
     /// <returns>is the id valid</returns>
     private static bool IsValidIdNumber(int id)
     {
-        string idStr = id.ToString().PadLeft(9, '0');
+        if (!int.TryParse(id.ToString(), out int validId))
+            throw new BO.BlIllegalValues("ID number must be a valid integer.");
+
+        string idStr = validId.ToString().PadLeft(9, '0');
 
         if (idStr.Length != 9)
-            return false;
+            throw new BO.BlIllegalValues("ID number must be 9 digits long.");
 
         int sum = 0;
         for (int i = 0; i < idStr.Length - 1; i++)
@@ -88,7 +94,7 @@ internal static class VolunteerManager
     private static bool IsStrongPassword(string password)
     {
         if (password.Length < 8)
-            return false;
+            throw new BO.BlIllegalValues("Password must be at least 8 characters long.");
 
         bool hasUpperCase = false;
         bool hasLowerCase = false;
@@ -102,7 +108,11 @@ internal static class VolunteerManager
             if (char.IsDigit(c)) hasDigit = true;
             if (!char.IsLetterOrDigit(c)) hasSpecialChar = true;
         }
-        return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar;
+
+        if (!hasUpperCase || !hasLowerCase || !hasDigit || !hasSpecialChar)
+            throw new BO.BlIllegalValues("Password must contain upper and lower case letters, numbers, and special characters.");
+
+        return true;
     }
 
     /// <summary>

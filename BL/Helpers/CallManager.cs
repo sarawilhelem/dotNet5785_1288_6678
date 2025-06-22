@@ -1,5 +1,6 @@
 ﻿using BO;
 using DalApi;
+using DO;
 
 namespace Helpers;
 
@@ -11,6 +12,30 @@ internal class CallManager
     private static IDal s_dal = DalApi.Factory.Get;
 
     internal static ObserverManager Observers = new();
+
+
+
+    public static void CheckValidation(BO.Call call)
+    {
+        var prevCall = s_dal.Call.Read(c => c.Id == call.Id);
+        if (prevCall is null)
+            throw new BlDoesNotExistException($"Call with id {call.Id} does not exists");
+        if (call.Status == FinishCallType.Close || call.Status == FinishCallType.Expired)
+            throw new BlUpdateImpossibleException("Closed and expired call can not be updated");
+        if (call.Status == FinishCallType.InProcess || call.Status == FinishCallType.InProcessInRisk)
+        {
+            if(prevCall!.Description != call.Description || (BO.CallType)prevCall.CallType != call.Type || 
+                prevCall.Address != call.Address )
+                throw new BlUpdateImpossibleException("Processed call can not be updated except for max close time");
+
+        }
+        if (call.OpenTime > call.MaxCloseTime || call.MaxCloseTime < AdminManager.Now)
+            throw new BO.BlIllegalDatesOrder("MaxCloseTime can't be before now or open time");
+        if (call == null)
+            throw new BO.BlIllegalValues("Address can not be null");
+    }
+
+
     /// <summary>
     /// read assignments with the call
     /// </summary>

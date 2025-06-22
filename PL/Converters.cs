@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace PL
@@ -90,22 +91,51 @@ namespace PL
         {
             if (value is bool booleanValue)
             {
-                return booleanValue ? true : (bool?) null;
+                return booleanValue ? true : (bool?)null;
             }
             return null; // In case of other types, return null
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool booleanValue)
+            if (value is ComboBoxItem item)
             {
-                return booleanValue; // Return the boolean as-is
-            }
-            if (value == null)
-            {
-                return false; // Null means false
+                return item.Tag; // Return the Tag of the selected ComboBoxItem
             }
             return false; // Default to false if not boolean or null
+        }
+    }
+    public class NullToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value == null ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class DeleteableCallToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is BO.CallInList call)
+            {
+                if (call.LastVolunteerName == null &&
+                    (call.Status == BO.FinishCallType.Open ||
+                     call.Status == BO.FinishCallType.OpenInRisk))
+                {
+                    return Visibility.Visible; // להציג את הכפתור
+                }
+            }
+            return Visibility.Hidden; // לא להציג את הכפתור
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 

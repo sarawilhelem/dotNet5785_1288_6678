@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
         Title="VolunteerListWindow"
-        Height="640"
+        Height="800"
         Width="800"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
@@ -31,12 +31,13 @@
             <Label Content="Sort by:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
             <ComboBox ItemsSource="{Binding Source={StaticResource VolunteerInListFieldsCollectionKey}}"
                       SelectedValue="{Binding SelectedSortField, Mode=TwoWay}"
-                      SelectionChanged="ChangeVolunteersListSort"
+                      SelectionChanged="ChangeVolunteersListSortOrFilter"
                       Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
 
             <Label Content="Active Status:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,10,0" Grid.Column="2" />
-            <ComboBox SelectedValue="{Binding IsActiveFilter, Converter={StaticResource BooleanToNullableConverter}}"
-                      Grid.Column="3" Width="120">
+            <ComboBox SelectedValue="{Binding IsActiveFilter, Converter={StaticResource BooleanToNullableConverterKey}, Mode=TwoWay}"
+          SelectionChanged="ChangeVolunteersListSortOrFilter"
+          Grid.Column="3" Width="120">
                 <ComboBoxItem Content="All" Tag="{x:Null}"/>
                 <ComboBoxItem Content="Active" Tag="True"/>
                 <ComboBoxItem Content="Inactive" Tag="False"/>

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace PL.Volunteer;
 
@@ -49,8 +51,7 @@ public partial class VolunteerWindow : Window
     }
 
     private void BtnAddUpdate_Click(object sender, RoutedEventArgs e)
-    {
-        
+    {        
         try
         {
             if (CurrentVolunteer == null)
@@ -58,7 +59,10 @@ public partial class VolunteerWindow : Window
             else if (ButtonText == "ADD")
                 s_bl.Volunteer.Create(CurrentVolunteer);
             else
-                s_bl.Volunteer.Update(CurrentVolunteer.Id, CurrentVolunteer);
+            {
+                int userId = (int)Application.Current.Resources["UserIdKey"];
+                s_bl.Volunteer.Update(userId, CurrentVolunteer);
+            };
             MessageBox.Show($"Succeed to {ButtonText} volunteer {CurrentVolunteer.Id}", "success", 
                 MessageBoxButton.OK, MessageBoxImage.Information);
             this.Close();
@@ -75,6 +79,13 @@ public partial class VolunteerWindow : Window
         int id = CurrentVolunteer!.Id;
         CurrentVolunteer = null;
         CurrentVolunteer = s_bl.Volunteer.Read(id);
+    }
+
+    private void NumberTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        // Regex to check if the input is a number
+        Regex regex = new Regex("[^0-9]+");
+        e.Handled = regex.IsMatch(e.Text);
     }
 
     /// <summary>

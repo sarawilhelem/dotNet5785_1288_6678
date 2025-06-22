@@ -24,8 +24,6 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <Label Content="Id:" HorizontalAlignment="Right" Grid.Row="0"
@@ -44,35 +42,25 @@
         <Label Content="Address:" HorizontalAlignment="Right" Grid.Row="3"/>
         <TextBox Text="{Binding CurrentCall.Address, Mode=TwoWay}" Width="200" Grid.Row="3" Grid.Column="1"/>
 
-        <Label Content="Latitude:" HorizontalAlignment="Right" Grid.Row="4"
-            Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-        <TextBox Text="{Binding CurrentCall.Latitude, Mode=TwoWay}" IsReadOnly="True" Width="200" Grid.Row="4" Grid.Column="1"
-              Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-
-        <Label Content="Longitude:" HorizontalAlignment="Right" Grid.Row="5"
-            Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-        <TextBox Text="{Binding CurrentCall.Longitude, Mode=TwoWay}" IsReadOnly="True" Width="200" Grid.Row="5" Grid.Column="1"
-              Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-
-        <Label Content="Open Time:" HorizontalAlignment="Right" Grid.Row="6"
+        <Label Content="Open Time:" HorizontalAlignment="Right" Grid.Row="4"
                Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-        <DatePicker SelectedDate="{Binding CurrentCall.OpenTime, Mode=TwoWay}" Width="200" Grid.Row="6" Grid.Column="1" IsEnabled="False"
+        <DatePicker SelectedDate="{Binding CurrentCall.OpenTime, Mode=TwoWay}" Width="200" Grid.Row="4" Grid.Column="1" IsEnabled="False"
                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
 
-        <Label Content="Max Close Time:" HorizontalAlignment="Right" Grid.Row="7"/>
-        <DatePicker SelectedDate="{Binding CurrentCall.MaxCloseTime, Mode=TwoWay}" Width="200" Grid.Row="7" Grid.Column="1"/>
+        <Label Content="Max Close Time:" HorizontalAlignment="Right" Grid.Row="5"/>
+        <DatePicker SelectedDate="{Binding CurrentCall.MaxCloseTime, Mode=TwoWay}" Width="200" Grid.Row="5" Grid.Column="1"/>
 
-        <Label Content="Status:" HorizontalAlignment="Right" Grid.Row="8"
+        <Label Content="Status:" HorizontalAlignment="Right" Grid.Row="6"
                Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
         <ComboBox SelectedItem="{Binding CurrentCall.Status, Mode=TwoWay}" 
                ItemsSource="{Binding Source={StaticResource FinishCallTypeCollectionKey}}" 
                Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"
-               IsEnabled="False" Width="200" Grid.Row="8" Grid.Column="1" />
+               IsEnabled="False" Width="200" Grid.Row="6" Grid.Column="1" />
 
-        <Label Content="Call Assign List:" HorizontalAlignment="Right" Grid.Row="9"
+        <Label Content="Call Assign List:" HorizontalAlignment="Right" Grid.Row="7"
             Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
 
-        <ListView Grid.Row="9" Grid.Column="1" Width="200" ItemsSource="{Binding Path=CurrentCall.CallAssignList}"
+        <ListView Grid.Row="7" Grid.Column="1" Width="200" ItemsSource="{Binding Path=CurrentCall.CallAssignList}"
                   Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}">
             <ListView.View>
                 <GridView>

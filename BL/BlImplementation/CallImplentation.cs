@@ -50,17 +50,19 @@ internal class CallImplentation : ICall
     {
 
         IEnumerable<DO.Call> callList = _dal.Call.ReadAll();
-        IEnumerable<DO.Assignment> assinments = _dal.Assignment.ReadAll();
+        IEnumerable<DO.Assignment> assignments = _dal.Assignment.ReadAll();
         IEnumerable<BO.CallInList> callsListToReturn = callList.Select(
             call =>
             {
-                var lastAssignment = assinments.Where(a => a.CallId == call.Id).
-                OrderByDescending(a => a.OpenTime).FirstOrDefault();
-                int? id;
-                if (lastAssignment == null)
-                    id = null;
-                else
-                    id = lastAssignment.Id;
+                var lastAssignment = assignments.Where(a => a.CallId == call.Id)
+                                                .OrderByDescending(a => a.OpenTime)
+                                                .FirstOrDefault();
+
+                int? id = lastAssignment?.Id;
+                var lastVolunteerName = lastAssignment != null
+                    ? _dal.Volunteer.Read(lastAssignment.VolunteerId)?.Name
+                    : null;
+
                 return new BO.CallInList
                 {
                     Id = id,
@@ -68,7 +70,7 @@ internal class CallImplentation : ICall
                     CallType = (BO.CallType)call.CallType,
                     OpenTime = call.OpenTime,
                     MaxCloseTime = Helpers.CallManager.RestTimeForCall(call),
-                    LastVolunteerName = lastAssignment is not null ? _dal.Volunteer.Read(lastAssignment.VolunteerId)!.Name : null,
+                    LastVolunteerName = lastVolunteerName,
                     TotalProcessingTime = Helpers.CallManager.CalculateAssignmentDuration(call),
                     Status = Helpers.CallManager.GetCallStatus(call.Id),
                     AmountOfAssignments = Helpers.CallManager.GetAmountOfAssignments(call)
@@ -180,11 +182,8 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlCoordinatesException">if there is an exception when calculate the lat and lon</exception>
     /// <exception cref="BO.BlDoesNotExistException">if there is not a call with that id</exception>
     public void Update(BO.Call call)
-    {
-        if (call.OpenTime > call.MaxCloseTime || call.MaxCloseTime < AdminManager.Now)
-            throw new BO.BlIllegalDatesOrder("MaxCloseTime can't be before now or open time");
-        if (call == null)
-            throw new BO.BlIllegalValues("Address can not be null");
+    {        
+        CallManager.CheckValidation(call);
         var (latitude, longitude) = Tools.GetCoordinates(call.Address);
         var callToUpdate = new DO.Call
         {
@@ -234,7 +233,7 @@ internal class CallImplentation : ICall
         }
         else
         {
-            throw new BO.BlDeleteImpossible("Call is not Open or assigned to a volunteer");
+            throw new BO.BlDeleteImpossible("Call is not open or assigned to a volunteer");
         }
     }
 
@@ -381,36 +380,35 @@ internal class CallImplentation : ICall
     /// <summary>
     /// cancel the assitnment between volunteer and call
     /// </summary>
-    /// <param name="volunteerId">id of the volunteer</param>
+    /// <param name="userId">id of the volunteer</param>
     /// <param name="assignmentId">id of the assignment to cancel</param>
     /// <exception cref="BO.BlDoesNotExistException">if there is not volunteer or assignment with these ids</exception>
     /// <exception cref="BO.BlCancelProcessIllegalException">when trying to cancel finished assignment</exception>
-    public void CanceleProcess(int volunteerId, int assignmentId)
+    public void CancelProcess(int userId, int assignmentId)
     {
-        var volunteer = _dal.Volunteer.Read(v => v.Id == volunteerId) ??
-            throw new BO.BlDoesNotExistException($"Volunteer with id {volunteerId} does not exists");
+        var volunteer = _dal.Volunteer.Read(v => v.Id == userId) ??
+            throw new BO.BlDoesNotExistException($"Volunteer with id {userId} does not exists");
         var assignment = _dal.Assignment.Read(a => a.Id == assignmentId) ??
             throw new BO.BlDoesNotExistException($"assignment with id {assignmentId} does not exists");
-        if (volunteer.Role == DO.Role.Manager || assignment.VolunteerId == volunteerId)
+        if (volunteer.Role == DO.Role.Manager || assignment.VolunteerId == userId)
         {
-            var finishType = assignment.VolunteerId == volunteerId ? DO.FinishType.SelfCancel : DO.FinishType.ManagerCancel;
+            var finishType = assignment.VolunteerId == userId ? DO.FinishType.SelfCancel : DO.FinishType.ManagerCancel;
             if (assignment.FinishTime == null)
             {
                 var newAssignment = new DO.Assignment
                 {
                     Id = assignment.Id,
-                    VolunteerId = volunteerId,
+                    VolunteerId = assignment.VolunteerId,
                     CallId = assignment.CallId,
                     OpenTime = assignment.OpenTime,
                     FinishTime = AdminManager.Now,
                     FinishType = finishType
                 };
-
                 try
                 {
                     _dal.Assignment.Update(newAssignment);
-                    AssignmentManager.Observers.NotifyItemUpdated(newAssignment.Id);  //stage 5
-                    AssignmentManager.Observers.NotifyListUpdated();  //stage 5
+                    AssignmentManager.Observers.NotifyItemUpdated(newAssignment.Id); 
+                    AssignmentManager.Observers.NotifyListUpdated(); 
 
                 }
                 catch

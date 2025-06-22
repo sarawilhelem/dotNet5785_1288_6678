@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BO;
 
 namespace PL;
@@ -62,5 +63,19 @@ internal class DistanceTypeCollection : IEnumerable
 internal class RoleCollection : IEnumerable
 {
     private static readonly IEnumerable<Role> s_enums = (Enum.GetValues(typeof(Role)) as IEnumerable<Role>)!;
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}
+
+public enum FilterFields
+{
+    CallId,
+    LastVolunteerName,
+    CallType,
+    Status
+}
+
+internal class FilterFieldsCollection : IEnumerable
+{
+    private static readonly IEnumerable<FilterFields> s_enums = (Enum.GetValues(typeof(FilterFields)) as IEnumerable<FilterFields>)!;
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }

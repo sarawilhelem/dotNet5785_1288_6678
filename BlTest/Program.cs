@@ -372,7 +372,7 @@ namespace BlTest
                             int assId;
                             while (!int.TryParse(Console.ReadLine(), out assId))
                                 Console.WriteLine("Id is illegal! enter again!");
-                            s_bl.Call.CanceleProcess(volId, assId);
+                            s_bl.Call.CancelProcess(volId, assId);
                             break;
                         case CallMenu.ChooseCall:
                             Console.WriteLine("Enter your id:");
