@@ -99,7 +99,7 @@ namespace PL.VolunteerWindows
         {
             try
             {
-                //new CallsHistory(CurrentVolunteer.Id).Show();
+                new CallsHistory().Show();
             }
             catch (Exception ex)
             {
