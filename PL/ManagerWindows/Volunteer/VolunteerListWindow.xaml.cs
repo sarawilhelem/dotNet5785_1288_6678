@@ -1,5 +1,4 @@
 ﻿using BO;
-using PL.Call;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,7 +6,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-namespace PL.Volunteer
+namespace PL.ManagerWindows.Volunteer
 {
     /// <summary>
     /// Interaction logic for VolunteerListWindow.xaml
@@ -94,7 +93,7 @@ namespace PL.Volunteer
         private void Volunteer_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             int id = SelectedVolunteer?.Id 
-                ?? throw new ArgumentNullException("No volunteer was accepted for deletion");
+                ?? throw new ArgumentNullException("No volunteer was accepted");
             try
             {
                 new VolunteerWindow(id).Show();
@@ -112,7 +111,7 @@ namespace PL.Volunteer
                 if (volunteer == null)
                     throw new ArgumentNullException("No volunteer was accepted for deletion");
 
-                var result = MessageBox.Show("האם אתה בטוח שברצונך למחוק את המתנדב?", "אישור מחיקה", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                var result = MessageBox.Show("Are you sure you want to delete the volunteer?", "Deleting Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.Yes)
                 {

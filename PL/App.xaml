@@ -23,6 +23,7 @@
         <pl:BooleanToNullableConverter x:Key="BooleanToNullableConverterKey"/>
         <pl:NullToVisibilityConverter x:Key="NullToVisibilityConverterKey"/>
         <pl:DeleteableCallToVisibilityConverter x:Key="DeleteableCallToVisibilityConverterKey"/>
+        <pl:VolunteerCanSelectCallConverter x:Key="VolunteerCanSelectCallConverter"/>
         <pl:FilterFieldsCollection x:Key="FilterFieldCollectionKey"/>
     </Application.Resources>
 </Application>

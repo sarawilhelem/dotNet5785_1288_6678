@@ -139,4 +139,21 @@ namespace PL
         }
     }
 
+    public class VolunteerCanSelectCallConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is BO.Volunteer volunteer)
+            {
+                return volunteer.IsActive == true && volunteer.Call == null;
+            }
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

@@ -44,9 +44,9 @@ public partial class EnterSystemWindow : Window
 
             Application.Current.Resources["UserIdKey"] = volunteer.Id;
             if (volunteer.Role == BO.Role.Manager)
-                new MainWindow().Show();
+                new ManagerWindows.MainWindow().Show();
             else if (volunteer.Role == BO.Role.Volunteer)
-                MessageBox.Show("Volunteer window has to be shown", "Window", MessageBoxButton.OK, MessageBoxImage.Information);
+                new VolunteerWindows.VolunteerWindow().Show();
             else
                 MessageBox.Show("Volunteer's role does not found", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             this.Close();

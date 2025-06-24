@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace PL.Volunteer;
+namespace PL.ManagerWindows.Volunteer;
 
 /// <summary>
 /// Interaction logic for VolunteerWindow.xaml

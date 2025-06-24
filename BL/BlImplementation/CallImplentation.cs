@@ -321,16 +321,20 @@ internal class CallImplentation : ICall
         openedCalls = openedCalls.Where(a =>
       Helpers.CallManager.GetCallStatus(a.CallId) == BO.FinishCallType.Open ||
        Helpers.CallManager.GetCallStatus(a.CallId) == BO.FinishCallType.OpenInRisk);
-        var openCallsToReturn = openedCalls.Select(
-                a => new BO.OpenCallInList
-                {
-                    Id = a.CallId,
-                    CallType = (BO.CallType)(_dal.Call.Read(c => c.Id == a.CallId)!.CallType),
-                    Address = _dal.Call.Read(c => c.Id == a.CallId)!.Address,
-                    OpenTime = _dal.Call.Read(c => c.Id == a.CallId)!.OpenTime,
-                    MaxCloseTime = _dal.Call.Read(c => c.Id == a.CallId)!.MaxCloseTime,
-                    Distance = Helpers.CallManager.DistanceBetweenVolunteerAndCall(volunteerId, a.CallId)
-                });
+        var openCallsToReturn = openedCalls.Select(a =>
+        {
+            var call = _dal.Call.Read(c => c.Id == a.CallId)!;
+            return new BO.OpenCallInList
+            {
+                Id = a.CallId,
+                CallType = (BO.CallType)call.CallType,
+                Address = call.Address,
+                OpenTime = call.OpenTime,
+                MaxCloseTime = call.MaxCloseTime,
+                Distance = Helpers.CallManager.DistanceBetweenVolunteerAndCall(volunteerId, a.CallId),
+                Description = call.Description
+            };
+        });
         if (callType != null)
             openCallsToReturn = openCallsToReturn.Where(call => call.CallType == callType);
         openCallsToReturn = sort switch
@@ -340,6 +344,7 @@ internal class CallImplentation : ICall
             BO.OpenCallInListFields.OpenTime => openCallsToReturn.OrderBy(call => call.OpenTime),
             BO.OpenCallInListFields.MaxCloseTime => openCallsToReturn.OrderBy(call => call.MaxCloseTime),
             BO.OpenCallInListFields.Distance => openCallsToReturn.OrderBy(call => call.Distance),
+            BO.OpenCallInListFields.Description => openCallsToReturn.OrderBy(call => call.Description),
             _ => openCallsToReturn.OrderBy(call => call.Id),
         };
         return openCallsToReturn;
@@ -354,7 +359,7 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlFinishProcessIllegalException">if the assignment is not with this volunteer or the call wasn't in prociss</exception>
     public void FinishProcess(int volunteerId, int assignmentId)
     {
-        var assignment = _dal.Assignment.Read(a => a.CallId == assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id {assignmentId} does not exist");
+        var assignment = _dal.Assignment.Read(a => a.Id == assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id {assignmentId} does not exist");
         if (assignment.VolunteerId != volunteerId)
             throw new BO.BlFinishProcessIllegalException("this assignment is not with this volunteer");
 
@@ -372,8 +377,8 @@ internal class CallImplentation : ICall
             FinishType = DO.FinishType.Processed
         };
         _dal.Assignment.Update(assignmentToUpdate);
-        AssignmentManager.Observers.NotifyItemUpdated(assignmentToUpdate.Id);  
-        AssignmentManager.Observers.NotifyListUpdated();  
+        CallManager.Observers.NotifyItemUpdated(assignment.CallId);  
+        VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId);
 
     }
 
@@ -407,8 +412,8 @@ internal class CallImplentation : ICall
                 try
                 {
                     _dal.Assignment.Update(newAssignment);
-                    AssignmentManager.Observers.NotifyItemUpdated(newAssignment.Id); 
-                    AssignmentManager.Observers.NotifyListUpdated(); 
+                    CallManager.Observers.NotifyItemUpdated(assignment.CallId); 
+                    VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId); 
 
                 }
                 catch
@@ -443,6 +448,8 @@ internal class CallImplentation : ICall
         if (Helpers.CallManager.RestTimeForCall(call) != TimeSpan.Zero)
         {
             Helpers.AssignmentManager.CreateAssignment(callId, volunteerId);
+            CallManager.Observers.NotifyItemUpdated(callId);
+            VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
         }
         else
         {

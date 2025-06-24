@@ -93,6 +93,7 @@ public enum OpenCallInListFields
     OpenTime,
     MaxCloseTime,
     Distance,
+    Description,
     None
 }
 public enum TimeUnit

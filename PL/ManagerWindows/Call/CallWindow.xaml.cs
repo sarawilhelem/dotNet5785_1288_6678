@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PL.Call
+namespace PL.ManagerWindows.Call
 {
     /// <summary>
     /// Interaction logic for CallWindow.xaml

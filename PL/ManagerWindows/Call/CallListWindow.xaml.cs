@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace PL.Call
+namespace PL.ManagerWindows.Call
 {
     public partial class CallListWindow : Window, INotifyPropertyChanged
     {
@@ -277,11 +277,6 @@ namespace PL.Call
             {
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void ApplyFilter_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateCallsList(); // Apply the filter on button click
         }
     }
 }

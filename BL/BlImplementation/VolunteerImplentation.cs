@@ -165,7 +165,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
             return;
         VolunteerManager.CheckValidation(volunteer);
 
-        if (volunteer.Address != null)
+        if (volunteer.Address != null && volunteer.Address != "")
         {
             var (latitude, longitude) = Tools.GetCoordinates(volunteer.Address);
             volunteer.Latitude = latitude;
@@ -182,7 +182,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
             if(volunteer.IsActive == false && prevDoVolunteer.IsActive ==  true)
             {
                 var assingments = _dal.Assignment.ReadAll();
-                if (assingments.Any(a => a.VolunteerId == id && a.FinishTime == null))
+                if (assingments.Any(a => a.VolunteerId == volunteer.Id && a.FinishTime == null))
                     throw new BO.BlUpdateImpossibleException($"Volunteer {volunteer.Id} cannot be marked as inactive because there is a call in his care.");
             }
             DO.Volunteer updateDoVolunteer = new(volunteer.Id, volunteer.Name, volunteer.Phone, volunteer.Email, volunteer.Address,

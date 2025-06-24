@@ -21,6 +21,7 @@ public class OpenCallInList
     required public string Address { get; set; }
     public DateTime OpenTime { get; init; }
     public DateTime? MaxCloseTime { get; set; }
+    public string? Description { get; set; }
     public double Distance { get; init; }
     public override string ToString() => Helpers.Tools.ToStringProperty(this);
 

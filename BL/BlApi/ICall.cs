@@ -12,6 +12,6 @@ public interface ICall: IObservable
     public IEnumerable<BO.ClosedCallInList> ReadAllVolunteerClosedCalls(int VolunteerId, BO.CallType? callType = null, BO.ClosedCallInListFields? sort=null);
     public IEnumerable<BO.OpenCallInList> ReadAllVolunteerOpenCalls(int VolunteerId, BO.CallType? callType = null, BO.OpenCallInListFields? sort = null);
     public void FinishProcess(int volunteerId,int assignmentId);
-    public void CancelProcess(int volunteerId, int assignmentId);
+    public void CancelProcess(int userId, int assignmentId);
     public void ChooseCall(int volunteerId, int callId);
 }

@@ -181,25 +181,40 @@ public static class Initialization
         List<Call> calls = (List<Call>)s_dal!.Call.ReadAll().ToList();
         List<Volunteer> volunteers = (List<Volunteer>)s_dal!.Volunteer.ReadAll().ToList();
 
+        HashSet<int> volunteersInProgress = new();
+
         for (int i = 0; i < COUNT_ASSIGNMENTS; i++)
         {
             int cId = calls[i % calls.Count].Id;
-            int vId = volunteers[s_rand.Next(0, volunteers.Count)].Id; 
+            int vId = volunteers[s_rand.Next(0, volunteers.Count)].Id;
             DateTime insersion = calls[i % calls.Count].OpenTime.AddDays(s_rand.Next(0, 30));
             DateTime? fTime;
-            if (s_rand.Next(0, 10) == 1 && calls[i % calls.Count].MaxCloseTime > s_dal.Config.Clock) 
+            if (s_rand.Next(0, 10) == 1 && calls[i % calls.Count].MaxCloseTime > s_dal.Config.Clock)
             {
                 fTime = null;
             }
             else
             {
                 fTime = insersion.AddDays(s_rand.Next(1, 300));
-                if(fTime > s_dal!.Config.Clock) 
+                if (fTime > s_dal!.Config.Clock)
                     fTime = null;
             }
             FinishType? fType = fTime == null ? null :
                 fTime < s_dal.Config.Clock ? FinishType.Expired :
-                (FinishType)s_rand.Next(0, 3); 
+                (FinishType)s_rand.Next(0, 3);
+
+            if (fType == null)
+            {
+                if (volunteersInProgress.Contains(vId))
+                {
+                    i--; 
+                    continue;
+                }
+                else
+                {
+                    volunteersInProgress.Add(vId);
+                }
+            }
 
             Assignment newA = new Assignment(cId, vId, insersion, fTime, fType);
             s_dal!.Assignment.Create(newA);

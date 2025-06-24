@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace PL
+namespace PL.ManagerWindows
 {
     public partial class MainWindow : Window
     {
