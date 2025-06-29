@@ -77,7 +77,7 @@ internal class CallManager
     /// <returns>the time span rest</returns>
     public static TimeSpan RestTimeForCall(DO.Call call)
     {
-        return AdminManager.Now < call.MaxCloseTime ? (TimeSpan)(call.MaxCloseTime - AdminManager.Now) : TimeSpan.Zero;
+        return AdminManager.Now < call.MaxCloseTime ? (TimeSpan)(call.MaxCloseTime - AdminManager.Now) : TimeSpan.Zero; 
     }
 
     /// <summary>

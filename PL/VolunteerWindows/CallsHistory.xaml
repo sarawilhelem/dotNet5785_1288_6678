@@ -37,11 +37,11 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="Auto"/>
-                    <GridViewColumn Header="CallType" DisplayMemberBinding="{Binding CallType}" Width="Auto"/>
-                    <GridViewColumn Header="OpenCallTime" DisplayMemberBinding="{Binding OpenCallTime}" Width="Auto"/>
-                    <GridViewColumn Header="StartCallTime" DisplayMemberBinding="{Binding StartCallTime}" Width="Auto"/>
-                    <GridViewColumn Header="FinishCallTime" DisplayMemberBinding="{Binding FinishCallTime}" Width="Auto"/>
+                    <GridViewColumn Header="Call Type" DisplayMemberBinding="{Binding CallType}" Width="Auto"/>
                     <GridViewColumn Header="Address" DisplayMemberBinding="{Binding Address}" Width="Auto"/>
+                    <GridViewColumn Header="Open Time" DisplayMemberBinding="{Binding OpenCallTime}" Width="Auto"/>
+                    <GridViewColumn Header="Start Call Time" DisplayMemberBinding="{Binding StartCallTime}" Width="Auto"/>
+                    <GridViewColumn Header="Finish Call Time" DisplayMemberBinding="{Binding FinishCallTime}" Width="Auto"/>
                     <GridViewColumn Header="FinishType" DisplayMemberBinding="{Binding FinishType}" Width="Auto"/>
                 </GridView>
             </ListView.View>

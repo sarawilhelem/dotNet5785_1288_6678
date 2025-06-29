@@ -235,6 +235,7 @@ internal class CallImplentation : ICall
         {
             throw new BO.BlDeleteImpossible("Call is not open or assigned to a volunteer");
         }
+        CallManager.Observers.NotifyListUpdated();
     }
 
     /// <summary>
@@ -275,15 +276,7 @@ internal class CallImplentation : ICall
     public IEnumerable<BO.ClosedCallInList> ReadAllVolunteerClosedCalls(int volunteerId, BO.CallType? callType = null, BO.ClosedCallInListFields? sort = null)
     {
 
-        var closedCalls = Helpers.CallManager.AssignmentsListForVolunteer(volunteerId).Where(a =>
-        {
-            var status = Helpers.CallManager.GetCallStatus(a.CallId);
-            return
-            status == BO.FinishCallType.InProcessInRisk ||
-             status == BO.FinishCallType.InProcess ||
-              status == BO.FinishCallType.Close ||
-               status == BO.FinishCallType.Expired;
-        }).Select(
+        var closedCalls = Helpers.CallManager.AssignmentsListForVolunteer(volunteerId).Select(
                         a => new BO.ClosedCallInList
                         {
                             Id = a.CallId,
@@ -292,7 +285,7 @@ internal class CallImplentation : ICall
                             OpenCallTime = _dal.Call.Read(c => c.Id == a.CallId)!.OpenTime,
                             StartCallTime = a.OpenTime,
                             FinishCallTime = a.FinishTime,
-                            FinishType = a.FinishType is not null ? (BO.FinishType)a.FinishType : BO.FinishType.Processed
+                            FinishType = (BO.FinishType?)a.FinishType
                         }
             );
         if (callType != null)
@@ -377,7 +370,8 @@ internal class CallImplentation : ICall
             FinishType = DO.FinishType.Processed
         };
         _dal.Assignment.Update(assignmentToUpdate);
-        CallManager.Observers.NotifyItemUpdated(assignment.CallId);  
+        CallManager.Observers.NotifyItemUpdated(assignment.CallId);
+        CallManager.Observers.NotifyListUpdated();
         VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId);
 
     }
@@ -412,6 +406,7 @@ internal class CallImplentation : ICall
                 try
                 {
                     _dal.Assignment.Update(newAssignment);
+                    CallManager.Observers.NotifyListUpdated();
                     CallManager.Observers.NotifyItemUpdated(assignment.CallId); 
                     VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId); 
 
@@ -448,6 +443,7 @@ internal class CallImplentation : ICall
         if (Helpers.CallManager.RestTimeForCall(call) != TimeSpan.Zero)
         {
             Helpers.AssignmentManager.CreateAssignment(callId, volunteerId);
+            CallManager.Observers.NotifyListUpdated();
             CallManager.Observers.NotifyItemUpdated(callId);
             VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
         }
