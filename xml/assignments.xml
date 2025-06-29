@@ -452,8 +452,16 @@
     <CallId>1045</CallId>
     <VolunteerId>270420680</VolunteerId>
     <OpenTime>2024-01-01T00:00:00</OpenTime>
-    <FinishTime xsi:nil="true" />
-    <FinishType xsi:nil="true" />
+    <FinishTime>2024-01-01T00:00:00</FinishTime>
+    <FinishType>SelfCancel</FinishType>
     <Id>2056</Id>
+  </Assignment>
+  <Assignment>
+    <CallId>1016</CallId>
+    <VolunteerId>270420680</VolunteerId>
+    <OpenTime>2024-01-01T00:00:00</OpenTime>
+    <FinishTime>2024-01-01T00:00:00</FinishTime>
+    <FinishType>Processed</FinishType>
+    <Id>2057</Id>
   </Assignment>
 </ArrayOfAssignment>
