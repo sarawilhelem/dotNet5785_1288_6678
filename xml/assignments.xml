@@ -464,4 +464,28 @@
     <FinishType>Processed</FinishType>
     <Id>2057</Id>
   </Assignment>
+  <Assignment>
+    <CallId>1030</CallId>
+    <VolunteerId>270420680</VolunteerId>
+    <OpenTime>2024-01-01T00:00:00</OpenTime>
+    <FinishTime>2024-01-01T00:00:00</FinishTime>
+    <FinishType>SelfCancel</FinishType>
+    <Id>2058</Id>
+  </Assignment>
+  <Assignment>
+    <CallId>1010</CallId>
+    <VolunteerId>270420680</VolunteerId>
+    <OpenTime>2024-01-01T00:00:00</OpenTime>
+    <FinishTime>2024-01-01T00:00:00</FinishTime>
+    <FinishType>Processed</FinishType>
+    <Id>2059</Id>
+  </Assignment>
+  <Assignment>
+    <CallId>1049</CallId>
+    <VolunteerId>270420680</VolunteerId>
+    <OpenTime>2024-01-01T00:00:00</OpenTime>
+    <FinishTime>2024-01-01T00:00:00</FinishTime>
+    <FinishType>SelfCancel</FinishType>
+    <Id>2060</Id>
+  </Assignment>
 </ArrayOfAssignment>

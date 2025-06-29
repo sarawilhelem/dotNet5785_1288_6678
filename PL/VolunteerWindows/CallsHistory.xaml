@@ -43,13 +43,10 @@
                     <GridViewColumn Header="FinishCallTime" DisplayMemberBinding="{Binding FinishCallTime}" Width="Auto"/>
                     <GridViewColumn Header="Address" DisplayMemberBinding="{Binding Address}" Width="Auto"/>
                     <GridViewColumn Header="FinishType" DisplayMemberBinding="{Binding FinishType}" Width="Auto"/>
-                    <GridViewColumn Width="Auto">
-                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
         
-        <TextBlock Grid.Row="2" Text="{Binding SelectedCall.Description}" Margin="10" FontWeight="Bold" HorizontalAlignment="Center"/>
 
     </Grid>
 </Window>
