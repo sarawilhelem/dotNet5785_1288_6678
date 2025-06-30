@@ -48,34 +48,39 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlIllegalValues">if filterParam is not suitable to filterBy type</exception>
     public IEnumerable<BO.CallInList> ReadAll(BO.CallInListFields? filterBy = null, Object? filterParam = null, BO.CallInListFields? sortBy = null)
     {
-
-        IEnumerable<DO.Call> callList = _dal.Call.ReadAll();
-        IEnumerable<DO.Assignment> assignments = _dal.Assignment.ReadAll();
-        IEnumerable<BO.CallInList> callsListToReturn = callList.Select(
-            call =>
-            {
-                var lastAssignment = assignments.Where(a => a.CallId == call.Id)
-                                                .OrderByDescending(a => a.OpenTime)
-                                                .FirstOrDefault();
-
-                int? id = lastAssignment?.Id;
-                var lastVolunteerName = lastAssignment != null
-                    ? _dal.Volunteer.Read(lastAssignment.VolunteerId)?.Name
-                    : null;
-
-                return new BO.CallInList
+        IEnumerable<DO.Call> callList;
+        IEnumerable<DO.Assignment> assignments;
+        IEnumerable<BO.CallInList> callsListToReturn;
+        lock (AdminManager.BlMutex)
+        {
+            callList = _dal.Call.ReadAll();
+            assignments = _dal.Assignment.ReadAll();
+            callsListToReturn = callList.Select(
+                call =>
                 {
-                    Id = id,
-                    CallId = call.Id,
-                    CallType = (BO.CallType)call.CallType,
-                    OpenTime = call.OpenTime,
-                    MaxCloseTime = Helpers.CallManager.RestTimeForCall(call),
-                    LastVolunteerName = lastVolunteerName,
-                    TotalProcessingTime = Helpers.CallManager.CalculateAssignmentDuration(call),
-                    Status = Helpers.CallManager.GetCallStatus(call.Id),
-                    AmountOfAssignments = Helpers.CallManager.GetAmountOfAssignments(call)
-                };
-            });
+                    var lastAssignment = assignments.Where(a => a.CallId == call.Id)
+                                                    .OrderByDescending(a => a.OpenTime)
+                                                    .FirstOrDefault();
+
+                    int? id = lastAssignment?.Id;
+                    var lastVolunteerName = lastAssignment != null
+                        ? _dal.Volunteer.Read(lastAssignment.VolunteerId)?.Name
+                        : null;
+
+                    return new BO.CallInList
+                    {
+                        Id = id,
+                        CallId = call.Id,
+                        CallType = (BO.CallType)call.CallType,
+                        OpenTime = call.OpenTime,
+                        MaxCloseTime = Helpers.CallManager.RestTimeForCall(call),
+                        LastVolunteerName = lastVolunteerName,
+                        TotalProcessingTime = Helpers.CallManager.CalculateAssignmentDuration(call),
+                        Status = Helpers.CallManager.GetCallStatus(call.Id),
+                        AmountOfAssignments = Helpers.CallManager.GetAmountOfAssignments(call)
+                    };
+                });
+        }
         try
         {
             if (filterParam != null && filterParam.ToString() != "")
@@ -159,7 +164,9 @@ internal class CallImplentation : ICall
     /// <returns>The call with that id</returns>
     public BO.Call? Read(int id)
     {
-        var DOCall = _dal.Call.Read(i => i.Id == id);
+        DO.Call DOCall;
+        lock (AdminManager.BlMutex)
+            DOCall = _dal.Call.Read(i => i.Id == id);
         if (DOCall == null) return null;
         var assignments = Helpers.CallManager.AssignmentsListForCall(id);
         BO.Call call = new((BO.CallType)(DOCall.CallType), DOCall.Address, DOCall.OpenTime,
@@ -199,7 +206,7 @@ internal class CallImplentation : ICall
         };
         try
         {
-            _dal.Call.Update(callToUpdate);
+            Helpers.CallManager.Update(callToUpdate);
             VolunteerManager.Observers.NotifyListUpdated();
             CallManager.Observers.NotifyListUpdated();
             CallManager.Observers.NotifyItemUpdated(callToUpdate.Id);
@@ -217,14 +224,15 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlDeleteImpossible">if there is not a call with that id or call is not open or assigned to a volunteer</exception>
     public void Delete(int id)
     {
-        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        if (_dal.Call.Read(id) == null)
+        AdminManager.ThrowOnSimulatorIsRunning();
+        lock (AdminManager.BlMutex)
+            if (_dal.Call.Read(id) == null)
             throw new BO.BlDoesNotExistException($"Call with id {id} does not exists");
         if (!Helpers.CallManager.AssignmentsListForCall(id).Any() && Helpers.CallManager.GetCallStatus(id) == BO.FinishCallType.Open)
         {
             try
             {
-                _dal.Call.Delete(id);
+                Helpers.CallManager.Delete(id);
                 CallManager.Observers.NotifyListUpdated();
             }
             catch
@@ -265,7 +273,7 @@ internal class CallImplentation : ICall
             MaxCloseTime = call.MaxCloseTime,
             Description = call.Description
         };
-        _dal.Call.Create(callToAdd);
+        Helpers.CallManager.Create(callToAdd);
         CallManager.Observers.NotifyListUpdated();
     }
 
@@ -278,8 +286,10 @@ internal class CallImplentation : ICall
     /// <returns>the closed calls</returns>
     public IEnumerable<BO.ClosedCallInList> ReadAllVolunteerClosedCalls(int volunteerId, BO.CallType? callType = null, BO.ClosedCallInListFields? sort = null)
     {
-
-        var closedCalls = Helpers.CallManager.AssignmentsListForVolunteer(volunteerId).Select(
+        IEnumerable<BO.ClosedCallInList> closedCalls;
+        lock (AdminManager.BlMutex)
+        {
+            closedCalls = Helpers.CallManager.AssignmentsListForVolunteer(volunteerId).Select(
                         a => new BO.ClosedCallInList
                         {
                             Id = a.CallId,
@@ -291,6 +301,7 @@ internal class CallImplentation : ICall
                             FinishType = (BO.FinishType?)a.FinishType
                         }
             );
+        }
         if (callType != null)
             closedCalls = closedCalls.Where(call => call.CallType == callType);
         closedCalls = sort switch
@@ -319,7 +330,9 @@ internal class CallImplentation : ICall
        Helpers.CallManager.GetCallStatus(a.CallId) == BO.FinishCallType.OpenInRisk);
         var openCallsToReturn = openedCalls.Select(a =>
         {
-            var call = _dal.Call.Read(c => c.Id == a.CallId)!;
+            DO.Call call;
+            lock (AdminManager.BlMutex)
+                 call = _dal.Call.Read(c => c.Id == a.CallId)!;
             return new BO.OpenCallInList
             {
                 Id = a.CallId,
@@ -355,8 +368,10 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlFinishProcessIllegalException">if the assignment is not with this volunteer or the call wasn't in prociss</exception>
     public void FinishProcess(int volunteerId, int assignmentId)
     {
-        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        var assignment = _dal.Assignment.Read(a => a.Id == assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id {assignmentId} does not exist");
+        AdminManager.ThrowOnSimulatorIsRunning();
+        DO.Assignment assignment;
+        lock (AdminManager.BlMutex)
+             assignment = _dal.Assignment.Read(a => a.Id == assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id {assignmentId} does not exist");
         if (assignment.VolunteerId != volunteerId)
             throw new BO.BlFinishProcessIllegalException("this assignment is not with this volunteer");
 
@@ -373,7 +388,7 @@ internal class CallImplentation : ICall
             FinishTime = AdminManager.Now,
             FinishType = DO.FinishType.Processed
         };
-        _dal.Assignment.Update(assignmentToUpdate);
+        Helpers.AssignmentManager.Update(assignmentToUpdate);
         CallManager.Observers.NotifyItemUpdated(assignment.CallId);
         CallManager.Observers.NotifyListUpdated();
         VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId);
@@ -389,10 +404,14 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlCancelProcessIllegalException">when trying to cancel finished assignment</exception>
     public void CancelProcess(int userId, int assignmentId)
     {
-        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        var volunteer = _dal.Volunteer.Read(v => v.Id == userId) ??
+        AdminManager.ThrowOnSimulatorIsRunning();
+        DO.Volunteer volunteer;
+        DO.Assignment assignment;
+        lock (AdminManager.BlMutex)
+            volunteer = _dal.Volunteer.Read(v => v.Id == userId) ??
             throw new BO.BlDoesNotExistException($"Volunteer with id {userId} does not exists");
-        var assignment = _dal.Assignment.Read(a => a.Id == assignmentId) ??
+        lock (AdminManager.BlMutex)
+            assignment = _dal.Assignment.Read(a => a.Id == assignmentId) ??
             throw new BO.BlDoesNotExistException($"assignment with id {assignmentId} does not exists");
         if (volunteer.Role == DO.Role.Manager || assignment.VolunteerId == userId)
         {
@@ -410,7 +429,7 @@ internal class CallImplentation : ICall
                 };
                 try
                 {
-                    _dal.Assignment.Update(newAssignment);
+                    Helpers.AssignmentManager.Update(newAssignment);
                     CallManager.Observers.NotifyListUpdated();
                     CallManager.Observers.NotifyItemUpdated(assignment.CallId); 
                     VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId); 
@@ -437,13 +456,17 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlDoesNotExistException">if there is not volunteer or assignment with these ids</exception>
     public void ChooseCall(int volunteerId, int callId)
     {
-        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.ThrowOnSimulatorIsRunning();
+        DO.Call call;
+        DO.Volunteer volunteer;//stage 7
         var assignments = Helpers.CallManager.AssignmentsListForCall(callId).Where(a => a.FinishType == null);
         if (assignments.Any())
             throw new BO.BlIllegalChoseCallException($"Call {callId} is in process");
-        var call = _dal.Call.Read(call => call.Id == callId) ??
+        lock (AdminManager.BlMutex)
+            call = _dal.Call.Read(call => call.Id == callId) ??
             throw new BO.BlDoesNotExistException($"Call with id {callId} does not exists");
-        var volunteer = _dal.Volunteer.Read(v => v.Id == volunteerId) ??
+        lock (AdminManager.BlMutex)
+            volunteer = _dal.Volunteer.Read(v => v.Id == volunteerId) ??
             throw new BO.BlDoesNotExistException($"Volunteer with id {volunteerId} does not exists");
 
         if (Helpers.CallManager.RestTimeForCall(call) != TimeSpan.Zero)

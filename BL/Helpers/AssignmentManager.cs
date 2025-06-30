@@ -25,5 +25,9 @@ internal class AssignmentManager
         s_dal.Assignment.Create(assignment);
         AssignmentManager.Observers.NotifyListUpdated();
     }
+    public static void Update(DO.Assignment assignmentToUpdate)
+    {
+        s_dal.Assignment.Update(assignmentToUpdate);
+    }
 
 }

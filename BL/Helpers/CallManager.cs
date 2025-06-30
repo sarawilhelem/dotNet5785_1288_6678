@@ -17,7 +17,9 @@ internal class CallManager
 
     public static void CheckValidation(BO.Call call)
     {
-        var prevCall = s_dal.Call.Read(c => c.Id == call.Id);
+        DO.Call prevCall;
+        lock (AdminManager.BlMutex)
+            prevCall = s_dal.Call.Read(c => c.Id == call.Id);
         if (prevCall is null)
             throw new BlDoesNotExistException($"Call with id {call.Id} does not exists");
         if (call.Status == FinishCallType.Close || call.Status == FinishCallType.Expired)
@@ -43,7 +45,9 @@ internal class CallManager
     /// <returns>all assitnments with that call</returns>
     public static IEnumerable<DO.Assignment> AssignmentsListForCall(int id)
     {
-        var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == id);
+        IEnumerable<DO.Assignment> assignmentsList;
+        lock (AdminManager.BlMutex) 
+         assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == id);
         return assignmentsList;
     }
 
@@ -54,7 +58,9 @@ internal class CallManager
     /// <returns>all assignments with that volunteer</returns>
     public static IEnumerable<DO.Assignment> AssignmentsListForVolunteer(int id)
     {
-        var assignmentsList = s_dal.Assignment.ReadAll(a => a.VolunteerId == id);
+        IEnumerable<DO.Assignment> assignmentsList;
+        lock (AdminManager.BlMutex)
+             assignmentsList = s_dal.Assignment.ReadAll(a => a.VolunteerId == id);
         return assignmentsList;
     }
 
@@ -66,7 +72,8 @@ internal class CallManager
     /// <exception cref="BO.BlDoesNotExistException">if there is not volunteer with that id</exception>
     public static DO.Volunteer GetVolunteer(int id)
     {
-        return s_dal.Volunteer.Read(v => v.Id == id) ??
+        lock (AdminManager.BlMutex)
+            return s_dal.Volunteer.Read(v => v.Id == id) ??
             throw new BO.BlDoesNotExistException($"Volunteer with id {id} does not exists");
     }
     
@@ -87,8 +94,12 @@ internal class CallManager
     /// <returns>the call status</returns>
     public static FinishCallType GetCallStatus(int id)
     {
-        var call = s_dal.Call.Read(c => c.Id == id);
-        var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == id);
+        DO.Call call;
+        IEnumerable<Assignment> assignmentsList;
+        lock (AdminManager.BlMutex)
+         call = s_dal.Call.Read(c => c.Id == id);
+        lock (AdminManager.BlMutex)
+            assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == id);
         var isProcesseds = assignmentsList.Any(a => a.FinishType == DO.FinishType.Processed);
         if (isProcesseds)
         {
@@ -153,7 +164,9 @@ internal class CallManager
     /// <returns>before how many time, or null if never</returns>
     public static TimeSpan? CalculateAssignmentDuration(DO.Call call)
     {
-        var assignment = s_dal.Assignment.Read(a => a.CallId == call.Id && a.FinishType == DO.FinishType.Processed);
+        Assignment assignment;
+        lock (AdminManager.BlMutex)
+            assignment = s_dal.Assignment.Read(a => a.CallId == call.Id && a.FinishType == DO.FinishType.Processed);
         if (assignment != null)
             return (TimeSpan?)(assignment.FinishTime - assignment.OpenTime);
         return null;
@@ -168,9 +181,13 @@ internal class CallManager
     /// <exception cref="BO.BlDoesNotExistException">if there is not a volunter of call with these ids</exception>
     public static double DistanceBetweenVolunteerAndCall(int volunteerId, int callId)
     {
-        var volunteer = s_dal.Volunteer.Read(v => v.Id == volunteerId) ??
+        DO.Volunteer volunteer;
+        DO.Call call;
+        lock (AdminManager.BlMutex)
+            volunteer = s_dal.Volunteer.Read(v => v.Id == volunteerId) ??
             throw new BO.BlDoesNotExistException($"volunteer with id {volunteerId} does not exists");
-        var call = s_dal.Call.Read(c => c.Id == callId) ??
+        lock (AdminManager.BlMutex)
+            call = s_dal.Call.Read(c => c.Id == callId) ??
             throw new BO.BlDoesNotExistException($"call with id {callId} does not exists");
 
         if (volunteer.Latitude is null || volunteer.Longitude is null)
@@ -186,8 +203,24 @@ internal class CallManager
     /// <returns>how many assignments is has</returns>
     public static int GetAmountOfAssignments(DO.Call call)
     {
-        var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == call.Id);
+        IEnumerable<Assignment> assignmentsList;
+        lock (AdminManager.BlMutex)
+            assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == call.Id);
         return assignmentsList.Count();
     }
-
+    public static void Update(DO.Call callToUpdate)
+    {
+        lock (AdminManager.BlMutex)
+            s_dal.Call.Update(callToUpdate);
+    }
+    public static void Delete(int id)
+    {
+        lock (AdminManager.BlMutex)
+            s_dal.Call.Delete(id);
+    }
+    public static void Create(DO.Call call)
+    {
+        lock (AdminManager.BlMutex)
+            s_dal.Call.Create(call);
+    }
 }
