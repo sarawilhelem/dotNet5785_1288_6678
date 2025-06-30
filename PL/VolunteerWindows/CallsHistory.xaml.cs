@@ -96,6 +96,10 @@ namespace PL.VolunteerWindows
         {
             s_bl.Call.RemoveObserver(UpdateCallsList);
         }
+
+        /// <summary>
+        /// Read the calls list again from BL
+        /// </summary>
         private void UpdateCallsList()
         {
             var selectedId = SelectedCall?.Id;
