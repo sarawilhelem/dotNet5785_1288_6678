@@ -6,8 +6,6 @@ namespace BlImplementation;
 
 internal class AdminImplentaition : IAdmin
 {
-    private readonly DalApi.IDal _dal = DalApi.Factory.Get;
-
     /// <summary>
     /// get the system clock
     /// </summary>
@@ -91,7 +89,7 @@ internal class AdminImplentaition : IAdmin
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         AdminManager.Start(interval); //stage 7
-    }
+    }  
 
     public void StopSimulator()
     => AdminManager.Stop(); //stage 7

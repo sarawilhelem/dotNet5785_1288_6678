@@ -1,5 +1,6 @@
 ﻿using BO;
 using DalApi;
+using BlImplementation;
 using DO;
 
 namespace Helpers;
@@ -188,6 +189,148 @@ internal class CallManager
     {
         var assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == call.Id);
         return assignmentsList.Count();
+    }
+
+    /// <summary>
+    /// read all calls, filtered and sorted according to the params
+    /// </summary>
+    /// <param name="filterBy">enum value to choose the field to filter</param>
+    /// <param name="filterParam">value to filter the field in Object type</param>
+    /// <param name="sortBy">enum value to choose the field to sort by it</param>
+    /// <returns>all calls filtered and sorted</returns>
+    /// <exception cref="BO.BlIllegalValues">if filterParam is not suitable to filterBy type</exception>
+    public static IEnumerable<BO.CallInList> ReadAll(BO.CallInListFields? filterBy = null, Object? filterParam = null, BO.CallInListFields? sortBy = null)
+    {
+
+        IEnumerable<DO.Call> callList = s_dal.Call.ReadAll();
+        IEnumerable<DO.Assignment> assignments = s_dal.Assignment.ReadAll();
+        IEnumerable<BO.CallInList> callsListToReturn = callList.Select(
+            call =>
+            {
+                var lastAssignment = assignments.Where(a => a.CallId == call.Id)
+                                                .OrderByDescending(a => a.OpenTime)
+                                                .FirstOrDefault();
+
+                int? id = lastAssignment?.Id;
+                var lastVolunteerName = lastAssignment != null
+                    ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.Name
+                    : null;
+
+                return new BO.CallInList
+                {
+                    Id = id,
+                    CallId = call.Id,
+                    CallType = (BO.CallType)call.CallType,
+                    OpenTime = call.OpenTime,
+                    MaxCloseTime = Helpers.CallManager.RestTimeForCall(call),
+                    LastVolunteerName = lastVolunteerName,
+                    TotalProcessingTime = Helpers.CallManager.CalculateAssignmentDuration(call),
+                    Status = Helpers.CallManager.GetCallStatus(call.Id),
+                    AmountOfAssignments = Helpers.CallManager.GetAmountOfAssignments(call)
+                };
+            });
+        try
+        {
+            if (filterParam != null && filterParam.ToString() != "")
+            {
+                switch (filterBy)
+                {
+                    case BO.CallInListFields.Id:
+                        callsListToReturn = callsListToReturn.Where(call => call.Id is not null && call.Id!.Equals(Convert.ToInt32(filterParam))).ToList();
+                        break;
+                    case BO.CallInListFields.CallId:
+                        callsListToReturn = callsListToReturn.Where(call => call.CallId.Equals(Convert.ToInt32(filterParam))).ToList();
+                        break;
+                    case BO.CallInListFields.OpenTime:
+                        callsListToReturn = callsListToReturn.Where(call => call.OpenTime.Equals(Convert.ToDateTime(filterParam))).ToList();
+                        break;
+                    case BO.CallInListFields.MaxCloseTime:
+                        callsListToReturn = callsListToReturn.Where(call => call.MaxCloseTime.Equals(Convert.ToDateTime(filterParam))).ToList();
+                        break;
+                    case BO.CallInListFields.LastVolunteerName:
+                        callsListToReturn = callsListToReturn.Where(call => call.LastVolunteerName is not null && call.LastVolunteerName!.Equals(filterParam.ToString())).ToList();
+                        break;
+                    case BO.CallInListFields.CallType:
+                        callsListToReturn = callsListToReturn.Where(call => call.CallType.Equals(filterParam)).ToList();
+                        break;
+                    case BO.CallInListFields.Status:
+                        callsListToReturn = callsListToReturn.Where(call => call.Status.Equals(filterParam)).ToList();
+                        break;
+                    case BO.CallInListFields.AmountOfAssignments:
+                        callsListToReturn = callsListToReturn.Where(call => call.AmountOfAssignments.Equals(Convert.ToInt32(filterParam))).ToList();
+                        break;
+                    case BO.CallInListFields.TotalProcessingTime:
+                        callsListToReturn = callsListToReturn.Where(call => call.TotalProcessingTime is not null
+                            && call.TotalProcessingTime!.Equals(CallManager.ConvertToTimeSpan(filterParam!))).ToList();
+                        break;
+                }
+            }
+        }
+        catch (BlIllegalValues ex)
+        {
+            throw new BO.BlIllegalValues(ex.Message);
+        }
+        if (sortBy != null)
+            switch (sortBy)
+            {
+                case BO.CallInListFields.Id:
+                    callsListToReturn = callsListToReturn.OrderBy(call => call.Id);
+                    break;
+                case BO.CallInListFields.CallId:
+                    callsListToReturn = callsListToReturn.OrderBy(call => call.CallId);
+                    break;
+                case BO.CallInListFields.CallType:
+                    callsListToReturn = callsListToReturn.OrderBy(call => call.CallType);
+                    break;
+                case BO.CallInListFields.OpenTime:
+                    callsListToReturn = callsListToReturn.OrderBy(call => call.OpenTime);
+                    break;
+                case BO.CallInListFields.MaxCloseTime:
+                    callsListToReturn = callsListToReturn.OrderBy(call => call.MaxCloseTime);
+                    break;
+                case BO.CallInListFields.LastVolunteerName:
+                    callsListToReturn = callsListToReturn.OrderBy(call => call.LastVolunteerName);
+                    break;
+                case BO.CallInListFields.TotalProcessingTime:
+                    callsListToReturn = callsListToReturn.OrderBy(call => call.TotalProcessingTime);
+                    break;
+                case BO.CallInListFields.Status:
+                    callsListToReturn = callsListToReturn.OrderBy(call => call.Status);
+                    break;
+                case BO.CallInListFields.AmountOfAssignments:
+                    callsListToReturn = callsListToReturn.OrderBy(call => call.AmountOfAssignments);
+                    break;
+            }
+
+        return callsListToReturn;
+    }
+
+    internal static void PeriodicSCallsUpdates(DateTime newClock) //stage 4
+    {
+        bool callUpdated; //stage 5
+        List<BO.CallInList> callsList;
+        lock (AdminManager.BlMutex) //stage 7
+        callsList = ReadAll().ToList();
+        callUpdated = false; //stage 5
+        foreach (var call in callsList) //stage 4
+        {
+            if (call.MaxCloseTime <= TimeSpan.Zero && (call.Status == FinishCallType.InProcessInRisk || call.Status == FinishCallType.InProcess))
+            {
+                callUpdated = true; //stage 5
+                DO.Assignment doAssignment;
+                lock (AdminManager.BlMutex)
+                {
+                    doAssignment = s_dal.Assignment.Read(call.Id ?? 0)!;
+                    s_dal.Assignment.Update(doAssignment with { FinishTime = newClock, FinishType = DO.FinishType.Expired });
+                }
+                CallManager.Observers.NotifyItemUpdated(call.CallId);
+            }
+        }
+        if (callUpdated) //stage 5
+        {
+            CallManager.Observers.NotifyListUpdated();
+            VolunteerManager.Observers.NotifyListUpdated();
+        }
     }
 
 }
