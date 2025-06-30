@@ -4,6 +4,7 @@ using DO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 /// <summary>
@@ -17,6 +18,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <param name="v">a volunteer xmlelement</param>
     /// <returns>a Volunteer Object</returns>
     /// <exception cref="FormatException">whent the converting the Id of the volunteer was failed</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     private static Volunteer GetVolunteer(XElement v)
     {
         return new DO.Volunteer()
@@ -41,6 +43,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="v">a volunteer object</param>
     /// <returns>a volunteer xmlelement</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     private static XElement CreateVolunteerElement(Volunteer v)
     {
         return new XElement("Volunteer",
@@ -63,6 +66,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="item">a volunteer to add</param>
     /// <exception cref="DalAlreadyExistsException">when trying add an existing volunteer</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Volunteer item)
     {
         XElement volunteersRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
@@ -77,6 +81,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="id">a volunteer's id to delete</param>
     /// <exception cref="DO.DalDoesNotExistException">if deleting was failed because there is not volunteer with that id</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         XElement volunteersRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
@@ -90,6 +95,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <summary>
     /// delete volunteers list
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         XMLTools.SaveListToXMLElement(new XElement("ArrayOfVolunteers"), Config.s_volunteers_xml);
@@ -100,6 +106,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="id">id of a volunteer to reed</param>
     /// <returns>a volunteer with that id</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(int id)
     {
         XElement? volunteerElement =
@@ -113,6 +120,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="filter">a function who accept a volunteer and returns true of false</param>
     /// <returns>the first volunteer who returns true to filter, or null if there is not any such volunteer</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(Func<Volunteer, bool> filter)
     {
         return XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml)
@@ -124,6 +132,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="filter">a function who accept a volunteer and returns true of false or null if any function was not sended</param>
     /// <returns>all volunteers who returns true to filter, or all volunteers if filter=null</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) //stage 2
     {
         IEnumerable<XElement> volunteersElement = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements();
@@ -141,6 +150,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="item">a volunteer to update the volunteer with the same id to be like it</param>
     /// <exception cref="DO.DalDoesNotExistException">if there is not any volunteer with that id</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Volunteer item)
     {
         XElement volunteersRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);

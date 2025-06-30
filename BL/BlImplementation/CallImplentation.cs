@@ -182,7 +182,8 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlCoordinatesException">if there is an exception when calculate the lat and lon</exception>
     /// <exception cref="BO.BlDoesNotExistException">if there is not a call with that id</exception>
     public void Update(BO.Call call)
-    {        
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CallManager.CheckValidation(call);
         var (latitude, longitude) = Tools.GetCoordinates(call.Address);
         var callToUpdate = new DO.Call
@@ -216,6 +217,7 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlDeleteImpossible">if there is not a call with that id or call is not open or assigned to a volunteer</exception>
     public void Delete(int id)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         if (_dal.Call.Read(id) == null)
             throw new BO.BlDoesNotExistException($"Call with id {id} does not exists");
         if (!Helpers.CallManager.AssignmentsListForCall(id).Any() && Helpers.CallManager.GetCallStatus(id) == BO.FinishCallType.Open)
@@ -247,6 +249,7 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlCoordinatesException">if there is an exception when calculate the lat and lon</exception>
     public void Create(BO.Call call)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         if (call.Address is null)
             throw new BO.BlIllegalValues("address can not be null");
         if (call.OpenTime > call.MaxCloseTime || call.MaxCloseTime < AdminManager.Now)
@@ -352,6 +355,7 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlFinishProcessIllegalException">if the assignment is not with this volunteer or the call wasn't in prociss</exception>
     public void FinishProcess(int volunteerId, int assignmentId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         var assignment = _dal.Assignment.Read(a => a.Id == assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id {assignmentId} does not exist");
         if (assignment.VolunteerId != volunteerId)
             throw new BO.BlFinishProcessIllegalException("this assignment is not with this volunteer");
@@ -385,6 +389,7 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlCancelProcessIllegalException">when trying to cancel finished assignment</exception>
     public void CancelProcess(int userId, int assignmentId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         var volunteer = _dal.Volunteer.Read(v => v.Id == userId) ??
             throw new BO.BlDoesNotExistException($"Volunteer with id {userId} does not exists");
         var assignment = _dal.Assignment.Read(a => a.Id == assignmentId) ??
@@ -432,6 +437,7 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlDoesNotExistException">if there is not volunteer or assignment with these ids</exception>
     public void ChooseCall(int volunteerId, int callId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         var assignments = Helpers.CallManager.AssignmentsListForCall(callId).Where(a => a.FinishType == null);
         if (assignments.Any())
             throw new BO.BlIllegalChoseCallException($"Call {callId} is in process");

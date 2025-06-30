@@ -20,12 +20,15 @@ internal class AdminImplentaition : IAdmin
     /// <summary>
     /// Initialization db and clock
     /// </summary>
-    public void InitializationDB()
+    public void InitializationDB() //stage 4
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         DalTest.Initialization.Do();
         AdminManager.UpdateClock(AdminManager.Now);
+        AdminManager.RiskRange = AdminManager.RiskRange;
 
     }
+
 
     /// <summary>
     /// advance the clock by a unit time
@@ -34,6 +37,7 @@ internal class AdminImplentaition : IAdmin
 
     public void AdvanceClock(BO.TimeUnit timeUnit)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         switch (timeUnit)
         {
             case BO.TimeUnit.Minute:
@@ -66,11 +70,12 @@ internal class AdminImplentaition : IAdmin
     /// <summary>
     /// Reset db and clock
     /// </summary>
-    public void ResetDB()
+    public void ResetDB() //stage 4
     {
-        _dal.ResetDB();
-        AdminManager.UpdateClock(AdminManager.Now);
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.ResetDB(); //stage 7
     }
+
 
     /// <summary>
     /// set the risk range
@@ -78,15 +83,26 @@ internal class AdminImplentaition : IAdmin
     /// <param name="riskRange">the new risk range</param>
     public void SetRiskRange(TimeSpan riskRange)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         AdminManager.RiskRange = riskRange;
     }
 
+    public void StartSimulator(int interval)  //stage 7
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.Start(interval); //stage 7
+    }
+
+    public void StopSimulator()
+    => AdminManager.Stop(); //stage 7
+
     public void AddClockObserver(Action clockObserver) =>
-AdminManager.ClockUpdatedObservers += clockObserver;
+    AdminManager.ClockUpdatedObservers += clockObserver;
     public void RemoveClockObserver(Action clockObserver) =>
     AdminManager.ClockUpdatedObservers -= clockObserver;
     public void AddConfigObserver(Action configObserver) =>
    AdminManager.ConfigUpdatedObservers += configObserver;
     public void RemoveConfigObserver(Action configObserver) =>
     AdminManager.ConfigUpdatedObservers -= configObserver;
+
 }

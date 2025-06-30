@@ -4,6 +4,7 @@ namespace Dal;
 using DalApi;
 using DO;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Inheriting and realizing IDal = Interface which contains fields of the entities' interfaces and declare their reset 

@@ -125,3 +125,12 @@ public class BlUpdateImpossibleException(string? message) : Exception(message)
 public class BlIllegalChoseCallException(string? message) : Exception(message)
 {
 }
+
+/// <summary>
+/// exception to when trying to use a resource which used by another thread
+/// </summary>
+/// <param name="message">exception message</param>
+[Serializable]
+public class BLTemporaryNotAvailableException(string? message) : Exception(message)
+{
+}

@@ -20,6 +20,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <exception cref="BO.BlAlreadyExistsException">to when trying to add a volunteer with already exist id</exception>
     public void Create(BO.Volunteer volunteer)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         VolunteerManager.CheckValidation(volunteer);
 
         if (volunteer.Address is not null)
@@ -55,6 +56,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <exception cref="BO.BlDeleteImpossible">to when there is not any volunteer with that id</exception>
     public void Delete(int id)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         var assingments = _dal.Assignment.ReadAll();
         if (assingments.Any(a => a.VolunteerId == id && a.FinishTime == null))
             throw new BO.BlDeleteImpossible($"volunteer with Id {id} cannot be deleted because he is handling a call.");
@@ -160,6 +162,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <exception cref="BO.BlDoesNotExistException">there is not any volunteer with the id like the parameter volunteer</exception>
     public void Update(int id, BO.Volunteer volunteer)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         DO.Volunteer? requester = _dal.Volunteer.Read(id);
         if (requester is null || (volunteer.Id != id && requester.Role != DO.Role.Manager))
             return;

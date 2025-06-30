@@ -1,5 +1,6 @@
 ﻿
 using DalApi;
+using System.Runtime.CompilerServices;
 namespace Dal;
 
 /// <summary>
@@ -12,7 +13,9 @@ internal class ConfigImplementation : IConfig
     /// </summary>
     public DateTime Clock   
     {
+        [MethodImpl(MethodImplOptions.Synchronized)]
         get => Config.Clock;
+        [MethodImpl(MethodImplOptions.Synchronized)]
         set => Config.Clock = value;
     }
 
@@ -21,13 +24,16 @@ internal class ConfigImplementation : IConfig
     /// </summary>
     public TimeSpan RiskRange 
     {
+        [MethodImpl(MethodImplOptions.Synchronized)]
         get => Config.RiskRange;
+        [MethodImpl(MethodImplOptions.Synchronized)]
         set => Config.RiskRange = value;
     }
 
     /// <summary>
     /// Reset config's fields
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Reset() 
     {
         Config.Reset();

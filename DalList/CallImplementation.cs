@@ -2,6 +2,7 @@
 
 using DO;
 
+using System.Runtime.CompilerServices;
 namespace Dal;
 
 /// <summary>
@@ -13,6 +14,7 @@ internal class CallImplementation : ICall
     /// create a new call and add to the list
     /// </summary>
     /// <param name="item">a call object to add to the list</param>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Call item)
     {
         int id = Config.NextCallId;
@@ -25,6 +27,7 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="id">id of call</param>
     /// <exception cref="DalDeleteImpossible">throwed when there is not call with that id</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     { 
         Call? thisCall = DataSource.Calls.Find(c => c.Id == id);
@@ -36,6 +39,7 @@ internal class CallImplementation : ICall
     /// <summary>
     /// delete all calls
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
        DataSource.Calls.Clear();
@@ -46,6 +50,7 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="id">id of a call</param>
     /// <returns>a call with that id</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Call? Read(int id)
     {
         return DataSource.Calls.FirstOrDefault(c => c.Id == id);
@@ -56,6 +61,7 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="filter">function which get a call and returns true of false</param>
     /// <returns>first call in datasource.calls which return true to filter function</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Call? Read(Func<Call, bool> filter)
     {
         return DataSource.Calls.FirstOrDefault(c => filter(c));
@@ -66,8 +72,8 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="filter">function which get a call and returns true of false. Can be null</param>
     /// <returns>all calls which the filter returns true to them, of all the call if filter is null</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null) //stage 2
-
     {
         return filter == null
             ? DataSource.Calls.Select(item => item)
@@ -80,6 +86,7 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="item">a call</param>
     /// <exception cref="DalDoesNotExistException">throwed when there is not call with that id</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Call item)
     {
         //update call according to id of item

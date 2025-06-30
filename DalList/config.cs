@@ -1,4 +1,5 @@
-﻿namespace Dal;
+﻿using System.Runtime.CompilerServices;
+namespace Dal;
 
 /// <summary>
 /// Configuration Entity provide 4 static fields to other records in the volunteers organization
@@ -19,9 +20,24 @@ static internal class Config
     private static int nextAssignmentId = startAssigmentId;
     internal static int NextAssignmentId { get => nextAssignmentId++; }
 
-    internal static DateTime Clock { get; set; } = new DateTime(2024, 1, 1);
-    public static TimeSpan RiskRange { get; set; }
+    internal static DateTime Clock
+    {
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        get;
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        set;
+    } = new DateTime(2024, 1, 1);
 
+    public static TimeSpan RiskRange
+    {
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        get;
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        set;
+    }
+
+
+    [MethodImpl(MethodImplOptions.Synchronized)]
     internal static void Reset()
     {
         nextCallId = startCallId;

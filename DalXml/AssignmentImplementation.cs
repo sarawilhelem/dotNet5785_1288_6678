@@ -3,6 +3,7 @@ namespace Dal;
 using DalApi;
 using DO;
 using System;
+using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 
 /// <summary>
@@ -14,6 +15,7 @@ internal class AssignmenImplementaion : IAssignment
     /// create new assignment
     /// </summary>
     /// <param name="item">an item to add to the list</param>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Assignment item)
     {
         List<Assignment> Assignments = XMLTools.LoadListFromXMLSerializer<Assignment>(Config.s_assignments_xml);
@@ -28,6 +30,7 @@ internal class AssignmenImplementaion : IAssignment
     /// </summary>
     /// <param name="id">id of an assignment which it has to be deleted</param>
     /// <exception cref="DalDeleteImpossible">exception when delete was failed because assignment with tha id was not found</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         List<Assignment> Assignments = XMLTools.LoadListFromXMLSerializer<Assignment>(Config.s_assignments_xml);
@@ -40,6 +43,7 @@ internal class AssignmenImplementaion : IAssignment
     /// <summary>
     /// delete all assignments
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         XMLTools.SaveListToXMLSerializer(new List<Assignment>(), Config.s_assignments_xml);
@@ -50,6 +54,7 @@ internal class AssignmenImplementaion : IAssignment
     /// </summary>
     /// <param name="id">id of an assignment to read</param>
     /// <returns>the assignment with that id</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Assignment? Read(int id)
     {
         List<Assignment> Assignments = XMLTools.LoadListFromXMLSerializer<Assignment>(Config.s_assignments_xml);
@@ -62,6 +67,7 @@ internal class AssignmenImplementaion : IAssignment
     /// </summary>
     /// <param name="filter">a function who accepts an assignment and returns to it true or false</param>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Assignment? Read(Func<Assignment, bool> filter)
     {
         List<Assignment> Assignments = XMLTools.LoadListFromXMLSerializer<Assignment>(Config.s_assignments_xml);
@@ -73,6 +79,7 @@ internal class AssignmenImplementaion : IAssignment
     /// </summary>
     /// <param name="filter">a function who accepts an assignment and returns to it true or false if any function wasn't sended filter=null</param>
     /// <returns>all the assignments who returns true to filter, or all the assignments if filter=null</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null) //stage 2
     {
         List<Assignment> Assignments = XMLTools.LoadListFromXMLSerializer<Assignment>(Config.s_assignments_xml);
@@ -86,6 +93,7 @@ internal class AssignmenImplementaion : IAssignment
     /// </summary>
     /// <param name="item">an assignment to update the assignment with the same id like it</param>
     /// <exception cref="DalDoesNotExistException">an exception if there is not any assignment with that id</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Assignment item)
     {
         List<Assignment> Assignments = XMLTools.LoadListFromXMLSerializer<Assignment>(Config.s_assignments_xml);

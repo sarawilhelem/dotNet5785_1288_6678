@@ -4,6 +4,7 @@ namespace Dal;
 using DalApi;
 using DO;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Class which contains all entities' implementations and has a function to reset them

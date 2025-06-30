@@ -37,6 +37,9 @@ public interface IAdmin
     /// Initialization db and clock
     /// </summary>
     public void InitializationDB();
+    void StartSimulator(int interval); //stage 7
+    void StopSimulator(); //stage 7
+
 
     void AddConfigObserver(Action configObserver);
     void RemoveConfigObserver(Action configObserver);
