@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using BO;
+using System.Runtime.CompilerServices;
 
 namespace Helpers;
 
@@ -153,6 +154,7 @@ internal static class AdminManager //stage 4
 
             }
             catch (ThreadInterruptedException) { }
+            catch (BLTemporaryNotAvailableException) { }
         }
     }
     #endregion Stage 7 base
