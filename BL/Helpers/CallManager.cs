@@ -19,9 +19,8 @@ internal class CallManager
     {
         DO.Call prevCall;
         lock (AdminManager.BlMutex)
-            prevCall = s_dal.Call.Read(c => c.Id == call.Id);
-        if (prevCall is null)
-            throw new BlDoesNotExistException($"Call with id {call.Id} does not exists");
+            prevCall = s_dal.Call.Read(c => c.Id == call.Id) ??
+                throw new BO.BlDoesNotExistException($"Call with id {call.Id} does not exists");
         if (call.Status == FinishCallType.Close || call.Status == FinishCallType.Expired)
             throw new BlUpdateImpossibleException("Closed and expired call can not be updated");
         if (call.Status == FinishCallType.InProcess || call.Status == FinishCallType.InProcessInRisk)
