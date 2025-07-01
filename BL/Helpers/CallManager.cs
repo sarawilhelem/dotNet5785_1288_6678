@@ -1,7 +1,5 @@
-﻿using BO;
-using DalApi;
+﻿using DalApi;
 using BlImplementation;
-using DO;
 
 namespace Helpers;
 
@@ -22,13 +20,13 @@ internal class CallManager
         lock (AdminManager.BlMutex)
             prevCall = s_dal.Call.Read(c => c.Id == call.Id) ??
                 throw new BO.BlDoesNotExistException($"Call with id {call.Id} does not exists");
-        if (call.Status == FinishCallType.Close || call.Status == FinishCallType.Expired)
-            throw new BlUpdateImpossibleException("Closed and expired call can not be updated");
-        if (call.Status == FinishCallType.InProcess || call.Status == FinishCallType.InProcessInRisk)
+        if (call.Status ==BO.FinishCallType.Close || call.Status == BO.FinishCallType.Expired)
+            throw new BO.BlUpdateImpossibleException("Closed and expired call can not be updated");
+        if (call.Status == BO.FinishCallType.InProcess || call.Status == BO.FinishCallType.InProcessInRisk)
         {
             if(prevCall!.Description != call.Description || (BO.CallType)prevCall.CallType != call.Type || 
                 prevCall.Address != call.Address )
-                throw new BlUpdateImpossibleException("Processed call can not be updated except for max close time");
+                throw new BO.BlUpdateImpossibleException("Processed call can not be updated except for max close time");
 
         }
         if (call.OpenTime > call.MaxCloseTime || call.MaxCloseTime < AdminManager.Now)
@@ -92,24 +90,24 @@ internal class CallManager
     /// </summary>
     /// <param name="id">the call id</param>
     /// <returns>the call status</returns>
-    public static FinishCallType GetCallStatus(int id)
+    public static BO.FinishCallType GetCallStatus(int id)
     {
-        DO.Call call;
-        IEnumerable<Assignment> assignmentsList;
+        DO.Call? call;
+        IEnumerable<DO.Assignment> assignmentsList;
         lock (AdminManager.BlMutex)
-         call = s_dal.Call.Read(c => c.Id == id);
+            call = s_dal.Call.Read(c => c.Id == id);
         lock (AdminManager.BlMutex)
             assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == id);
         var isProcesseds = assignmentsList.Any(a => a.FinishType == DO.FinishType.Processed);
         if (isProcesseds)
         {
-            return FinishCallType.Close;
+            return BO.FinishCallType.Close;
         }
         else
         {
             if (call is null || RestTimeForCall(call) == TimeSpan.Zero)
             {
-                return FinishCallType.Expired;
+                return BO.FinishCallType.Expired;
             }
             else
             {
@@ -117,15 +115,15 @@ internal class CallManager
                 if(isInProcess)
                 {
                     if ((call.MaxCloseTime - AdminManager.Now) <= s_dal.Config.RiskRange)
-                        return FinishCallType.InProcessInRisk;
-                    return FinishCallType.InProcess;
+                        return BO.FinishCallType.InProcessInRisk;
+                    return BO.FinishCallType.InProcess;
                 }
 
                 else
                 {
                     if ((call.MaxCloseTime - AdminManager.Now) <= s_dal.Config.RiskRange)
-                        return FinishCallType.OpenInRisk;
-                    return FinishCallType.Open;
+                        return BO.FinishCallType.OpenInRisk;
+                    return BO.FinishCallType.Open;
                 }
             }
         }
@@ -164,7 +162,7 @@ internal class CallManager
     /// <returns>before how many time, or null if never</returns>
     public static TimeSpan? CalculateAssignmentDuration(DO.Call call)
     {
-        Assignment assignment;
+        DO.Assignment? assignment;
         lock (AdminManager.BlMutex)
             assignment = s_dal.Assignment.Read(a => a.CallId == call.Id && a.FinishType == DO.FinishType.Processed);
         if (assignment != null)
@@ -203,7 +201,7 @@ internal class CallManager
     /// <returns>how many assignments is has</returns>
     public static int GetAmountOfAssignments(DO.Call call)
     {
-        IEnumerable<Assignment> assignmentsList;
+        IEnumerable<DO.Assignment> assignmentsList;
         lock (AdminManager.BlMutex)
             assignmentsList = s_dal.Assignment.ReadAll(a => a.CallId == call.Id);
         return assignmentsList.Count();
@@ -284,7 +282,7 @@ internal class CallManager
                 }
             }
         }
-        catch (BlIllegalValues ex)
+        catch (BO.BlIllegalValues ex)
         {
             throw new BO.BlIllegalValues(ex.Message);
         }
@@ -332,7 +330,7 @@ internal class CallManager
         callUpdated = false; //stage 5
         foreach (var call in callsList) //stage 4
         {
-            if (call.MaxCloseTime <= TimeSpan.Zero && (call.Status == FinishCallType.InProcessInRisk || call.Status == FinishCallType.InProcess))
+            if (call.MaxCloseTime <= TimeSpan.Zero && (call.Status == BO.FinishCallType.InProcessInRisk || call.Status == BO.FinishCallType.InProcess))
             {
                 callUpdated = true; //stage 5
                 DO.Assignment doAssignment;
@@ -349,6 +347,21 @@ internal class CallManager
             CallManager.Observers.NotifyListUpdated();
             VolunteerManager.Observers.NotifyListUpdated();
         }
+    }
+
+    internal static void Update(DO.Call call)
+    {
+        s_dal.Call.Update(call);
+    }
+
+    internal static void Create(DO.Call call)
+    {
+        s_dal.Call.Create(call);
+    }
+
+    internal static void Delete(int callId)
+    {
+        s_dal.Call.Delete(callId);
     }
 
 }
