@@ -81,7 +81,6 @@ internal class CallImplentation : ICall
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CallManager.CheckValidation(call);
 
-        // יצירת DO.Call מבלי לחשב את הקואורדינטות
         DO.Call callToUpdate = new DO.Call
         {
             CallType = (DO.CallType)call.Type,
@@ -184,6 +183,7 @@ internal class CallImplentation : ICall
                     Helpers.CallManager.Update(doCall);
                 }
                 CallManager.Observers.NotifyListUpdated();
+                CallManager.Observers.NotifyItemUpdated(doCall.Id);
             }
         }
     }
@@ -225,6 +225,15 @@ internal class CallImplentation : ICall
             _ => closedCalls.OrderBy(call => call.Id),
         };
         return closedCalls;
+    }
+
+    public string? GetDirectionsLink(string? startAddress, string endAddress)
+    {
+        if (string.IsNullOrEmpty(startAddress)) return null;
+
+        string start = Uri.EscapeDataString(startAddress);
+        string end = Uri.EscapeDataString(endAddress);
+        return $"https://www.google.com/maps/dir/{start}/{end}";
     }
 
     /// <summary>

@@ -118,15 +118,22 @@ internal static class AdminManager //stage 4
     }
 
     [MethodImpl(MethodImplOptions.Synchronized)] //stage 7                                                 
-    internal static void Stop()
+    internal static Task Stop()
     {
-        if (s_thread is not null)
+        Thread? threadToJoin = null;
+        lock (typeof(AdminManager))
         {
-            s_stop = true;
-            s_thread.Interrupt(); //awake a sleeping thread
-            s_thread.Name = "ClockRunner stopped";
-            s_thread = null;
+            if (s_thread is not null)
+            {
+                s_stop = true;
+                s_thread.Interrupt();
+                threadToJoin = s_thread;
+                s_thread = null;
+            }
         }
+        return threadToJoin != null
+            ? Task.Run(() => threadToJoin.Join())
+            : Task.CompletedTask;
     }
 
 

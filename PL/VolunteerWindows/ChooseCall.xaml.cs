@@ -2,28 +2,19 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Windows.Navigation;
 using System.Windows.Threading;
 
 namespace PL.VolunteerWindows
 {
-    /// <summary>
-    /// Interaction logic for ChooseCall.xaml
-    /// </summary>
     public partial class ChooseCall : Window, INotifyPropertyChanged
     {
-        private volatile DispatcherOperation? _observerOperation = null; //stage 7
-
+        private volatile DispatcherOperation? _observerOperation = null;
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         static int volunteerId;
 
@@ -43,17 +34,37 @@ namespace PL.VolunteerWindows
                 {
                     _selectedCall = value;
                     OnPropertyChanged(nameof(SelectedCall));
+                    UpdateMapLink();
                 }
             }
         }
+
+        private string? _mapLink;
+        public string? MapLink
+        {
+            get => _mapLink;
+            set
+            {
+                if (_mapLink != value)
+                {
+                    _mapLink = value;
+                    OnPropertyChanged(nameof(MapLink));
+                    OnPropertyChanged(nameof(MapLinkVisibility));
+                }
+            }
+        }
+
+        public Visibility MapLinkVisibility =>
+            string.IsNullOrEmpty(MapLink) ? Visibility.Collapsed : Visibility.Visible;
+
         public ICommand ChooseCallCommand { get; }
 
         public static readonly DependencyProperty CallListProperty =
-           DependencyProperty.Register(
+            DependencyProperty.Register(
                 "CallList",
                 typeof(IEnumerable<BO.OpenCallInList>),
                 typeof(ChooseCall)
-           );
+            );
 
         private string _selectedSortField;
         public string SelectedSortField
@@ -94,58 +105,72 @@ namespace PL.VolunteerWindows
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             s_bl.Call.AddObserver(UpdateCallsList);
-            UpdateCallsList(); // Load initial call list
+            UpdateCallsList();
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
             s_bl.Call.RemoveObserver(UpdateCallsList);
         }
+
         private void UpdateCallsList()
         {
             if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
                 _observerOperation = Dispatcher.BeginInvoke(() =>
-                { 
+                {
                     var selectedId = SelectedCall?.Id;
-            BO.OpenCallInListFields? sortField = GetSelectedSortField();
-            BO.CallType? callType = GetSelectedCallType();
+                    BO.OpenCallInListFields? sortField = GetSelectedSortField();
+                    BO.CallType? callType = GetSelectedCallType();
+                    try
+                    {
+                        CallList = s_bl!.Call.ReadAllVolunteerOpenCalls(volunteerId, callType, sortField);
+
+                        if (selectedId != null)
+                            SelectedCall = CallList?.FirstOrDefault(c => c.Id == selectedId);
+                        else
+                            SelectedCall = null;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Failed to load calls list", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                });
+        }
+
+        private void UpdateMapLink()
+        {
+            if (SelectedCall == null)
+            {
+                MapLink = null;
+                return;
+            }
+
             try
             {
-                CallList = s_bl!.Call.ReadAllVolunteerOpenCalls(volunteerId, callType, sortField);
-
-                // Restore selected call if possible
-                if (selectedId != null)
-                    SelectedCall = CallList?.FirstOrDefault(c => c.Id == selectedId);
-                else
-                    SelectedCall = null; // זה מפעיל OnPropertyChanged
+                var volunteer = s_bl.Volunteer.Read(volunteerId);
+                MapLink = s_bl.Call.GetDirectionsLink(volunteer?.Address, SelectedCall.Address);
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show(ex.Message, "Failed to load calls list", MessageBoxButton.OK, MessageBoxImage.Error);
+                MapLink = null;
             }
-        });
         }
 
         private BO.OpenCallInListFields? GetSelectedSortField()
         {
             if (string.IsNullOrEmpty(SelectedSortField))
-            {
-                return null; // Return null if no field is selected
-            }
+                return null;
 
             if (Enum.TryParse(typeof(BO.OpenCallInListFields), SelectedSortField, out var result))
-            {
-                return (BO.OpenCallInListFields?)result; // Safely return the parsed value
-            }
+                return (BO.OpenCallInListFields?)result;
+
             return null;
         }
 
         private BO.CallType? GetSelectedCallType()
         {
             if (string.IsNullOrEmpty(SelectedCallType))
-            {
                 return null;
-            }
 
             if (Enum.TryParse(typeof(BO.CallType), SelectedCallType, out var result))
             {
@@ -165,7 +190,7 @@ namespace PL.VolunteerWindows
                 MessageBox.Show("Succeed to choose the call", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -176,5 +201,14 @@ namespace PL.VolunteerWindows
             UpdateCallsList();
         }
 
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new ProcessStartInfo
+            {
+                FileName = e.Uri.AbsoluteUri,
+                UseShellExecute = true
+            });
+            e.Handled = true;
+        }
     }
 }

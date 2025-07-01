@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.VolunteerWindows"
         mc:Ignorable="d"
-        Title="VolunteerWindow" Height="680" Width="400" Padding="50"
+        Title="VolunteerWindow" Height="750" Width="400" Padding="50"
         Loaded="Window_Loeded" Closed="Window_Closed"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid>
@@ -62,7 +62,6 @@
         <TextBox Text="{Binding CurrentVolunteer.MaxDistance, Mode=TwoWay}" PreviewTextInput="NumberTextBox_PreviewTextInput"
                  Width="200" Grid.Row="8" Grid.Column="1"/>
 
-
         <ContentControl Grid.Row="9" Grid.ColumnSpan="2" Margin="50,0,0,0" 
                         Visibility="{Binding CurrentVolunteer.Call, Converter={StaticResource NullToVisibilityConverterKey}}">
             <StackPanel Orientation="Vertical">
@@ -88,6 +87,13 @@
                     <Label Content="{Binding CurrentVolunteerCall.Address, Mode=OneWay}" Width="200"/>
                 </StackPanel>
 
+                <TextBlock Margin="5,5,0,0">
+                <Hyperlink NavigateUri="{Binding MapLink}" 
+                           RequestNavigate="Hyperlink_RequestNavigate">
+                           Open in map
+                </Hyperlink>
+                </TextBlock>
+
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Open Time:" HorizontalAlignment="Left"/>
                     <Label Content="{Binding CurrentVolunteerCall.OpenTime, Mode=OneWay}" Width="200"/>
@@ -103,7 +109,14 @@
                     <Label Content="{Binding CurrentVolunteerCall.Status, Mode=OneWay}" Width="200"/>
                 </StackPanel>
 
-                <Label Content="Call Assign List:" HorizontalAlignment="Left" Grid.Row="7"/>
+                <StackPanel Orientation="Horizontal" 
+                          Visibility="{Binding MapLink, Converter={StaticResource NullToVisibilityConverterKey}}">
+                    <Label Content="Directions:" HorizontalAlignment="Left"/>
+                    <Label Content="{Binding CurrentVolunteerCall.Description, Mode=OneWay}" Width="200"/>
+                </StackPanel>
+                
+
+                <Label Content="Call Assign List:" HorizontalAlignment="Left"/>
                 <ListView Margin="0,0,30,0" ItemsSource="{Binding CurrentVolunteerCall.CallAssignList}">
                     <ListView.View>
                         <GridView>
@@ -131,6 +144,7 @@
         </ContentControl>
         <Button Content="Update Details" Click="BtnUpdate_Click" Width="150" Grid.Row="12" Grid.ColumnSpan="2"/>
         <Button Content="Calls History" Click="BtnCallsHistory_Click" Width="150" Grid.Row="13" Grid.ColumnSpan="2"/>
-        <Button Content="Choose Call" Click="BtnChooseCall_Click"  Width="150" Grid.Row="14" Grid.ColumnSpan="2" IsEnabled="{Binding CurrentVolunteer, Converter={StaticResource VolunteerCanSelectCallConverter}}"/>
+        <Button Content="Choose Call" Click="BtnChooseCall_Click"  Width="150" Grid.Row="14" Grid.ColumnSpan="2" 
+                IsEnabled="{Binding CurrentVolunteer, Converter={StaticResource VolunteerCanSelectCallConverter}}"/>
     </Grid>
 </Window>

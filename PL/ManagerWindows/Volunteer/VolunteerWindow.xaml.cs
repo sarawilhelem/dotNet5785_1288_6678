@@ -53,18 +53,18 @@ public partial class VolunteerWindow : Window
         }
     }
 
-    private void BtnAddUpdate_Click(object sender, RoutedEventArgs e)
+    private async void BtnAddUpdate_Click(object sender, RoutedEventArgs e)
     {        
         try
         {
             if (CurrentVolunteer == null)
                 throw new NullReferenceException("currentVolunteer is null");
             else if (ButtonText == "ADD")
-                s_bl.Volunteer.Create(CurrentVolunteer);
+                await s_bl.Volunteer.Create(CurrentVolunteer);
             else
             {
                 int userId = (int)Application.Current.Resources["UserIdKey"];
-                s_bl.Volunteer.Update(userId, CurrentVolunteer);
+                await s_bl.Volunteer.Update(userId, CurrentVolunteer);
             };
             MessageBox.Show($"Succeed to {ButtonText} volunteer {CurrentVolunteer.Id}", "success", 
                 MessageBoxButton.OK, MessageBoxImage.Information);

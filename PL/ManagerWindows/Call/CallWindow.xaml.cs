@@ -59,7 +59,7 @@ namespace PL.ManagerWindows.Call
             }
         }
 
-        private void BtnAddUpdate_Click(object sender, RoutedEventArgs e)
+        private async void BtnAddUpdate_Click(object sender, RoutedEventArgs e)
         {
 
             try
@@ -68,13 +68,13 @@ namespace PL.ManagerWindows.Call
                     throw new NullReferenceException("currentCall is null");
                 else if (ButtonText == "ADD")
                 {
-                    s_bl.Call.Create(CurrentCall);
+                    await s_bl.Call.Create(CurrentCall);
                     MessageBox.Show($"Succeed to ADD Call", "success",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
-                    s_bl.Call.Update(CurrentCall);
+                    await s_bl.Call.Update(CurrentCall);
                     MessageBox.Show($"Succeed to UPDATE Call {CurrentCall.Id}", "success",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 }

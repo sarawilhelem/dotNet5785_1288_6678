@@ -1,6 +1,7 @@
 ﻿namespace DalTest;
 using DalApi;
 using DO;
+using static System.Net.WebRequestMethods;
 
 
 public static class Initialization

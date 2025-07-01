@@ -26,5 +26,6 @@
         <pl:VolunteerCanSelectCallConverter x:Key="VolunteerCanSelectCallConverter"/>
         <pl:FilterFieldsCollection x:Key="FilterFieldCollectionKey"/>
         <pl:BoolToStartStopConverter x:Key="BoolToStartStopConverter"/>
+        <pl:BooleanInverseConverter x:Key="BooleanInverseConverter"/>
     </Application.Resources>
 </Application>

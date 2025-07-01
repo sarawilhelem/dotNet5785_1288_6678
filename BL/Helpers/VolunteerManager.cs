@@ -280,9 +280,9 @@ internal static class VolunteerManager
                 var volunteerDetails = bl.Volunteer.Read(volunteer.Id);
                 var callDetails = bl.Call.Read(volunteer.CallId.Value)!;
                 var distance = CalculateDistance(volunteerDetails.Latitude, volunteerDetails.Longitude, callDetails?.Latitude, callDetails?.Longitude);
-                if (volunteerDetails.Call!.Insersion.AddHours(distance * 2 + 2) < AdminManager.Now)
+                if (volunteerDetails.Call!.Insersion.AddHours(distance * 1000 + 2000) < AdminManager.Now)
                     CallManager.FinishProcess(volunteer.Id, volunteerDetails.Call.Id);
-                else if (rand.Next(0, 10) == 6)
+                else if (rand.Next(0, 10) == 0)
                     CallManager.CancelProcess(volunteer.Id, volunteerDetails.Call!.Id);
             }
         }

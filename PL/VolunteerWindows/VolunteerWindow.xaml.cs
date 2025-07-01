@@ -1,20 +1,23 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using System.Windows.Threading;
 
 namespace PL.VolunteerWindows
 {
     public partial class VolunteerWindow : Window, INotifyPropertyChanged
     {
-        private volatile DispatcherOperation? _observerOperation = null; //stage 7
+        private volatile DispatcherOperation? _observerOperation = null;
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
 
         private BO.Volunteer? _currentVolunteer;
         private BO.Call? _currentVolunteerCall;
+        private string? _mapLink;
 
         private int volunteerId;
 
@@ -28,6 +31,7 @@ namespace PL.VolunteerWindows
                     _currentVolunteer = value;
                     OnPropertyChanged(nameof(CurrentVolunteer));
                     UpdateCurrentVolunteerCall();
+                    UpdateMapLink();
                 }
             }
         }
@@ -41,6 +45,20 @@ namespace PL.VolunteerWindows
                 {
                     _currentVolunteerCall = value;
                     OnPropertyChanged(nameof(CurrentVolunteerCall));
+                    UpdateMapLink();
+                }
+            }
+        }
+
+        public string? MapLink
+        {
+            get => _mapLink;
+            set
+            {
+                if (_mapLink != value)
+                {
+                    _mapLink = value;
+                    OnPropertyChanged(nameof(MapLink));
                 }
             }
         }
@@ -52,7 +70,6 @@ namespace PL.VolunteerWindows
             {
                 volunteerId = (int)Application.Current.Resources["UserIdKey"];
                 LoadVolunteer();
-
             }
             catch (Exception ex)
             {
@@ -73,7 +90,25 @@ namespace PL.VolunteerWindows
                 CurrentVolunteerCall = null;
         }
 
-        private void BtnUpdate_Click(object sender, RoutedEventArgs e)
+        private void UpdateMapLink()
+        {
+            if (CurrentVolunteer?.Address == null || CurrentVolunteerCall?.Address == null)
+            {
+                MapLink = null;
+                return;
+            }
+
+            try
+            {
+                MapLink = s_bl.Call.GetDirectionsLink(CurrentVolunteer.Address, CurrentVolunteerCall.Address);
+            }
+            catch
+            {
+                MapLink = null;
+            }
+        }
+
+        private async void BtnUpdate_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -81,7 +116,7 @@ namespace PL.VolunteerWindows
                     throw new NullReferenceException("CurrentVolunteer is null");
 
                 int userId = (int)Application.Current.Resources["UserIdKey"];
-                s_bl.Volunteer.Update(userId, CurrentVolunteer);
+                await s_bl.Volunteer.Update(userId, CurrentVolunteer);
                 MessageBox.Show($"Succeed to Update volunteer {CurrentVolunteer.Id} details", "success",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -158,8 +193,17 @@ namespace PL.VolunteerWindows
             }
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new ProcessStartInfo
+            {
+                FileName = e.Uri.AbsoluteUri,
+                UseShellExecute = true
+            });
+            e.Handled = true;
+        }
 
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
         {

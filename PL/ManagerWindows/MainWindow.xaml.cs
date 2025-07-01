@@ -9,7 +9,7 @@ namespace PL.ManagerWindows
     {
         private volatile DispatcherOperation? _clockObserverOperation = null;
         private volatile DispatcherOperation? _configObserverOperation = null;
-
+        private const int defaultInternal = 10000;
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private Call.CallListWindow callListWindow;
         private Volunteer.VolunteerListWindow? volunteerListWindow;
@@ -32,7 +32,7 @@ namespace PL.ManagerWindows
         }
 
         public static readonly DependencyProperty IntervalProperty =
-            DependencyProperty.Register("Interval", typeof(int), typeof(MainWindow), new PropertyMetadata(1));
+            DependencyProperty.Register("Interval", typeof(int), typeof(MainWindow), new PropertyMetadata(defaultInternal));
 
         public int Interval
         {
@@ -48,11 +48,11 @@ namespace PL.ManagerWindows
             get { return (bool)GetValue(IsSimulatorRunningProperty); }
             set { SetValue(IsSimulatorRunningProperty, value); }
         }
-        private void ToggleSimulator(object sender, RoutedEventArgs e)
+        private async void ToggleSimulator(object sender, RoutedEventArgs e)
         {
             if (IsSimulatorRunning)
             {
-                s_bl.Admin.StopSimulator();
+                await s_bl.Admin.StopSimulator();
                 IsSimulatorRunning = false;
             }
             else
@@ -134,10 +134,10 @@ namespace PL.ManagerWindows
                     callListWindow.Closed += (s, args) => callListWindow = null; // Reset reference when closed
                     callListWindow.Show();
                 }
+                else if(IsSimulatorRunning == true)
+                    new Call.CallListWindow().Show();
                 else
-                {
-                    callListWindow.Activate(); // Bring the existing window to the front
-                }
+                    callListWindow.Activate(); 
             }
             catch (Exception ex)
             {
@@ -155,6 +155,8 @@ namespace PL.ManagerWindows
                     volunteerListWindow.Closed += (s, args) => volunteerListWindow = null;
                     volunteerListWindow.Show();
                 }
+                else if (IsSimulatorRunning == true)
+                    new Volunteer.VolunteerListWindow().Show();
                 else
                 {
                     volunteerListWindow.Activate();

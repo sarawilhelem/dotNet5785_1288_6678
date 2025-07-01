@@ -38,7 +38,7 @@ public interface IAdmin
     /// </summary>
     public void InitializationDB();
     void StartSimulator(int interval); //stage 7
-    void StopSimulator(); //stage 7
+    Task StopSimulator(); //stage 7
 
 
     void AddConfigObserver(Action configObserver);

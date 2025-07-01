@@ -366,6 +366,7 @@ internal class CallManager
             CallManager.Observers.NotifyListUpdated();
             CallManager.Observers.NotifyItemUpdated(callId);
             VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
+            VolunteerManager.Observers.NotifyListUpdated();
         }
         else
         {
@@ -405,7 +406,7 @@ internal class CallManager
         CallManager.Observers.NotifyItemUpdated(assignment.CallId);
         CallManager.Observers.NotifyListUpdated();
         VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId);
-
+        VolunteerManager.Observers.NotifyListUpdated();
     }
 
     /// <summary>
@@ -445,7 +446,7 @@ internal class CallManager
                     CallManager.Observers.NotifyListUpdated();
                     CallManager.Observers.NotifyItemUpdated(assignment.CallId);
                     VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId);
-
+                    VolunteerManager.Observers.NotifyListUpdated();
                 }
                 catch
                 {

@@ -14,4 +14,5 @@ public interface ICall: IObservable
     public void FinishProcess(int volunteerId,int assignmentId);
     public void CancelProcess(int userId, int assignmentId);
     public void ChooseCall(int volunteerId, int callId);
+    string? GetDirectionsLink(string? startAddress, string endAddress);
 }

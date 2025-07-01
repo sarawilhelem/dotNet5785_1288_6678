@@ -91,8 +91,8 @@ internal class AdminImplentaition : IAdmin
         AdminManager.Start(interval); //stage 7
     }  
 
-    public void StopSimulator()
-    => AdminManager.Stop(); //stage 7
+    public async Task StopSimulator()
+    => await AdminManager.Stop();
 
     public void AddClockObserver(Action clockObserver) =>
     AdminManager.ClockUpdatedObservers += clockObserver;
