@@ -94,12 +94,10 @@ internal class CallImplentation : ICall
 
         try
         {
-            CallManager.Update(callToUpdate); // עדכון ה-DAL עם הפרטים הקיימים
+            CallManager.Update(callToUpdate); 
             VolunteerManager.Observers.NotifyListUpdated();
             CallManager.Observers.NotifyListUpdated();
             CallManager.Observers.NotifyItemUpdated(callToUpdate.Id);
-
-            // חישוב הקואורדינטות בצורה אסינכרונית מבלי לחכות לתוצאה
             _ = UpdateCoordinatesForCallAddressAsync(callToUpdate); //stage 7
         }
         catch
@@ -166,12 +164,10 @@ internal class CallImplentation : ICall
 
         lock (AdminManager.BlMutex)
         {
-            Helpers.CallManager.Create(callToAdd); // עדכון ה-DAL עם הפרטים הקיימים
+            Helpers.CallManager.Create(callToAdd);
         }
 
         CallManager.Observers.NotifyListUpdated();
-
-        // חישוב הקואורדינטות בצורה אסינכרונית מבלי לחכות לתוצאה
          _=UpdateCoordinatesForCallAddressAsync(callToAdd); 
     }
 

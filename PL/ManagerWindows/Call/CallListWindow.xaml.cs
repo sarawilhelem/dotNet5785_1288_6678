@@ -7,12 +7,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace PL.ManagerWindows.Call
 {
     public partial class CallListWindow : Window, INotifyPropertyChanged
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
+
 
         public IEnumerable<BO.CallInList> CallList
         {
@@ -76,10 +80,19 @@ namespace PL.ManagerWindows.Call
             SelectedFilterField = nameof(FilterFields.CallId);
         }
 
+        private void ListObserver()
+        {
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    UpdateCallsList();
+                });
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            s_bl.Call.AddObserver(UpdateCallsList);
-            UpdateCallsList(); // Load initial call list
+            s_bl.Call.AddObserver(ListObserver);
+            UpdateCallsList(); 
         }
 
         private void Window_Closed(object sender, EventArgs e)

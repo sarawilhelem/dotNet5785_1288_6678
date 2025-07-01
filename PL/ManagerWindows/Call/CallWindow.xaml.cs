@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PL.ManagerWindows.Call
 {
@@ -21,6 +22,8 @@ namespace PL.ManagerWindows.Call
     public partial class CallWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
+
         public BO.Call? CurrentCall
         {
             get { return (BO.Call?)GetValue(CurrentCallProperty); }
@@ -91,14 +94,17 @@ namespace PL.ManagerWindows.Call
         /// </summary>
         private void CallObserver()
         {
-            int id = CurrentCall!.Id;
-            CurrentCall = null;
-            CurrentCall = s_bl.Call.Read(id);
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    int id = CurrentCall!.Id;
+                    CurrentCall = null;
+                    CurrentCall = s_bl.Call.Read(id);
+                });
         }
 
         private void NumberTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // Regex to check if the input is a number
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
