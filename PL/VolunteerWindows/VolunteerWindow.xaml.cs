@@ -4,11 +4,13 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace PL.VolunteerWindows
 {
     public partial class VolunteerWindow : Window, INotifyPropertyChanged
     {
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
 
         private BO.Volunteer? _currentVolunteer;
@@ -166,7 +168,11 @@ namespace PL.VolunteerWindows
 
         private void VolunteerObserver()
         {
-            LoadVolunteer();
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    LoadVolunteer();
+                });
         }
 
         private void Window_Loeded(object sender, RoutedEventArgs e)

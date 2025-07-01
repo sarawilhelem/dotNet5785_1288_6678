@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 namespace PL.ManagerWindows.Volunteer
 {
     /// <summary>
@@ -13,6 +14,8 @@ namespace PL.ManagerWindows.Volunteer
     /// </summary>
     public partial class VolunteerListWindow : Window
     {
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
+
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
 
         private ObservableCollection<BO.VolunteerInList> _volunteerList = new ObservableCollection<BO.VolunteerInList>();
@@ -65,7 +68,11 @@ namespace PL.ManagerWindows.Volunteer
 
         private void VolunteerListObserver()
         {
-            UpdateVolunteersList();
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+                UpdateVolunteersList();
+                });
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

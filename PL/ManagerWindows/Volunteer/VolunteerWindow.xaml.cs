@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace PL.ManagerWindows.Volunteer;
 
@@ -14,6 +15,8 @@ namespace PL.ManagerWindows.Volunteer;
 /// </summary>
 public partial class VolunteerWindow : Window
 {
+    private volatile DispatcherOperation? _observerOperation = null; //stage 7
+
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     public BO.Volunteer? CurrentVolunteer
     {
@@ -76,9 +79,13 @@ public partial class VolunteerWindow : Window
     /// </summary>
     private void VolunteerObserver()
     {
-        int id = CurrentVolunteer!.Id;
-        CurrentVolunteer = null;
-        CurrentVolunteer = s_bl.Volunteer.Read(id);
+        if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+            _observerOperation = Dispatcher.BeginInvoke(() =>
+            {
+                int id = CurrentVolunteer!.Id;
+                CurrentVolunteer = null;
+                CurrentVolunteer = s_bl.Volunteer.Read(id);
+            });
     }
 
     private void NumberTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)

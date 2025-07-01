@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Windows.Threading;
 
 namespace PL.VolunteerWindows
 {
@@ -20,6 +21,8 @@ namespace PL.VolunteerWindows
     /// </summary>
     public partial class CallsHistory : Window
     {
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
+
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         static int volunteerId;
 
@@ -102,23 +105,27 @@ namespace PL.VolunteerWindows
         /// </summary>
         private void UpdateCallsList()
         {
-            var selectedId = SelectedCall?.Id;
-            BO.ClosedCallInListFields? sortField = GetSelectedSortField();
-            BO.CallType? callType = GetSelectedCallType();
-            try
-            {
-                CallList = s_bl!.Call.ReadAllVolunteerClosedCalls(volunteerId, callType, sortField);
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    var selectedId = SelectedCall?.Id;
+                    BO.ClosedCallInListFields? sortField = GetSelectedSortField();
+                    BO.CallType? callType = GetSelectedCallType();
+                    try
+                    {
+                        CallList = s_bl!.Call.ReadAllVolunteerClosedCalls(volunteerId, callType, sortField);
 
-                if (selectedId != null)
-                    SelectedCall = CallList?.FirstOrDefault(c => c.Id == selectedId);
-                else
-                    SelectedCall = null;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Failed to load calls list", MessageBoxButton.OK, MessageBoxImage.Error);
+                        if (selectedId != null)
+                            SelectedCall = CallList?.FirstOrDefault(c => c.Id == selectedId);
+                        else
+                            SelectedCall = null;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Failed to load calls list", MessageBoxButton.OK, MessageBoxImage.Error);
 
-            }
+                    }
+                });
         }
         private BO.ClosedCallInListFields? GetSelectedSortField()
         {
