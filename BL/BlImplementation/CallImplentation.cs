@@ -115,7 +115,7 @@ internal class CallImplentation : ICall
         AdminManager.ThrowOnSimulatorIsRunning();
         lock (AdminManager.BlMutex)
             if (_dal.Call.Read(id) == null)
-            throw new BO.BlDoesNotExistException($"Call with id {id} does not exists");
+                throw new BO.BlDoesNotExistException($"Call with id {id} does not exists");
         if (!Helpers.CallManager.AssignmentsListForCall(id).Any() && Helpers.CallManager.GetCallStatus(id) == BO.FinishCallType.Open)
         {
             try
@@ -151,21 +151,41 @@ internal class CallImplentation : ICall
         if (call.OpenTime > call.MaxCloseTime || call.MaxCloseTime < AdminManager.Now)
             throw new BO.BlIllegalDatesOrder("MaxCloseTime can't be before now or open time");
 
-        var (latitude, longitude) = await Tools.GetCoordinatesAsync(call.Address);
-
-        var callToAdd = new DO.Call
+        DO.Call callToAdd = new DO.Call
         {
             CallType = (DO.CallType)call.Type,
             Address = call.Address,
-            Latitude = latitude ?? throw new BO.BlCoordinatesException("Can't approach address"),
-            Longitude = longitude ?? throw new BO.BlCoordinatesException("Can't approach address"),
             OpenTime = Helpers.AdminManager.Now,
             MaxCloseTime = call.MaxCloseTime,
             Description = call.Description
         };
 
-        Helpers.CallManager.Create(callToAdd);
+        lock (AdminManager.BlMutex)
+        {
+            Helpers.CallManager.Create(callToAdd); // עדכון ה-DAL עם הפרטים הקיימים
+        }
+
         CallManager.Observers.NotifyListUpdated();
+
+        // חישוב הקואורדינטות בצורה אסינכרונית מבלי לחכות לתוצאה
+         _=UpdateCoordinatesForCallAddressAsync(callToAdd); 
+    }
+
+    private static async Task UpdateCoordinatesForCallAddressAsync(DO.Call doCall)
+    {
+        if (doCall.Address is not null)
+        {
+            var (latitude, longitude) = await Tools.GetCoordinatesAsync(doCall.Address);
+            if (latitude is not null && longitude is not null)
+            {
+                doCall = doCall with { Latitude = latitude.Value, Longitude = longitude.Value };
+                lock (AdminManager.BlMutex)
+                {
+                    Helpers.CallManager.Update(doCall);
+                }
+                CallManager.Observers.NotifyListUpdated();
+            }
+        }
     }
 
 
@@ -214,7 +234,7 @@ internal class CallImplentation : ICall
     /// <param name="callType">calls with which calltpye to return, can be null and then all the calls will return</param>
     /// <param name="sort">enum value to choose by which field to sort the calls</param>
     /// <returns>the open calls</returns>
-    public IEnumerable<BO.OpenCallInList>  ReadAllVolunteerOpenCalls(int volunteerId, BO.CallType? callType = null, BO.OpenCallInListFields? sort = null)
+    public IEnumerable<BO.OpenCallInList> ReadAllVolunteerOpenCalls(int volunteerId, BO.CallType? callType = null, BO.OpenCallInListFields? sort = null)
     {
         var openedCalls = CallManager.ReadAll();
         openedCalls = openedCalls.Where(a =>
@@ -224,7 +244,7 @@ internal class CallImplentation : ICall
         {
             DO.Call call;
             lock (AdminManager.BlMutex)
-                 call = _dal.Call.Read(c => c.Id == a.CallId)!;
+                call = _dal.Call.Read(c => c.Id == a.CallId)!;
             return new BO.OpenCallInList
             {
                 Id = a.CallId,
@@ -263,7 +283,7 @@ internal class CallImplentation : ICall
         AdminManager.ThrowOnSimulatorIsRunning();
         DO.Assignment assignment;
         lock (AdminManager.BlMutex)
-             assignment = _dal.Assignment.Read(a => a.Id == assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id {assignmentId} does not exist");
+            assignment = _dal.Assignment.Read(a => a.Id == assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id {assignmentId} does not exist");
         if (assignment.VolunteerId != volunteerId)
             throw new BO.BlFinishProcessIllegalException("this assignment is not with this volunteer");
 
@@ -376,7 +396,7 @@ internal class CallImplentation : ICall
     }
 
 
-  
+
 
     public void AddObserver(Action listObserver) =>
         CallManager.Observers.AddListObserver(listObserver);
