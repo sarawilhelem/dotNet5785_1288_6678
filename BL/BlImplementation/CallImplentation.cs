@@ -3,6 +3,7 @@ using BO;
 using Helpers;
 using System;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 
 
@@ -38,14 +39,6 @@ internal class CallImplentation : ICall
         return statusCounts;
     }
 
-    /// <summary>
-    /// read all calls, filtered and sorted according to the params
-    /// </summary>
-    /// <param name="filterBy">enum value to choose the field to filter</param>
-    /// <param name="filterParam">value to filter the field in Object type</param>
-    /// <param name="sortBy">enum value to choose the field to sort by it</param>
-    /// <returns>all calls filtered and sorted</returns>
-    /// <exception cref="BO.BlIllegalValues">if filterParam is not suitable to filterBy type</exception>
     public IEnumerable<BO.CallInList> ReadAll(BO.CallInListFields? filterBy = null, Object? filterParam = null, BO.CallInListFields? sortBy = null)
     {
         IEnumerable<DO.Call> callList;
@@ -431,8 +424,8 @@ internal class CallImplentation : ICall
                 {
                     Helpers.AssignmentManager.Update(newAssignment);
                     CallManager.Observers.NotifyListUpdated();
-                    CallManager.Observers.NotifyItemUpdated(assignment.CallId); 
-                    VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId); 
+                    CallManager.Observers.NotifyItemUpdated(assignment.CallId);
+                    VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId);
 
                 }
                 catch
@@ -483,14 +476,17 @@ internal class CallImplentation : ICall
 
     }
 
+
+  
+
     public void AddObserver(Action listObserver) =>
         CallManager.Observers.AddListObserver(listObserver);
     public void AddObserver(int id, Action observer) =>
-        CallManager.Observers.AddObserver(id, observer); 
+        CallManager.Observers.AddObserver(id, observer);
     public void RemoveObserver(Action listObserver) =>
-        CallManager.Observers.RemoveListObserver(listObserver); 
+        CallManager.Observers.RemoveListObserver(listObserver);
     public void RemoveObserver(int id, Action observer) =>
-        CallManager.Observers.RemoveObserver(id, observer); 
+        CallManager.Observers.RemoveObserver(id, observer);
 
 }
 

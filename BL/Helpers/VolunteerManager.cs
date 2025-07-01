@@ -203,4 +203,20 @@ internal static class VolunteerManager
         DateTime rangeStart = maxClose.Add(-range);
         return now >= rangeStart && now <= maxClose;
     }
+
+    internal static void Create(DO.Volunteer volunteer)
+    {
+        lock (AdminManager.BlMutex)
+            s_dal.Volunteer.Create(volunteer);
+    }
+    internal static void Update(DO.Volunteer volunteer)
+    {
+        lock (AdminManager.BlMutex)
+            s_dal.Volunteer.Update(volunteer);
+    }
+    internal static void Delete(int volunteerId)
+    {
+        lock (AdminManager.BlMutex)
+            s_dal.Volunteer.Delete(volunteerId);
+    }
 }

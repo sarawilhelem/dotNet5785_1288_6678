@@ -37,7 +37,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
 
         try
         {
-            _dal.Volunteer.Create(doVolunteer);
+            VolunteerManager.Create(doVolunteer);
             VolunteerManager.Observers.NotifyListUpdated();
             VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);
             CallManager.Observers.NotifyListUpdated();
@@ -57,13 +57,15 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     public void Delete(int id)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        var assingments = _dal.Assignment.ReadAll();
-        if (assingments.Any(a => a.VolunteerId == id && a.FinishTime == null))
+        IEnumerable<DO.Assignment> assignments;
+        lock (AdminManager.BlMutex)
+            assignments = _dal.Assignment.ReadAll();
+        if (assignments.Any(a => a.VolunteerId == id && a.FinishTime == null))
             throw new BO.BlDeleteImpossible($"volunteer with Id {id} cannot be deleted because he is handling a call.");
 
         try
         {
-            _dal.Volunteer.Delete(id);
+            VolunteerManager.Delete(id);
             VolunteerManager.Observers.NotifyListUpdated();
             CallManager.Observers.NotifyListUpdated();
         }
@@ -163,7 +165,9 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     public void Update(int id, BO.Volunteer volunteer)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        DO.Volunteer? requester = _dal.Volunteer.Read(id);
+        DO.Volunteer? requester;
+        lock (AdminManager.BlMutex) 
+            requester = _dal.Volunteer.Read(id);
         if (requester is null || (volunteer.Id != id && requester.Role != DO.Role.Manager))
             return;
         VolunteerManager.CheckValidation(volunteer);
@@ -176,27 +180,32 @@ internal class VolunteerImplentation : BlApi.IVolunteer
         }
         try
         {
-            DO.Volunteer? prevDoVolunteer = _dal.Volunteer.Read(volunteer.Id) ??
+            DO.Volunteer? prevDoVolunteer;
+            lock (AdminManager.BlMutex) 
+                prevDoVolunteer = _dal.Volunteer.Read(volunteer.Id) ??
                 throw new BO.BlDoesNotExistException($"volunteer with id {volunteer.Id} does not exist");
-            if (volunteer.Role == BO.Role.Volunteer && prevDoVolunteer.Role == DO.Role.Manager && !_dal.Volunteer.ReadAll(v => v.Role == DO.Role.Manager).Any())
-                throw new BO.BlUpdateImpossibleException($"Unable to update volunteer as there will be no managers left");
+            lock (AdminManager.BlMutex)
+                if (volunteer.Role == BO.Role.Volunteer && prevDoVolunteer.Role == DO.Role.Manager && !_dal.Volunteer.ReadAll(v => v.Role == DO.Role.Manager).Any())
+                    throw new BO.BlUpdateImpossibleException($"Unable to update volunteer as there will be no managers left");
             if (requester.Role != DO.Role.Manager && (DO.Role)volunteer.Role != prevDoVolunteer.Role)
                 volunteer.Role = (BO.Role)prevDoVolunteer.Role;
             if(volunteer.IsActive == false && prevDoVolunteer.IsActive ==  true)
             {
-                var assingments = _dal.Assignment.ReadAll();
-                if (assingments.Any(a => a.VolunteerId == volunteer.Id && a.FinishTime == null))
+                IEnumerable<DO.Assignment> assignments;
+                lock (AdminManager.BlMutex)
+                    assignments = _dal.Assignment.ReadAll();
+                if (assignments.Any(a => a.VolunteerId == volunteer.Id && a.FinishTime == null))
                     throw new BO.BlUpdateImpossibleException($"Volunteer {volunteer.Id} cannot be marked as inactive because there is a call in his care.");
             }
             DO.Volunteer updateDoVolunteer = new(volunteer.Id, volunteer.Name, volunteer.Phone, volunteer.Email, volunteer.Address,
                 volunteer.Latitude, volunteer.Longitude, volunteer.MaxDistance, (DO.Role)volunteer.Role,
                 (DO.DistanceType)volunteer.DistanceType, VolunteerManager.Encrypt(volunteer.Password), volunteer.IsActive);
-            _dal.Volunteer.Update(updateDoVolunteer);
+            VolunteerManager.Update(updateDoVolunteer);
             VolunteerManager.Observers.NotifyListUpdated();
             VolunteerManager.Observers.NotifyItemUpdated(prevDoVolunteer.Id);
             CallManager.Observers.NotifyListUpdated();
         }
-        catch (BO.BlDoesNotExistException ex)
+        catch (Exception ex)
         {
             throw new BO.BlDoesNotExistException($"volunteer with id {volunteer.Id} does not exist", ex);
         }
