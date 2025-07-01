@@ -194,11 +194,11 @@ internal class CallManager
 
         double earthRadiusKm = 6371;
 
-        double dLat = ToRadians(call.Latitude.Value - volunteer.Latitude.Value);
-        double dLon = ToRadians(call.Longitude.Value - volunteer.Longitude.Value);
+        double dLat = ToRadians(call.Latitude - volunteer.Latitude.Value);
+        double dLon = ToRadians(call.Longitude - volunteer.Longitude.Value);
 
         double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                   Math.Cos(ToRadians(volunteer.Latitude.Value)) * Math.Cos(ToRadians(call.Latitude.Value)) *
+                   Math.Cos(ToRadians(volunteer.Latitude.Value)) * Math.Cos(ToRadians(call.Latitude)) *
                    Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
 
         double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));

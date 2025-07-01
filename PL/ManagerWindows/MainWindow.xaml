@@ -25,7 +25,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label   FontSize="20" HorizontalAlignment="Center"  VerticalAlignment="Center" Width="194" Content="{Binding CurrentTime}"/>
+            <Label FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Width="194" Content="{Binding CurrentTime}"/>
             <!--advance clock-->
             <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="1" VerticalAlignment="Stretch" Width="auto">
                 <Grid.ColumnDefinitions>
@@ -40,8 +40,6 @@
                 <Button Content="advance by day"  Foreground="White" Background="Blue" HorizontalAlignment="Center" Grid.Column="2" VerticalAlignment="Center" Height="53" Width="122" Click="AddDay_Click"/>
                 <Button Content="advance by month"  Foreground="White" Background="Orange" HorizontalAlignment="Center" Grid.Column="3" VerticalAlignment="Center" Height="53" Width="122" Click="AddMonth_Click"/>
                 <Button Content="advance by year"  Foreground="White" Background="Purple" HorizontalAlignment="Center" Grid.Column="4" VerticalAlignment="Center" Height="53" Width="122" Click="AddYear_Click"/>
-
-
             </Grid>
         </Grid>
         <!--Risk Range-->
@@ -50,11 +48,29 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding RiskRange}" HorizontalAlignment="Center"  TextWrapping="Wrap"  Grid.Column="0" VerticalAlignment="Center" Width="120"/>
-            <Button Content="Update Risk Range" HorizontalAlignment="Center"  Grid.Column="1" VerticalAlignment="Center" Height="53" Width="122" Click="UpdateRiskRange"/>
+            <TextBox Text="{Binding RiskRange}" HorizontalAlignment="Center" TextWrapping="Wrap" Grid.Column="0" VerticalAlignment="Center" Width="120"/>
+            <Button Content="Update Risk Range" HorizontalAlignment="Center" Grid.Column="1" VerticalAlignment="Center" Height="53" Width="122" Click="UpdateRiskRange"/>
+        </Grid>
+        <!--Simulator Section-->
+        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="2" VerticalAlignment="Stretch" Width="auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding Interval, UpdateSourceTrigger=PropertyChanged}" 
+                     HorizontalAlignment="Center" 
+                     VerticalAlignment="Center" 
+                     Width="120" 
+                     PlaceholderText="Enter interval (min)"/>
+            <Button Content="{Binding IsSimulatorRunning, Converter={StaticResource BoolToStartStopConverter}}"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Height="53" 
+                    Width="122" 
+                    Click="ToggleSimulator"/>
         </Grid>
         <!--buttons-->
-        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="2" VerticalAlignment="Stretch" Width="auto">
+        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="3" VerticalAlignment="Stretch" Width="auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -65,8 +81,6 @@
             <Button Content="Calls" Background="LightGreen" HorizontalAlignment="Center" Grid.Column="1" VerticalAlignment="Center" Height="53" Width="122" Click="CallsList_Click"/>
             <Button Content="InitializationDB" Background="LightCoral" HorizontalAlignment="Center" Grid.Column="2" VerticalAlignment="Center" Height="53" Width="122" Click="InitializationDB_Click"/>
             <Button Content="ResetDB" Background="LightGoldenrodYellow" HorizontalAlignment="Center" Grid.Column="3" VerticalAlignment="Center" Height="53" Width="122" Click="ResetDB_Click"/>
-
         </Grid>
     </Grid>
 </Window>
-
