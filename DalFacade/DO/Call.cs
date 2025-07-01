@@ -14,17 +14,16 @@ namespace DO;
 /// <param name="MaxCloseTime">when it has to be closed</param>
 public record Call
 (
- CallType CallType,
- string Address,
- double Latitude,
- double Longitude,
- DateTime OpenTime,
- DateTime MaxCloseTime,
- string? Description = null
-
+     CallType CallType,
+     string Address,
+     DateTime OpenTime,
+     DateTime MaxCloseTime,
+     double? Latitude,
+     double? Longitude,
+     string? Description = null
 )
 {
     public int Id { get; init; }
-    public Call() : this(CallType.TakeCareAtHome, "Zayit 1, Jerusalem, Israel", 0, 0, DateTime.Now, DateTime.Now, "no more details")
+    public Call() : this(CallType.TakeCareAtHome, "Zayit 1, Jerusalem, Israel",  DateTime.Now, DateTime.Now, 0, 0, "no more details")
     { }
 }

@@ -440,4 +440,20 @@
     <FinishType>SelfCancel</FinishType>
     <Id>2054</Id>
   </Assignment>
+  <Assignment>
+    <CallId>1033</CallId>
+    <VolunteerId>357495092</VolunteerId>
+    <OpenTime>2024-01-01T00:00:00</OpenTime>
+    <FinishTime>2024-01-01T00:00:00</FinishTime>
+    <FinishType>SelfCancel</FinishType>
+    <Id>2055</Id>
+  </Assignment>
+  <Assignment>
+    <CallId>1045</CallId>
+    <VolunteerId>357495092</VolunteerId>
+    <OpenTime>2024-01-01T00:00:00</OpenTime>
+    <FinishTime>2024-01-01T00:00:00</FinishTime>
+    <FinishType>Processed</FinishType>
+    <Id>2056</Id>
+  </Assignment>
 </ArrayOfAssignment>

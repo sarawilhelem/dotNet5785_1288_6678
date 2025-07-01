@@ -166,7 +166,7 @@ public static class Initialization
 
                 DateTime close = open.AddDays(s_rand.Next(1, 365)); 
 
-                Call newC = new Call(type, cAddresses[i], cLatitudes[i], cLongitudes[i], open, close, cDescriptions[i % cDescriptions.Length]);
+                Call newC = new Call(type, cAddresses[i],  open, close, cLatitudes[i], cLongitudes[i], cDescriptions[i % cDescriptions.Length]);
 
                 s_dal!.Call.Create(newC);
             }

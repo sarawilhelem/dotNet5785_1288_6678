@@ -360,7 +360,7 @@ namespace DalTest
             }
             Console.Write("enter description: ");
             string description = Console.ReadLine()!;
-            Call newC = new(type, address, latitude, longitude, open, maxClose, description);
+            Call newC = new(type, address,  open, maxClose, latitude, longitude, description);
             return newC;
         }
 

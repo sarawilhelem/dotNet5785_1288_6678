@@ -181,17 +181,34 @@ internal class CallManager
     {
         DO.Volunteer volunteer;
         DO.Call call;
+
         lock (AdminManager.BlMutex)
             volunteer = s_dal.Volunteer.Read(v => v.Id == volunteerId) ??
-            throw new BO.BlDoesNotExistException($"volunteer with id {volunteerId} does not exists");
+                throw new BO.BlDoesNotExistException($"volunteer with id {volunteerId} does not exist");
         lock (AdminManager.BlMutex)
             call = s_dal.Call.Read(c => c.Id == callId) ??
-            throw new BO.BlDoesNotExistException($"call with id {callId} does not exists");
+                throw new BO.BlDoesNotExistException($"call with id {callId} does not exist");
 
-        if (volunteer.Latitude is null || volunteer.Longitude is null)
+        if (volunteer.Latitude == null || volunteer.Longitude == null || call.Latitude == null || call.Longitude == null)
             return 0;
-        var distance = Math.Sqrt(Math.Pow(((double)(volunteer.Latitude!) - call.Latitude), 2) + Math.Pow(((double)(volunteer.Longitude!) - call.Longitude), 2));
-        return distance;
+
+        double earthRadiusKm = 6371;
+
+        double dLat = ToRadians(call.Latitude.Value - volunteer.Latitude.Value);
+        double dLon = ToRadians(call.Longitude.Value - volunteer.Longitude.Value);
+
+        double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                   Math.Cos(ToRadians(volunteer.Latitude.Value)) * Math.Cos(ToRadians(call.Latitude.Value)) *
+                   Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+
+        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+        return earthRadiusKm * c; // Distance in kilometers
+    }
+
+    private static double ToRadians(double angle)
+    {
+        return angle * Math.PI / 180;
     }
 
     /// <summary>
