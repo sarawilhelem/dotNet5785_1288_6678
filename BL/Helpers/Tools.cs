@@ -14,42 +14,41 @@ static internal class Tools
     /// <param name="address">An address to casculate latitude and longitude</param>
     /// <returns>The latitude and longitude</returns>
     /// <exception cref="BO.BlCoordinatesException">If there is a problem when calculate coorcodination</exception>
-    public static (double?, double?) GetCoordinates(string address)
+    public static async Task<(double?, double?)> GetCoordinatesAsync(string address)
     {
         const string apiKey = "PK.83B935C225DF7E2F9B1ee90A6B46AD86";
-        
-            using var client = new HttpClient();
-            string url = $"https://us1.locationiq.com/v1/search.php?key={apiKey}&q={Uri.EscapeDataString(address)}&format=json";
 
-            var response = client.GetAsync(url).GetAwaiter().GetResult();
-            if (!response.IsSuccessStatusCode)
-                throw new BO.BlCoordinatesException("Invalid address or API error.");
+        using var client = new HttpClient();
+        string url = $"https://us1.locationiq.com/v1/search.php?key={apiKey}&q={Uri.EscapeDataString(address)}&format=json";
 
-            var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            using var doc = JsonDocument.Parse(json);
+        var response = await client.GetAsync(url);
+        if (!response.IsSuccessStatusCode)
+            throw new BO.BlCoordinatesException("Invalid address or API error.");
 
-            if (doc.RootElement.ValueKind != JsonValueKind.Array || doc.RootElement.GetArrayLength() == 0)
-                throw new BO.BlCoordinatesException("Address not found.");
+        var json = await response.Content.ReadAsStringAsync();
+        using var doc = JsonDocument.Parse(json);
 
-            var root = doc.RootElement[0];
+        if (doc.RootElement.ValueKind != JsonValueKind.Array || doc.RootElement.GetArrayLength() == 0)
+            throw new BO.BlCoordinatesException("Address not found.");
 
-            if (!root.TryGetProperty("lat", out var latProperty) ||
-                !root.TryGetProperty("lon", out var lonProperty))
-            {
-                throw new BO.BlCoordinatesException("Missing latitude or longitude in response.");
-            }
+        var root = doc.RootElement[0];
 
-            if (!double.TryParse(latProperty.GetString(), out double latitude) ||
-                !double.TryParse(lonProperty.GetString(), out double longitude))
-            {
-                throw new BO.BlCoordinatesException("Invalid latitude or longitude format.");
-            }
+        if (!root.TryGetProperty("lat", out var latProperty) ||
+            !root.TryGetProperty("lon", out var lonProperty))
+        {
+            throw new BO.BlCoordinatesException("Missing latitude or longitude in response.");
+        }
 
-            return (latitude, longitude);
-        
-        
+        if (!double.TryParse(latProperty.GetString(), out double latitude) ||
+            !double.TryParse(lonProperty.GetString(), out double longitude))
+        {
+            throw new BO.BlCoordinatesException("Invalid latitude or longitude format.");
+        }
+
+        return (latitude, longitude);
     }
-    
+
+
 
     /// <summary>
     /// converting an object to string by all his properties

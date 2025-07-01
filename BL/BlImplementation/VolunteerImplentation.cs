@@ -18,7 +18,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <param name="volunteer">the volunteer to add</param>
     /// <exception cref="BO.BlIllegalValues">to when the volunteers' details are illegal</exception>
     /// <exception cref="BO.BlAlreadyExistsException">to when trying to add a volunteer with already exist id</exception>
-    public void Create(BO.Volunteer volunteer)
+    public async Task Create(BO.Volunteer volunteer)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         VolunteerManager.CheckValidation(volunteer);
@@ -26,7 +26,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
         if (volunteer.Address is not null)
         {
 
-            var (latitude, longitude) = Tools.GetCoordinates(volunteer.Address);
+            var (latitude, longitude) = await Tools.GetCoordinatesAsync(volunteer.Address);
 
             volunteer.Latitude = latitude;
             volunteer.Longitude = longitude;
@@ -128,31 +128,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <returns>a list of bo volunteers</returns>
     public IEnumerable<BO.VolunteerInList> ReadAll(bool? isActive = null, BO.VolunteerInListFields? sort = null)
     {
-        var volunteersInList = from v in _dal.Volunteer.ReadAll(isActive is null ? null : v => v.IsActive == isActive)
-                               join a in _dal.Assignment.ReadAll() on v.Id equals a.VolunteerId into assignments
-                               let callId = assignments.FirstOrDefault(a => a.FinishTime == null)?.CallId
-                               let callType = callId is null ? null : (BO.CallType?)_dal.Call.Read(callId.Value)!.CallType
-                               select new BO.VolunteerInList(
-                                   v.Id,
-                                   v.Name,
-                                   v.IsActive,
-                                   assignments.Count(a => a.FinishType.Equals(DO.FinishType.Processed)),
-                                   assignments.Count(a => a.FinishType.Equals(DO.FinishType.ManagerCancel) || a.FinishType.Equals(DO.FinishType.SelfCancel)),
-                                   assignments.Count(a => a.FinishType.Equals(DO.FinishType.Expired)),
-                                   callId,
-                                   callType
-                               );
-
-        if (sort != null)
-        {
-            var propertyInfo = typeof(BO.VolunteerInList).GetProperty(sort.Value.ToString());
-            if (propertyInfo != null)
-            {
-                volunteersInList = volunteersInList.OrderBy(v => propertyInfo.GetValue(v)).ToList();
-            }
-        }
-
-        return volunteersInList.ToList();
+        return VolunteerManager.ReadAll(isActive, sort);
     }
 
     /// <summary>
@@ -162,7 +138,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// <param name="volunteer">the updated volunteer</param>
     /// <exception cref="BO.BlIllegalValues">if the volunteer details are illegal</exception>
     /// <exception cref="BO.BlDoesNotExistException">there is not any volunteer with the id like the parameter volunteer</exception>
-    public void Update(int id, BO.Volunteer volunteer)
+    public async Task Update(int id, BO.Volunteer volunteer)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         DO.Volunteer? requester;
@@ -174,7 +150,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
 
         if (volunteer.Address != null && volunteer.Address != "")
         {
-            var (latitude, longitude) = Tools.GetCoordinates(volunteer.Address);
+            var (latitude, longitude) = await Tools.GetCoordinatesAsync(volunteer.Address);
             volunteer.Latitude = latitude;
             volunteer.Longitude = longitude;
         }

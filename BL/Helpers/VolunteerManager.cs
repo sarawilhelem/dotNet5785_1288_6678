@@ -3,6 +3,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System;
 using System.IO;
+using System.Diagnostics;
 
 namespace Helpers;
 
@@ -158,7 +159,45 @@ internal static class VolunteerManager
         return sr.ReadToEnd();
     }
 
-    
+    /// <summary>
+    /// read all the volunteers
+    /// </summary>
+    /// <param name="isActive">do we want just active = true or not active = false or all volunteers = null</param>
+    /// <param name="sort">according to which field to sort the volunteers</param>
+    /// <returns>a list of bo volunteers</returns>
+    public static IEnumerable<BO.VolunteerInList> ReadAll(bool? isActive = null, BO.VolunteerInListFields? sort = null)
+    {
+        IEnumerable<BO.VolunteerInList> volunteersInList;
+        lock (AdminManager.BlMutex){
+            volunteersInList = (from v in s_dal.Volunteer.ReadAll(isActive is null ? null : v => v.IsActive == isActive)
+                               join a in s_dal.Assignment.ReadAll() on v.Id equals a.VolunteerId into assignments
+                               let callId = assignments.FirstOrDefault(a => a.FinishTime == null)?.CallId
+                               let callType = callId is null ? null : (BO.CallType?)s_dal.Call.Read(callId.Value)!.CallType
+                               select new BO.VolunteerInList(
+                                   v.Id,
+                                   v.Name,
+                                   v.IsActive,
+                                   assignments.Count(a => a.FinishType.Equals(DO.FinishType.Processed)),
+                                   assignments.Count(a => a.FinishType.Equals(DO.FinishType.ManagerCancel) || a.FinishType.Equals(DO.FinishType.SelfCancel)),
+                                   assignments.Count(a => a.FinishType.Equals(DO.FinishType.Expired)),
+                                   callId,
+                                   callType
+                               )).ToList();
+        }
+
+        if (sort != null)
+        {
+            var propertyInfo = typeof(BO.VolunteerInList).GetProperty(sort.Value.ToString());
+            if (propertyInfo != null)
+            {
+                volunteersInList = volunteersInList.OrderBy(v => propertyInfo.GetValue(v)).ToList();
+            }
+        }
+
+        return volunteersInList;
+    }
+
+
     /// <summary>
     /// Calculate distance betweent 2 addresses
     /// </summary>
@@ -218,5 +257,33 @@ internal static class VolunteerManager
     {
         lock (AdminManager.BlMutex)
             s_dal.Volunteer.Delete(volunteerId);
+    }
+    internal static void VolunteerActivitySimulation()
+    {
+        BlApi.IBl bl = BlApi.Factory.Get();
+        Random rand = new Random();
+        IEnumerable<BO.VolunteerInList> activeVolunteers = ReadAll(true);
+        foreach (var volunteer in activeVolunteers)
+        {
+            if (volunteer.CallId is null)
+            {
+                var callsList = bl.Call.ReadAllVolunteerOpenCalls(volunteer.Id).ToList();
+                if(rand.Next(0, 5) == 0 && callsList.Any())
+                {
+                    int chosenCallId = callsList[rand.Next(callsList.Count())].Id;
+                    bl.Call.ChooseCall(volunteer.Id, chosenCallId);
+                }
+            }
+            else
+            {
+                var volunteerDetails = bl.Volunteer.Read(volunteer.Id);
+                var callDetails = bl.Call.Read(volunteer.CallId.Value)!;
+                var distance = CalculateDistance(volunteerDetails.Latitude, volunteerDetails.Longitude, callDetails?.Latitude, callDetails?.Longitude);
+                if (volunteerDetails.Call!.Insersion.AddHours(distance * 2 + 2) < AdminManager.Now)
+                    bl.Call.FinishProcess(volunteer.Id, volunteerDetails.Call.Id);
+                else if(rand.Next(0, 10) == 6)
+                    bl.Call.CancelProcess(volunteer.Id, volunteerDetails.Call!.Id);
+            }
+        }
     }
 }

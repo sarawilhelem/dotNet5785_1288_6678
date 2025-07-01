@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using BO;
+using DO;
 using Helpers;
 using System;
 using System.Globalization;
@@ -75,11 +76,11 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlIllegalValues">if a field in the updated call is not legal</exception>
     /// <exception cref="BO.BlCoordinatesException">if there is an exception when calculate the lat and lon</exception>
     /// <exception cref="BO.BlDoesNotExistException">if there is not a call with that id</exception>
-    public void Update(BO.Call call)
+    public async Task Update(BO.Call call)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CallManager.CheckValidation(call);
-        var (latitude, longitude) = Tools.GetCoordinates(call.Address);
+        var (latitude, longitude) = await Tools.GetCoordinatesAsync(call.Address);
         var callToUpdate = new DO.Call
         {
             CallType = (DO.CallType)call.Type,
@@ -142,27 +143,31 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlIllegalValues">if a field in the new call is not legal</exception>
     /// <exception cref="BO.BlIllegalDatesOrder">if the dates order in the new call is illegal</exception>
     /// <exception cref="BO.BlCoordinatesException">if there is an exception when calculate the lat and lon</exception>
-    public void Create(BO.Call call)
+    public async Task Create(BO.Call call)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         if (call.Address is null)
             throw new BO.BlIllegalValues("address can not be null");
         if (call.OpenTime > call.MaxCloseTime || call.MaxCloseTime < AdminManager.Now)
             throw new BO.BlIllegalDatesOrder("MaxCloseTime can't be before now or open time");
-        var (latitude, longitude) = Tools.GetCoordinates(call.Address);
+
+        var (latitude, longitude) = await Tools.GetCoordinatesAsync(call.Address);
+
         var callToAdd = new DO.Call
         {
             CallType = (DO.CallType)call.Type,
             Address = call.Address,
-            Latitude = latitude ?? throw new BO.BlCoordinatesException("Can't approch address"),
-            Longitude = longitude ?? throw new BO.BlCoordinatesException("Can't approch address"),
+            Latitude = latitude ?? throw new BO.BlCoordinatesException("Can't approach address"),
+            Longitude = longitude ?? throw new BO.BlCoordinatesException("Can't approach address"),
             OpenTime = Helpers.AdminManager.Now,
             MaxCloseTime = call.MaxCloseTime,
             Description = call.Description
         };
+
         Helpers.CallManager.Create(callToAdd);
         CallManager.Observers.NotifyListUpdated();
     }
+
 
     /// <summary>
     /// read all closed calls which this volunteer had an assignment with them
@@ -187,7 +192,7 @@ internal class CallImplentation : ICall
                             FinishCallTime = a.FinishTime,
                             FinishType = (BO.FinishType?)a.FinishType
                         }
-            );
+            ).ToList();
         }
         if (callType != null)
             closedCalls = closedCalls.Where(call => call.CallType == callType);
@@ -209,9 +214,9 @@ internal class CallImplentation : ICall
     /// <param name="callType">calls with which calltpye to return, can be null and then all the calls will return</param>
     /// <param name="sort">enum value to choose by which field to sort the calls</param>
     /// <returns>the open calls</returns>
-    public IEnumerable<BO.OpenCallInList> ReadAllVolunteerOpenCalls(int volunteerId, BO.CallType? callType = null, BO.OpenCallInListFields? sort = null)
+    public IEnumerable<BO.OpenCallInList>  ReadAllVolunteerOpenCalls(int volunteerId, BO.CallType? callType = null, BO.OpenCallInListFields? sort = null)
     {
-        var openedCalls = ReadAll();
+        var openedCalls = CallManager.ReadAll();
         openedCalls = openedCalls.Where(a =>
       Helpers.CallManager.GetCallStatus(a.CallId) == BO.FinishCallType.Open ||
        Helpers.CallManager.GetCallStatus(a.CallId) == BO.FinishCallType.OpenInRisk);
