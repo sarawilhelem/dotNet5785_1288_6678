@@ -48,7 +48,6 @@ namespace PL.ManagerWindows
             get { return (bool)GetValue(IsSimulatorRunningProperty); }
             set { SetValue(IsSimulatorRunningProperty, value); }
         }
-
         private void ToggleSimulator(object sender, RoutedEventArgs e)
         {
             if (IsSimulatorRunning)
@@ -62,6 +61,9 @@ namespace PL.ManagerWindows
                 IsSimulatorRunning = true;
             }
         }
+
+
+
 
         private void AddMinute_Click(object sender, RoutedEventArgs e)
         {
@@ -101,6 +103,7 @@ namespace PL.ManagerWindows
                     CurrentTime = s_bl.Admin.GetClock();
                 });
         }
+
         private void ConfigObserver()
         {
             if (_configObserverOperation is null || _configObserverOperation.Status == DispatcherOperationStatus.Completed)
@@ -112,6 +115,10 @@ namespace PL.ManagerWindows
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            if (IsSimulatorRunning)
+            {
+                s_bl.Admin.StopSimulator(); // Ensure simulator is stopped
+            }
             s_bl.Admin.RemoveClockObserver(ClockObserver);
             s_bl.Admin.RemoveConfigObserver(ConfigObserver);
             this.Close();
