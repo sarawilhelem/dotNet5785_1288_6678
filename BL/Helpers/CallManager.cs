@@ -203,7 +203,7 @@ internal class CallManager
 
         double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
-        return earthRadiusKm * c; // Distance in kilometers
+        return earthRadiusKm * c; 
     }
 
     private static double ToRadians(double angle)
@@ -339,11 +339,130 @@ internal class CallManager
         return callsListToReturn;
     }
 
+    /// <summary>
+    /// creating assignment between a volunteer and a call
+    /// </summary>
+    /// <param name="volunteerId">the volunteer id</param>
+    /// <param name="callId">the call id</param>
+    /// <exception cref="BO.BlIllegalChoseCallException">if call is already in process</exception>
+    /// <exception cref="BO.BlDoesNotExistException">if there is not volunteer or assignment with these ids</exception>
+    public static void ChooseCall(int volunteerId, int callId)
+    {
+        DO.Call call;
+        DO.Volunteer volunteer;//stage 7
+        var assignments = Helpers.CallManager.AssignmentsListForCall(callId).Where(a => a.FinishType == null);
+        if (assignments.Any())
+            throw new BO.BlIllegalChoseCallException($"Call {callId} is in process");
+        lock (AdminManager.BlMutex)
+            call = s_dal.Call.Read(call => call.Id == callId) ??
+            throw new BO.BlDoesNotExistException($"Call with id {callId} does not exists");
+        lock (AdminManager.BlMutex)
+            volunteer = s_dal.Volunteer.Read(v => v.Id == volunteerId) ??
+            throw new BO.BlDoesNotExistException($"Volunteer with id {volunteerId} does not exists");
+
+        if (Helpers.CallManager.RestTimeForCall(call) != TimeSpan.Zero)
+        {
+            Helpers.AssignmentManager.CreateAssignment(callId, volunteerId);
+            CallManager.Observers.NotifyListUpdated();
+            CallManager.Observers.NotifyItemUpdated(callId);
+            VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
+        }
+        else
+        {
+            throw new BO.BlIllegalChoseCallException($"Call {callId} expired");
+        }
+
+    }
+    /// <summary>
+    /// to update a volunteer went to the call
+    /// </summary>
+    /// <param name="volunteerId">the volunteer id</param>
+    /// <param name="assignmentId">the assignment id the volunteer finished</param>
+    /// <exception cref="BO.BlDoesNotExistException">if there is not volunteer or assignment with these ids</exception>
+    /// <exception cref="BO.BlFinishProcessIllegalException">if the assignment is not with this volunteer or the call wasn't in prociss</exception>
+    public static void FinishProcess(int volunteerId, int assignmentId)
+    {
+        DO.Assignment assignment;
+        lock (AdminManager.BlMutex)
+            assignment = s_dal.Assignment.Read(a => a.Id == assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id {assignmentId} does not exist");
+        if (assignment.VolunteerId != volunteerId)
+            throw new BO.BlFinishProcessIllegalException("this assignment is not with this volunteer");
+
+        if (assignment.FinishTime != null)
+            throw new BO.BlFinishProcessIllegalException("Call is not in process");
+
+
+        var assignmentToUpdate = new DO.Assignment
+        {
+            Id = assignmentId,
+            CallId = assignment.CallId,
+            VolunteerId = volunteerId,
+            OpenTime = assignment.OpenTime,
+            FinishTime = AdminManager.Now,
+            FinishType = DO.FinishType.Processed
+        };
+        Helpers.AssignmentManager.Update(assignmentToUpdate);
+        CallManager.Observers.NotifyItemUpdated(assignment.CallId);
+        CallManager.Observers.NotifyListUpdated();
+        VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId);
+
+    }
+
+    /// <summary>
+    /// cancel the assitnment between volunteer and call
+    /// </summary>
+    /// <param name="userId">id of the volunteer</param>
+    /// <param name="assignmentId">id of the assignment to cancel</param>
+    /// <exception cref="BO.BlDoesNotExistException">if there is not volunteer or assignment with these ids</exception>
+    /// <exception cref="BO.BlCancelProcessIllegalException">when trying to cancel finished assignment</exception>
+    public static void CancelProcess(int userId, int assignmentId)
+    {
+        DO.Volunteer volunteer;
+        DO.Assignment assignment;
+        lock (AdminManager.BlMutex)
+            volunteer = s_dal.Volunteer.Read(v => v.Id == userId) ??
+            throw new BO.BlDoesNotExistException($"Volunteer with id {userId} does not exists");
+        lock (AdminManager.BlMutex)
+            assignment = s_dal.Assignment.Read(a => a.Id == assignmentId) ??
+            throw new BO.BlDoesNotExistException($"assignment with id {assignmentId} does not exists");
+        if (volunteer.Role == DO.Role.Manager || assignment.VolunteerId == userId)
+        {
+            var finishType = assignment.VolunteerId == userId ? DO.FinishType.SelfCancel : DO.FinishType.ManagerCancel;
+            if (assignment.FinishTime == null)
+            {
+                var newAssignment = new DO.Assignment
+                {
+                    Id = assignment.Id,
+                    VolunteerId = assignment.VolunteerId,
+                    CallId = assignment.CallId,
+                    OpenTime = assignment.OpenTime,
+                    FinishTime = AdminManager.Now,
+                    FinishType = finishType
+                };
+                try
+                {
+                    Helpers.AssignmentManager.Update(newAssignment);
+                    CallManager.Observers.NotifyListUpdated();
+                    CallManager.Observers.NotifyItemUpdated(assignment.CallId);
+                    VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId);
+
+                }
+                catch
+                {
+                    throw new BO.BlDoesNotExistException("This assignment does not exist");
+                }
+            }
+            else
+            {
+                throw new BO.BlCancelProcessIllegalException("Can cancel just not finised assignments");
+            }
+        }
+    }
+
     internal static void PeriodicSCallsUpdates(DateTime newClock) //stage 4
     {
         bool callUpdated; //stage 5
         List<BO.CallInList> callsList;
-        lock (AdminManager.BlMutex) //stage 7
         callsList = ReadAll().ToList();
         callUpdated = false; //stage 5
         foreach (var call in callsList) //stage 4
@@ -358,6 +477,7 @@ internal class CallManager
                     s_dal.Assignment.Update(doAssignment with { FinishTime = newClock, FinishType = DO.FinishType.Expired });
                 }
                 CallManager.Observers.NotifyItemUpdated(call.CallId);
+                VolunteerManager.Observers.NotifyItemUpdated(doAssignment.VolunteerId);
             }
         }
         if (callUpdated) //stage 5

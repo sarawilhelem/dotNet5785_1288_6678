@@ -258,6 +258,7 @@ internal static class VolunteerManager
         lock (AdminManager.BlMutex)
             s_dal.Volunteer.Delete(volunteerId);
     }
+
     internal static void VolunteerActivitySimulation()
     {
         BlApi.IBl bl = BlApi.Factory.Get();
@@ -268,10 +269,10 @@ internal static class VolunteerManager
             if (volunteer.CallId is null)
             {
                 var callsList = bl.Call.ReadAllVolunteerOpenCalls(volunteer.Id).ToList();
-                if(rand.Next(0, 5) == 0 && callsList.Any())
+                if (rand.Next(0, 5) == 0 && callsList.Any())
                 {
                     int chosenCallId = callsList[rand.Next(callsList.Count())].Id;
-                    bl.Call.ChooseCall(volunteer.Id, chosenCallId);
+                    CallManager.ChooseCall(volunteer.Id, chosenCallId);
                 }
             }
             else
@@ -280,9 +281,9 @@ internal static class VolunteerManager
                 var callDetails = bl.Call.Read(volunteer.CallId.Value)!;
                 var distance = CalculateDistance(volunteerDetails.Latitude, volunteerDetails.Longitude, callDetails?.Latitude, callDetails?.Longitude);
                 if (volunteerDetails.Call!.Insersion.AddHours(distance * 2 + 2) < AdminManager.Now)
-                    bl.Call.FinishProcess(volunteer.Id, volunteerDetails.Call.Id);
-                else if(rand.Next(0, 10) == 6)
-                    bl.Call.CancelProcess(volunteer.Id, volunteerDetails.Call!.Id);
+                    CallManager.FinishProcess(volunteer.Id, volunteerDetails.Call.Id);
+                else if (rand.Next(0, 10) == 6)
+                    CallManager.CancelProcess(volunteer.Id, volunteerDetails.Call!.Id);
             }
         }
     }

@@ -67,14 +67,7 @@ internal static class AdminManager //stage 4
         var oldClock = s_dal.Config.Clock; //stage 4
         s_dal.Config.Clock = newClock; //stage 4
 
-        //TO_DO:
-        //Add calls here to any logic method that should be called periodically,
-        //after each clock update
-        //for example, Periodic students' updates:
-        //Go through all students to update properties that are affected by the clock update
-        //(students becomes not active after 5 years etc.)
-
-        //StudentManager.PeriodicStudentsUpdates(oldClock, newClock); //stage 4
+        
         if (_periodicTask is null || _periodicTask.IsCompleted) //stage 7
             _periodicTask = Task.Run(() => CallManager.PeriodicSCallsUpdates(newClock));
         //etc ...
@@ -93,7 +86,7 @@ internal static class AdminManager //stage 4
     /// <summary>
     /// The thread of the simulator
     /// </summary>
-    private static volatile Thread? s_thread;
+    private static volatile Thread? s_thread = null;
     /// <summary>
     /// The Interval for clock updating
     /// in minutes by second (default value is 1, will be set on Start())    
@@ -136,20 +129,19 @@ internal static class AdminManager //stage 4
         }
     }
 
+
+
     private static Task? _simulateTask = null;
 
     private static void clockRunner()
     {
         while (!s_stop)
         {
-            UpdateClock(Now.AddMinutes(s_interval));
-
-            CallManager.PeriodicSCallsUpdates(Now);
-        if (_simulateTask is null || _simulateTask.IsCompleted)//stage 7
-            _simulateTask = Task.Run(() => VolunteerManager.VolunteerActivitySimulation());
-
             try
             {
+                UpdateClock(Now.AddMinutes(s_interval));
+                if (_simulateTask is null || _simulateTask.IsCompleted)
+                    _simulateTask = Task.Run(() => VolunteerManager.VolunteerActivitySimulation());
                 Thread.Sleep(1000); 
 
             }

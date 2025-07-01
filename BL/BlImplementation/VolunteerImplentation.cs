@@ -1,11 +1,9 @@
-﻿
-
-using DalApi;
-using Helpers;
+﻿using Helpers;
+using BlApi;
 
 namespace BlImplementation;
 
-internal class VolunteerImplentation : BlApi.IVolunteer
+internal class VolunteerImplentation : IVolunteer
 {
     /// <summary>
     /// A field which we approach throw it to the dal object's crud
@@ -24,13 +22,14 @@ internal class VolunteerImplentation : BlApi.IVolunteer
                 doVolunteer = doVolunteer with { Latitude = latitude.Value, Longitude = longitude.Value };
                 lock (AdminManager.BlMutex)
                 {
-                    VolunteerManager.Update(doVolunteer); // עדכון המתנדב עם הקואורדינטות החדשות
+                    VolunteerManager.Update(doVolunteer); 
                 }
                 VolunteerManager.Observers.NotifyListUpdated();
                 VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);
             }
         }
     }
+
     /// <summary>
     /// add the volunteer to the lists in dal
     /// </summary>
@@ -44,8 +43,7 @@ internal class VolunteerImplentation : BlApi.IVolunteer
 
         // יצירת DO.Volunteer מבלי לחשב את הקואורדינטות
         DO.Volunteer doVolunteer = new(volunteer.Id, volunteer.Name, volunteer.Phone, volunteer.Email, volunteer.Address,
-            0, 0, // קואורדינטות זמניות
-            volunteer.MaxDistance, (DO.Role)volunteer.Role, (DO.DistanceType)volunteer.DistanceType, VolunteerManager.Encrypt(volunteer.Password), volunteer.IsActive);
+            null, null, volunteer.MaxDistance, (DO.Role)volunteer.Role, (DO.DistanceType)volunteer.DistanceType, VolunteerManager.Encrypt(volunteer.Password), volunteer.IsActive);
 
         try
         {
@@ -54,7 +52,6 @@ internal class VolunteerImplentation : BlApi.IVolunteer
             VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);
             CallManager.Observers.NotifyListUpdated();
 
-            // חישוב הקואורדינטות בצורה אסינכרונית מבלי לחכות לתוצאה
             _ = UpdateCoordinatesForVolunteerAddressAsync(doVolunteer); //stage 7
         }
         catch (DO.DalAlreadyExistsException ex)
@@ -163,12 +160,6 @@ internal class VolunteerImplentation : BlApi.IVolunteer
 
         VolunteerManager.CheckValidation(volunteer);
 
-        // לא נחשב קואורדינטות כאן, אלא נבצע את זה במתודה נפרדת
-        if (volunteer.Address != null && volunteer.Address != "")
-        {
-            // קואורדינטות יחשבו במתודה הנפרדת
-        }
-
         try
         {
             DO.Volunteer? prevDoVolunteer;
@@ -201,7 +192,6 @@ internal class VolunteerImplentation : BlApi.IVolunteer
             VolunteerManager.Observers.NotifyItemUpdated(prevDoVolunteer.Id);
             CallManager.Observers.NotifyListUpdated();
 
-            // חישוב הקואורדינטות בצורה אסינכרונית
             _ = UpdateCoordinatesForVolunteerAddressAsync(updateDoVolunteer); //stage 7
         }
         catch (Exception ex)
@@ -218,5 +208,6 @@ internal class VolunteerImplentation : BlApi.IVolunteer
         VolunteerManager.Observers.RemoveListObserver(listObserver); //stage 5
     public void RemoveObserver(int id, Action observer) =>
         VolunteerManager.Observers.RemoveObserver(id, observer); //stage 5
+
 
 }
