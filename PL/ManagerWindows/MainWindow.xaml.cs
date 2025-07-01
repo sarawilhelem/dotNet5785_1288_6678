@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace PL.ManagerWindows
 {
     public partial class MainWindow : Window
     {
+        private volatile DispatcherOperation? _clockObserverOperation = null;
+        private volatile DispatcherOperation? _configObserverOperation = null;
+
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private Call.CallListWindow callListWindow;
         private Volunteer.VolunteerListWindow? volunteerListWindow;
@@ -57,20 +61,27 @@ namespace PL.ManagerWindows
             s_bl.Admin.SetRiskRange(RiskRange);
         }
 
-        private void clockObserver()
+        private void ClockObserver()
         {
-            CurrentTime = s_bl.Admin.GetClock();
+            if (_clockObserverOperation is null || _clockObserverOperation.Status == DispatcherOperationStatus.Completed)
+                _clockObserverOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    CurrentTime = s_bl.Admin.GetClock();
+                });
         }
-
-        private void configObserver()
+        private void ConfigObserver()
         {
-            RiskRange = s_bl.Admin.GetRiskRange();
+            if (_configObserverOperation is null || _configObserverOperation.Status == DispatcherOperationStatus.Completed)
+                _configObserverOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    RiskRange = s_bl.Admin.GetRiskRange();
+                });
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            s_bl.Admin.RemoveClockObserver(clockObserver);
-            s_bl.Admin.RemoveConfigObserver(configObserver);
+            s_bl.Admin.RemoveClockObserver(ClockObserver);
+            s_bl.Admin.RemoveConfigObserver(ConfigObserver);
             this.Close();
         }
 
@@ -175,8 +186,8 @@ namespace PL.ManagerWindows
         {
             CurrentTime = s_bl.Admin.GetClock();
             RiskRange = s_bl.Admin.GetRiskRange();
-            s_bl.Admin.AddClockObserver(clockObserver);
-            s_bl.Admin.AddConfigObserver(configObserver);
+            s_bl.Admin.AddClockObserver(ClockObserver);
+            s_bl.Admin.AddConfigObserver(ConfigObserver);
             this.DataContext = this;
         }
 
