@@ -12,6 +12,25 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     /// </summary>
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
 
+
+
+    private static async Task UpdateCoordinatesForVolunteerAddressAsync(DO.Volunteer doVolunteer)
+    {
+        if (doVolunteer.Address is not null)
+        {
+            var (latitude, longitude) = await Tools.GetCoordinatesAsync(doVolunteer.Address);
+            if (latitude is not null && longitude is not null)
+            {
+                doVolunteer = doVolunteer with { Latitude = latitude.Value, Longitude = longitude.Value };
+                lock (AdminManager.BlMutex)
+                {
+                    VolunteerManager.Update(doVolunteer); // עדכון המתנדב עם הקואורדינטות החדשות
+                }
+                VolunteerManager.Observers.NotifyListUpdated();
+                VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);
+            }
+        }
+    }
     /// <summary>
     /// add the volunteer to the lists in dal
     /// </summary>
@@ -23,16 +42,9 @@ internal class VolunteerImplentation : BlApi.IVolunteer
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         VolunteerManager.CheckValidation(volunteer);
 
-        if (volunteer.Address is not null)
-        {
-
-            var (latitude, longitude) = await Tools.GetCoordinatesAsync(volunteer.Address);
-
-            volunteer.Latitude = latitude;
-            volunteer.Longitude = longitude;
-        }
-
-        DO.Volunteer doVolunteer = new(volunteer.Id, volunteer.Name, volunteer.Phone, volunteer.Email, volunteer.Address, volunteer.Latitude, volunteer.Longitude,
+        // יצירת DO.Volunteer מבלי לחשב את הקואורדינטות
+        DO.Volunteer doVolunteer = new(volunteer.Id, volunteer.Name, volunteer.Phone, volunteer.Email, volunteer.Address,
+            0, 0, // קואורדינטות זמניות
             volunteer.MaxDistance, (DO.Role)volunteer.Role, (DO.DistanceType)volunteer.DistanceType, VolunteerManager.Encrypt(volunteer.Password), volunteer.IsActive);
 
         try
@@ -41,12 +53,14 @@ internal class VolunteerImplentation : BlApi.IVolunteer
             VolunteerManager.Observers.NotifyListUpdated();
             VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);
             CallManager.Observers.NotifyListUpdated();
+
+            // חישוב הקואורדינטות בצורה אסינכרונית מבלי לחכות לתוצאה
+            _ = UpdateCoordinatesForVolunteerAddressAsync(doVolunteer); //stage 7
         }
         catch (DO.DalAlreadyExistsException ex)
         {
             throw new BO.BlAlreadyExistsException($"volunteer with Id {volunteer.Id} already exist", ex);
         }
-
     }
 
     /// <summary>
@@ -142,30 +156,34 @@ internal class VolunteerImplentation : BlApi.IVolunteer
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         DO.Volunteer? requester;
-        lock (AdminManager.BlMutex) 
+        lock (AdminManager.BlMutex)
             requester = _dal.Volunteer.Read(id);
         if (requester is null || (volunteer.Id != id && requester.Role != DO.Role.Manager))
             return;
+
         VolunteerManager.CheckValidation(volunteer);
 
+        // לא נחשב קואורדינטות כאן, אלא נבצע את זה במתודה נפרדת
         if (volunteer.Address != null && volunteer.Address != "")
         {
-            var (latitude, longitude) = await Tools.GetCoordinatesAsync(volunteer.Address);
-            volunteer.Latitude = latitude;
-            volunteer.Longitude = longitude;
+            // קואורדינטות יחשבו במתודה הנפרדת
         }
+
         try
         {
             DO.Volunteer? prevDoVolunteer;
-            lock (AdminManager.BlMutex) 
+            lock (AdminManager.BlMutex)
                 prevDoVolunteer = _dal.Volunteer.Read(volunteer.Id) ??
                 throw new BO.BlDoesNotExistException($"volunteer with id {volunteer.Id} does not exist");
+
             lock (AdminManager.BlMutex)
                 if (volunteer.Role == BO.Role.Volunteer && prevDoVolunteer.Role == DO.Role.Manager && !_dal.Volunteer.ReadAll(v => v.Role == DO.Role.Manager).Any())
                     throw new BO.BlUpdateImpossibleException($"Unable to update volunteer as there will be no managers left");
+
             if (requester.Role != DO.Role.Manager && (DO.Role)volunteer.Role != prevDoVolunteer.Role)
                 volunteer.Role = (BO.Role)prevDoVolunteer.Role;
-            if(volunteer.IsActive == false && prevDoVolunteer.IsActive ==  true)
+
+            if (volunteer.IsActive == false && prevDoVolunteer.IsActive == true)
             {
                 IEnumerable<DO.Assignment> assignments;
                 lock (AdminManager.BlMutex)
@@ -173,19 +191,25 @@ internal class VolunteerImplentation : BlApi.IVolunteer
                 if (assignments.Any(a => a.VolunteerId == volunteer.Id && a.FinishTime == null))
                     throw new BO.BlUpdateImpossibleException($"Volunteer {volunteer.Id} cannot be marked as inactive because there is a call in his care.");
             }
+
             DO.Volunteer updateDoVolunteer = new(volunteer.Id, volunteer.Name, volunteer.Phone, volunteer.Email, volunteer.Address,
                 volunteer.Latitude, volunteer.Longitude, volunteer.MaxDistance, (DO.Role)volunteer.Role,
                 (DO.DistanceType)volunteer.DistanceType, VolunteerManager.Encrypt(volunteer.Password), volunteer.IsActive);
+
             VolunteerManager.Update(updateDoVolunteer);
             VolunteerManager.Observers.NotifyListUpdated();
             VolunteerManager.Observers.NotifyItemUpdated(prevDoVolunteer.Id);
             CallManager.Observers.NotifyListUpdated();
+
+            // חישוב הקואורדינטות בצורה אסינכרונית
+            _ = UpdateCoordinatesForVolunteerAddressAsync(updateDoVolunteer); //stage 7
         }
         catch (Exception ex)
         {
             throw new BO.BlDoesNotExistException($"volunteer with id {volunteer.Id} does not exist", ex);
         }
     }
+
     public void AddObserver(Action listObserver) =>
         VolunteerManager.Observers.AddListObserver(listObserver); 
     public void AddObserver(int id, Action observer) =>
