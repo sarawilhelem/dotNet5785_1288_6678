@@ -80,30 +80,34 @@ internal class CallImplentation : ICall
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CallManager.CheckValidation(call);
-        var (latitude, longitude) = await Tools.GetCoordinatesAsync(call.Address);
-        var callToUpdate = new DO.Call
+
+        // יצירת DO.Call מבלי לחשב את הקואורדינטות
+        DO.Call callToUpdate = new DO.Call
         {
             CallType = (DO.CallType)call.Type,
             Address = call.Address,
-            Latitude = latitude ?? throw new BO.BlCoordinatesException("Can't approach the address"),
-            Longitude = longitude ?? throw new BO.BlCoordinatesException("Can't approach the address"),
             OpenTime = call.OpenTime,
             MaxCloseTime = call.MaxCloseTime,
             Description = call.Description,
             Id = call.Id
         };
+
         try
         {
-            CallManager.Update(callToUpdate);
+            CallManager.Update(callToUpdate); // עדכון ה-DAL עם הפרטים הקיימים
             VolunteerManager.Observers.NotifyListUpdated();
             CallManager.Observers.NotifyListUpdated();
             CallManager.Observers.NotifyItemUpdated(callToUpdate.Id);
+
+            // חישוב הקואורדינטות בצורה אסינכרונית מבלי לחכות לתוצאה
+            _ = UpdateCoordinatesForCallAddressAsync(callToUpdate); //stage 7
         }
         catch
         {
-            throw new BO.BlDoesNotExistException("That call does not exists");
+            throw new BO.BlDoesNotExistException("That call does not exist");
         }
     }
+
 
     /// <summary>
     /// delete a call
