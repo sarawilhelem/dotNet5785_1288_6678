@@ -54,6 +54,8 @@ internal class AdminImplentaition : IAdmin
                 AdminManager.UpdateClock(AdminManager.Now.AddYears(1));
                 break;
         }
+        CallManager.Observers.NotifyListUpdated();
+        VolunteerManager.Observers.NotifyListUpdated();
     }
 
     /// <summary>
@@ -83,6 +85,8 @@ internal class AdminImplentaition : IAdmin
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         AdminManager.RiskRange = riskRange;
+        CallManager.Observers.NotifyListUpdated();
+        VolunteerManager.Observers.NotifyListUpdated();
     }
 
     public void StartSimulator(int interval)  //stage 7

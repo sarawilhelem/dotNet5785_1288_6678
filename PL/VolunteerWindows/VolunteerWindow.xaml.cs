@@ -20,7 +20,7 @@ namespace PL.VolunteerWindows
         private string? _mapLink;
 
         private int volunteerId;
-
+        
         public BO.Volunteer? CurrentVolunteer
         {
             get => _currentVolunteer;
@@ -227,6 +227,11 @@ namespace PL.VolunteerWindows
         private void Window_Closed(object sender, EventArgs e)
         {
             s_bl.Volunteer.RemoveObserver(volunteerId, VolunteerObserver);
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

@@ -113,7 +113,7 @@
 
         <Label Content="Max Distance:" HorizontalAlignment="Right" Grid.Row="8"/>
         <TextBox Text="{Binding CurrentVolunteer.MaxDistance, Mode=TwoWay}" PreviewTextInput="NumberTextBox_PreviewTextInput"
-                 Width="200" Grid.Row="8" Grid.Column="1"/>
+                 Width="200" Grid.Row="8" Grid.Column="1" TextChanged="TextBox_TextChanged"/>
 
         <ContentControl Grid.Row="9" Grid.ColumnSpan="2" Margin="50,0,0,0" 
                         Visibility="{Binding CurrentVolunteer.Call, Converter={StaticResource NullToVisibilityConverterKey}}">

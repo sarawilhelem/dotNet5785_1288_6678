@@ -49,11 +49,16 @@ public partial class EnterSystemWindow : Window
                 new VolunteerWindows.VolunteerWindow().Show();
             else
                 MessageBox.Show("Volunteer's role does not found", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-            this.Close();
+
+            // איפוס השדות
+            Name = "";
+            Password = "";
         }
         catch (Exception ex)
         {
             MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
+
 }
