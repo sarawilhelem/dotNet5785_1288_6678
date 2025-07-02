@@ -24,7 +24,8 @@ internal class AdminImplentaition : IAdmin
         DalTest.Initialization.Do();
         AdminManager.UpdateClock(AdminManager.Now);
         AdminManager.RiskRange = AdminManager.RiskRange;
-
+        CallManager.Observers.NotifyListUpdated();
+        VolunteerManager.Observers.NotifyListUpdated();
     }
 
 

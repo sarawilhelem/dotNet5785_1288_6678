@@ -80,6 +80,15 @@ namespace PL.ManagerWindows.Call
             SelectedFilterField = nameof(FilterFields.CallId);
         }
 
+        public CallListWindow(BO.FinishCallType status)
+        {
+            InitializeComponent();
+            DeleteCallCommand = new RelayCommand<BO.CallInList>(DeleteCall);
+            CancelAssignmentCommand = new RelayCommand<BO.CallInList>(CancelAssignment);
+            SelectedFilterField = nameof(FilterFields.Status);
+            UpdateFilterValueControl(status);
+        }
+
         private void ListObserver()
         {
             if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
@@ -100,7 +109,7 @@ namespace PL.ManagerWindows.Call
             s_bl.Call.RemoveObserver(UpdateCallsList);
         }
 
-        private void UpdateFilterValueControl()
+        private void UpdateFilterValueControl(BO.FinishCallType status = BO.FinishCallType.Open)
         {
             if (string.IsNullOrEmpty(SelectedFilterField)) return;
 
@@ -133,6 +142,7 @@ namespace PL.ManagerWindows.Call
                     });
                     comboBox2.SelectedItem = null;
                     comboBox2.SelectionChanged += (s, e) => UpdateCallsList();
+                    comboBox2.SelectedItem = status;
                     comboBox2.VerticalContentAlignment = VerticalAlignment.Center;
                     CurrentFilterValueControl = comboBox2;
                     break;

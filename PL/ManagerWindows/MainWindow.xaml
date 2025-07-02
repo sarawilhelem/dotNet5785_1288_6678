@@ -111,10 +111,10 @@
             <Button Content="InitializationDB" Grid.Column="2" Click="InitializationDB_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanInverseConverter}}"/>
             <Button Content="ResetDB" Grid.Column="3" Click="ResetDB_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource BooleanInverseConverter}}"/>
         </Grid>
-        <DataGrid ItemsSource="{Binding CallsStatuses}" AutoGenerateColumns="False" MouseDoubleClick="DataGrid_MouseDoubleClick" Grid.Row="3">
+        <DataGrid ItemsSource="{Binding CallsStatuses}" AutoGenerateColumns="False" MouseDoubleClick="DataGrid_MouseDoubleClick" Grid.Row="3" SelectedItem="{Binding SelectedStatus, Mode=TwoWay}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="סטטוס" Binding="{Binding Item1}" />
-                <DataGridTextColumn Header="כמות" Binding="{Binding Item2}" />
+                <DataGridTextColumn Header="Status" Binding="{Binding Item1}" />
+                <DataGridTextColumn Header="Amount" Binding="{Binding Item2}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -342,9 +342,15 @@ namespace BlTest
                             s_bl.Call.Delete(cId);
                             break;
                         case CallMenu.GetCountsGroupByStatus:
-                            int[] countArr = s_bl.Call.GetCountsGroupByStatus();
-                            foreach (BO.FinishCallType status in Enum.GetValues(typeof(BO.FinishCallType)))
-                                Console.WriteLine($"{countArr[(int)status]} calls with {status} status");
+                            List<Tuple<string, int>> countList = s_bl.Call.GetCountsGroupByStatus();
+
+                            foreach (var item in countList)
+                            {
+                                string status = item.Item1;
+                                int count = item.Item2;
+
+                                Console.WriteLine($"{count} calls with {status} status");
+                            }
                             break;
                         case CallMenu.ReadAllVolunteerClosedCalls:
                             ReadAllVolunteerClosedCalls();
