@@ -420,8 +420,8 @@
     <CallId>1046</CallId>
     <VolunteerId>305848921</VolunteerId>
     <OpenTime>2024-01-01T00:00:00</OpenTime>
-    <FinishTime xsi:nil="true" />
-    <FinishType xsi:nil="true" />
+    <FinishTime>2024-01-01T00:00:00</FinishTime>
+    <FinishType>Processed</FinishType>
     <Id>2052</Id>
   </Assignment>
 </ArrayOfAssignment>
