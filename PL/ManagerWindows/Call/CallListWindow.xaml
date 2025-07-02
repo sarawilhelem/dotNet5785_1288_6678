@@ -5,70 +5,78 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.ManagerWindows.Call"
         mc:Ignorable="d"
-        Title="CallListWindow"
+        Title="Call List"
         Height="800"
         Width="1050"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Background="#FFFFFF">
 
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="25*"/>
-            <RowDefinition Height="500*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid HorizontalAlignment="Stretch" Height="Auto" Grid.Row="0" VerticalAlignment="Stretch">
+        <!-- Filter and Sort Section -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Content="Filter By:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+            <Label Content="Filter By:" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" FontWeight="Bold" Foreground="#333333"/>
             <ComboBox ItemsSource="{Binding Source={StaticResource FilterFieldCollectionKey}}" 
                       SelectedItem="{Binding SelectedFilterField}" 
-                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" VerticalContentAlignment="Center"/>
-            <Label Content="Filter Value:" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2"/>
+                      HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1" VerticalContentAlignment="Center" Margin="5,0" Background="#F0F0F0" Foreground="#333333"/>
+
+            <Label Content="Filter Value:" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="2" FontWeight="Bold" Foreground="#333333"/>
             <ContentControl Content="{Binding CurrentFilterValueControl}" Grid.Column="3" 
-                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
-                            VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
-            <Label Content="Sort By:" HorizontalAlignment="Center"  VerticalAlignment="Center" Grid.Column="4"/>
+                            VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0"/>
+
+            <Label Content="Sort By:" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="4" FontWeight="Bold" Foreground="#333333"/>
             <ComboBox ItemsSource="{Binding Source={StaticResource CallInListFieldsCollectionKey}}" 
-                SelectedItem="{Binding SelectedSortField}" VerticalContentAlignment="Center"
-                HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="5"/>
+                      SelectedItem="{Binding SelectedSortField}" 
+                      HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="5" VerticalContentAlignment="Center" Margin="5,0" Background="#F0F0F0" Foreground="#333333"/>
         </Grid>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding CallList}" SelectedItem="{Binding SelectedCall}" MouseDoubleClick="Call_MouseDoubleClick">
+        <!-- Call List Section -->
+        <ListView Grid.Row="1" ItemsSource="{Binding CallList}" SelectedItem="{Binding SelectedCall}" MouseDoubleClick="Call_MouseDoubleClick" BorderBrush="#CCCCCC" BorderThickness="1">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="Auto"/>
-                    <GridViewColumn Header="CallId" DisplayMemberBinding="{Binding CallId}" Width="Auto"/>
-                    <GridViewColumn Header="CallType" DisplayMemberBinding="{Binding CallType}" Width="Auto"/>
-                    <GridViewColumn Header="OpenTime" DisplayMemberBinding="{Binding OpenTime}" Width="Auto"/>
-                    <GridViewColumn Header="MaxCloseTime" DisplayMemberBinding="{Binding MaxCloseTime}" Width="Auto"/>
-                    <GridViewColumn Header="LastVolunteerName" DisplayMemberBinding="{Binding LastVolunteerName}" Width="Auto"/>
-                    <GridViewColumn Header="TotalProcessingTime" DisplayMemberBinding="{Binding TotalProcessingTime}" Width="Auto"/>
-                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="Auto"/>
-                    <GridViewColumn Header="AmountOfAssignments" DisplayMemberBinding="{Binding AmountOfAssignments}" Width="Auto"/>
-                    <GridViewColumn Width="Auto">
+                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="100"/>
+                    <GridViewColumn Header="CallId" DisplayMemberBinding="{Binding CallId}" Width="100"/>
+                    <GridViewColumn Header="CallType" DisplayMemberBinding="{Binding CallType}" Width="150"/>
+                    <GridViewColumn Header="OpenTime" DisplayMemberBinding="{Binding OpenTime}" Width="150"/>
+                    <GridViewColumn Header="MaxCloseTime" DisplayMemberBinding="{Binding MaxCloseTime}" Width="150"/>
+                    <GridViewColumn Header="LastVolunteerName" DisplayMemberBinding="{Binding LastVolunteerName}" Width="150"/>
+                    <GridViewColumn Header="TotalProcessingTime" DisplayMemberBinding="{Binding TotalProcessingTime}" Width="150"/>
+                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="100"/>
+                    <GridViewColumn Header="AmountOfAssignments" DisplayMemberBinding="{Binding AmountOfAssignments}" Width="150"/>
+                    <GridViewColumn Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="Delete" 
                                         Command="{Binding DataContext.DeleteCallCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
                                         CommandParameter="{Binding}" 
-                                        Visibility="{Binding Converter={StaticResource DeleteableCallToVisibilityConverterKey}}"/>
+                                        Visibility="{Binding Converter={StaticResource DeleteableCallToVisibilityConverterKey}}" 
+                                        Background="#FFCCCC" Foreground="#333333" FontWeight="Bold" Padding="5"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="Auto">
+                    <GridViewColumn Width="150">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Cancel Assignment" Command="{Binding DataContext.CancelAssignmentCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" />
+                                <Button Content="Cancel Assignment" 
+                                        Command="{Binding DataContext.CancelAssignmentCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                        CommandParameter="{Binding}" 
+                                        Background="#FFE5B4" Foreground="#333333" FontWeight="Bold" Padding="5"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -76,6 +84,8 @@
             </ListView.View>
         </ListView>
 
-        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100" Click="AddCall_Click"/>
+        <!-- Add Button -->
+        <Button Content="Add Call" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="150" Click="AddCall_Click" 
+                Background="#B3E5FC" Foreground="#333333" FontWeight="Bold" Margin="0,10,0,0"/>
     </Grid>
 </Window>

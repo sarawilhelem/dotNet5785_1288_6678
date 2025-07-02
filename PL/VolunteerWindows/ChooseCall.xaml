@@ -10,6 +10,41 @@
         Closed="Window_Closed"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
+    <Window.Resources>
+        <!-- Style for Labels -->
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Foreground" Value="#2E86C1"/>
+        </Style>
+
+        <!-- Style for ComboBoxes -->
+        <Style TargetType="ComboBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#F9E79F"/>
+            <Setter Property="BorderBrush" Value="#B7950B"/>
+        </Style>
+
+        <!-- Style for ListView -->
+        <Style TargetType="ListView">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#FDEDEC"/>
+            <Setter Property="BorderBrush" Value="#E74C3C"/>
+        </Style>
+
+        <!-- Style for Buttons -->
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#AED6F1"/>
+            <Setter Property="BorderBrush" Value="#3498DB"/>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -26,7 +61,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Content="Sort by:"  Grid.Column="0" VerticalAlignment="Stretch"  HorizontalAlignment="Center"  />
+            <Label Content="Sort by:" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
 
             <ComboBox ItemsSource="{Binding Source={StaticResource OpenCallInListFieldsCollectionKey}}" 
                       SelectedValue="{Binding SelectedSortField, Mode=TwoWay}"
@@ -35,7 +70,7 @@
                       HorizontalAlignment="Stretch" 
                       VerticalAlignment="Stretch" />
 
-            <Label Content="Call Type:"  Grid.Column="2"  VerticalAlignment="Stretch"  HorizontalAlignment="Center" />
+            <Label Content="Call Type:" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
 
             <ComboBox ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}" 
                       SelectedValue="{Binding SelectedCallType}"
@@ -46,7 +81,7 @@
         </Grid>
 
         <!-- ListView -->
-        <ListView Grid.Row="1" ItemsSource="{Binding CallList}" SelectedItem="{Binding SelectedCall, Mode=TwoWay}" >
+        <ListView Grid.Row="1" ItemsSource="{Binding CallList}" SelectedItem="{Binding SelectedCall, Mode=TwoWay}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="Auto"/>

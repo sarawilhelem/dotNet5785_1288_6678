@@ -5,115 +5,171 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.ManagerWindows.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerWindow" Height="600" Width="400" Padding="50"
+        Title="VolunteerWindow" Height="600" Width="400" Padding="20"
         Loaded="Window_Loaded" Closed="Window_Closed"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-    <Grid>
+
+    <Window.Resources>
+        <!-- Button Style -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#AED6F1"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#3498DB"/>
+        </Style>
+
+        <!-- TextBox Style -->
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#F9E79F"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#B7950B"/>
+        </Style>
+
+        <!-- ComboBox Style -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="#F9E79F"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#B7950B"/>
+        </Style>
+
+        <!-- Label Style -->
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="#2E86C1"/>
+        </Style>
+
+        <!-- CheckBox Style -->
+        <Style TargetType="CheckBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#2E86C1"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="#FADBD8">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Id:" HorizontalAlignment="Right" Grid.Row="0" />
+        <!-- Id -->
+        <Label Content="Id:" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="0" Margin="5"/>
         <TextBox Text="{Binding CurrentVolunteer.Id, Mode=TwoWay}" PreviewTextInput="NumberTextBox_PreviewTextInput"
-                 IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}" Width="200" Grid.Row="0" Grid.Column="1"/>
+                 IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}" 
+                 Width="200" Grid.Row="0" Grid.Column="1" Margin="5"/>
 
-        <Label Content="Name:" HorizontalAlignment="Right" Grid.Row="1"/>
-        <TextBox Text="{Binding CurrentVolunteer.Name, Mode=TwoWay}" Width="200" Grid.Row="1" Grid.Column="1"/>
+        <!-- Name -->
+        <Label Content="Name:" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="1" Margin="5"/>
+        <TextBox Text="{Binding CurrentVolunteer.Name, Mode=TwoWay}" Width="200" Grid.Row="1" Grid.Column="1" Margin="5"/>
 
-        <Label Content="Phone:" HorizontalAlignment="Right" Grid.Row="2"/>
+        <!-- Phone -->
+        <Label Content="Phone:" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="2" Margin="5"/>
         <TextBox Text="{Binding CurrentVolunteer.Phone, Mode=TwoWay}" PreviewTextInput="NumberTextBox_PreviewTextInput"
-                 Width="200" Grid.Row="2" Grid.Column="1"/>
+                 Width="200" Grid.Row="2" Grid.Column="1" Margin="5"/>
 
-        <Label Content="Email:" HorizontalAlignment="Right" Grid.Row="3"/>
-        <TextBox Text="{Binding CurrentVolunteer.Email, Mode=TwoWay}" Width="200" Grid.Row="3" Grid.Column="1"/>
+        <!-- Email -->
+        <Label Content="Email:" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3" Margin="5"/>
+        <TextBox Text="{Binding CurrentVolunteer.Email, Mode=TwoWay}" Width="200" Grid.Row="3" Grid.Column="1" Margin="5"/>
 
-        <Label Content="Password:" HorizontalAlignment="Right" Grid.Row="4"
+        <!-- Password -->
+        <Label Content="Password:" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="4" Margin="5"
                Visibility="{Binding ButtonText, Converter={StaticResource ConvertAddToVisibleKey}}"/>
-        <TextBox Text="{Binding CurrentVolunteer.Password, Mode=TwoWay}" Width="200" Grid.Row="4" Grid.Column="1"
+        <TextBox Text="{Binding CurrentVolunteer.Password, Mode=TwoWay}" Width="200" Grid.Row="4" Grid.Column="1" Margin="5"
                  Visibility="{Binding ButtonText, Converter={StaticResource ConvertAddToVisibleKey}}"/>
 
-        <Label Content="Address:" HorizontalAlignment="Right" Grid.Row="5"/>
-        <TextBox Text="{Binding CurrentVolunteer.Address, Mode=TwoWay}" Width="200" Grid.Row="5" Grid.Column="1"/>
+        <!-- Address -->
+        <Label Content="Address:" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="5" Margin="5"/>
+        <TextBox Text="{Binding CurrentVolunteer.Address, Mode=TwoWay}" Width="200" Grid.Row="5" Grid.Column="1" Margin="5"/>
 
-        <Label Content="Role:" HorizontalAlignment="Right" Grid.Row="6"/>
-        <ComboBox SelectedItem="{Binding CurrentVolunteer.Role, Mode=TwoWay}" Width="200" Grid.Row="6" Grid.Column="1" ItemsSource="{Binding Source={StaticResource RoleCollectionKey}}" />
+        <!-- Role -->
+        <Label Content="Role:" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="6" Margin="5"/>
+        <ComboBox SelectedItem="{Binding CurrentVolunteer.Role, Mode=TwoWay}" Width="200" Grid.Row="6" Grid.Column="1" Margin="5"
+                  ItemsSource="{Binding Source={StaticResource RoleCollectionKey}}"/>
 
-        <Label Content="Is Active:" HorizontalAlignment="Right" Grid.Row="7"/>
-        <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Width="200" Grid.Row="7" Grid.Column="1"/>
+        <!-- Is Active -->
+        <Label Content="Is Active:" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="7" Margin="5"/>
+        <CheckBox IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Width="200" Grid.Row="7" Grid.Column="1" Margin="5"/>
 
-        <Label Content="Max Distance:" HorizontalAlignment="Right" Grid.Row="8"/>
+        <!-- Max Distance -->
+        <Label Content="Max Distance:" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="8" Margin="5"/>
         <TextBox Text="{Binding CurrentVolunteer.MaxDistance, Mode=TwoWay}" PreviewTextInput="NumberTextBox_PreviewTextInput"
-                 Width="200" Grid.Row="8" Grid.Column="1"/>
+                 Width="200" Grid.Row="8" Grid.Column="1" Margin="5"/>
 
-        <ContentControl Grid.Row="9" Grid.ColumnSpan="2" Margin="50,0,0,0" 
+        <!-- Current Call -->
+        <ContentControl Grid.Row="9" Grid.ColumnSpan="2" Margin="10,0,0,0" 
                         Visibility="{Binding CurrentVolunteer.Call, Converter={StaticResource NullToVisibilityConverterKey}}">
             <StackPanel Orientation="Vertical">
-                <Label Content="Current Call:" HorizontalAlignment="Left" FontWeight="Bold"/>
+                <Label Content="Current Call:" HorizontalAlignment="Left" FontWeight="Bold" Margin="5"/>
 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="5">
                     <Label Content="Id:" HorizontalAlignment="Left"/>
                     <Label Content="{Binding CurrentVolunteer.Call.Id, Mode=OneWay}" Width="200"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="5">
                     <Label Content="Call Type:" HorizontalAlignment="Left"/>
                     <Label Content="{Binding CurrentVolunteer.Call.CallType, Mode=OneWay}" Width="200"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="5">
                     <Label Content="Address:" HorizontalAlignment="Left"/>
                     <Label Content="{Binding CurrentVolunteer.Call.Address, Mode=OneWay}" Width="200"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="5">
                     <Label Content="Distance:" HorizontalAlignment="Left"/>
                     <Label Content="{Binding CurrentVolunteer.Call.Distance, Mode=OneWay}" Width="200"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="5">
                     <Label Content="Open Time:" HorizontalAlignment="Left"/>
                     <Label Content="{Binding CurrentVolunteer.Call.OpenTime, Mode=OneWay}" Width="200"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="5">
                     <Label Content="Insertion Time:" HorizontalAlignment="Left"/>
                     <Label Content="{Binding CurrentVolunteer.Call.Insersion, Mode=OneWay}" Width="200"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="5">
                     <Label Content="Status:" HorizontalAlignment="Left"/>
                     <Label Content="{Binding CurrentVolunteer.Call.Status, Mode=OneWay}" Width="200"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="5">
                     <Label Content="Description:" HorizontalAlignment="Left"/>
                     <Label Content="{Binding CurrentVolunteer.Call.Description, Mode=OneWay}" Width="200"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="5">
                     <Label Content="Max Close Time:" HorizontalAlignment="Left"/>
                     <Label Content="{Binding CurrentVolunteer.Call.MaxCloseTime, Mode=OneWay}" Width="200"/>
                 </StackPanel>
             </StackPanel>
         </ContentControl>
 
-        <Button Content="{Binding ButtonText}" Click="BtnAddUpdate_Click" Width="150" Grid.Row="12" Margin="102,10,148,14" Grid.ColumnSpan="2"/>
+        <!-- Add/Update Button -->
+        <Button Content="{Binding ButtonText}" Click="BtnAddUpdate_Click" Width="150" Grid.Row="12" Margin="5" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
     </Grid>
 </Window>
