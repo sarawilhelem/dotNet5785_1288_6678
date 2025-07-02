@@ -5,6 +5,10 @@ using System.Windows.Threading;
 
 namespace PL.ManagerWindows
 {
+    /// <summary>
+    /// Represents the main window of the application, managing simulator controls, 
+    /// database operations, and navigation to other windows.
+    /// </summary>
     public partial class MainWindow : Window
     {
         private volatile DispatcherOperation? _clockObserverOperation = null;
@@ -14,40 +18,69 @@ namespace PL.ManagerWindows
         private Call.CallListWindow callListWindow;
         private Volunteer.VolunteerListWindow? volunteerListWindow;
 
+        /// <summary>
+        /// Dependency property for the current time displayed in the application.
+        /// </summary>
         public static readonly DependencyProperty CurrentTimeProperty =
             DependencyProperty.Register("CurrentTime", typeof(DateTime), typeof(MainWindow));
+
+        /// <summary>
+        /// Gets or sets the current time displayed in the application, synchronized with the simulator clock.
+        /// </summary>
         public DateTime CurrentTime
         {
             get { return (DateTime)GetValue(CurrentTimeProperty); }
             set { SetValue(CurrentTimeProperty, value); }
         }
 
+        /// <summary>
+        /// Dependency property for the risk range used in the simulator.
+        /// </summary>
         public static readonly DependencyProperty RiskRangeProperty =
             DependencyProperty.Register("RiskRange", typeof(TimeSpan), typeof(MainWindow));
 
+        /// <summary>
+        /// Gets or sets the risk range used for monitoring and simulation purposes.
+        /// </summary>
         public TimeSpan RiskRange
         {
             get { return (TimeSpan)GetValue(RiskRangeProperty); }
             set { SetValue(RiskRangeProperty, value); }
         }
 
+        /// <summary>
+        /// Dependency property for the interval in milliseconds for the simulator's operations.
+        /// </summary>
         public static readonly DependencyProperty IntervalProperty =
             DependencyProperty.Register("Interval", typeof(int), typeof(MainWindow), new PropertyMetadata(defaultInternal));
 
+        /// <summary>
+        /// Gets or sets the interval in milliseconds for the simulator's operations.
+        /// </summary>
         public int Interval
         {
             get { return (int)GetValue(IntervalProperty); }
             set { SetValue(IntervalProperty, value); }
         }
 
+        /// <summary>
+        /// Dependency property indicating whether the simulator is currently running.
+        /// </summary>
         public static readonly DependencyProperty IsSimulatorRunningProperty =
             DependencyProperty.Register("IsSimulatorRunning", typeof(bool), typeof(MainWindow), new PropertyMetadata(false));
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the simulator is currently running.
+        /// </summary>
         public bool IsSimulatorRunning
         {
             get { return (bool)GetValue(IsSimulatorRunningProperty); }
             set { SetValue(IsSimulatorRunningProperty, value); }
         }
+
+        /// <summary>
+        /// Toggles the simulator's state between running and stopped.
+        /// </summary>
         private async void ToggleSimulator(object sender, RoutedEventArgs e)
         {
             if (IsSimulatorRunning)
@@ -62,39 +95,57 @@ namespace PL.ManagerWindows
             }
         }
 
-
-
-
+        /// <summary>
+        /// Advances the simulator clock by one minute.
+        /// </summary>
         private void AddMinute_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.TimeUnit.Minute);
         }
 
+        /// <summary>
+        /// Advances the simulator clock by one hour.
+        /// </summary>
         private void AddHour_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.TimeUnit.Hour);
         }
 
+        /// <summary>
+        /// Advances the simulator clock by one day.
+        /// </summary>
         private void AddDay_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.TimeUnit.Day);
         }
 
+        /// <summary>
+        /// Advances the simulator clock by one month.
+        /// </summary>
         private void AddMonth_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.TimeUnit.Month);
         }
 
+        /// <summary>
+        /// Advances the simulator clock by one year.
+        /// </summary>
         private void AddYear_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.AdvanceClock(BO.TimeUnit.Year);
         }
 
+        /// <summary>
+        /// Updates the risk range in the simulator configuration.
+        /// </summary>
         private void UpdateRiskRange(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.SetRiskRange(RiskRange);
         }
 
+        /// <summary>
+        /// Observes and updates the current time from the simulator.
+        /// </summary>
         private void ClockObserver()
         {
             if (_clockObserverOperation is null || _clockObserverOperation.Status == DispatcherOperationStatus.Completed)
@@ -104,6 +155,9 @@ namespace PL.ManagerWindows
                 });
         }
 
+        /// <summary>
+        /// Observes and updates the risk range from the simulator configuration.
+        /// </summary>
         private void ConfigObserver()
         {
             if (_configObserverOperation is null || _configObserverOperation.Status == DispatcherOperationStatus.Completed)
@@ -113,6 +167,9 @@ namespace PL.ManagerWindows
                 });
         }
 
+        /// <summary>
+        /// Handles the window's closing event, ensuring proper cleanup of resources.
+        /// </summary>
         private void Window_Closed(object sender, EventArgs e)
         {
             if (IsSimulatorRunning)
@@ -124,6 +181,9 @@ namespace PL.ManagerWindows
             this.Close();
         }
 
+        /// <summary>
+        /// Opens the calls list window or activates it if already open.
+        /// </summary>
         private void CallsList_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -134,10 +194,10 @@ namespace PL.ManagerWindows
                     callListWindow.Closed += (s, args) => callListWindow = null; // Reset reference when closed
                     callListWindow.Show();
                 }
-                else if(IsSimulatorRunning == true)
+                else if (IsSimulatorRunning == true)
                     new Call.CallListWindow().Show();
                 else
-                    callListWindow.Activate(); 
+                    callListWindow.Activate();
             }
             catch (Exception ex)
             {
@@ -145,6 +205,9 @@ namespace PL.ManagerWindows
             }
         }
 
+        /// <summary>
+        /// Opens the volunteers list window or activates it if already open.
+        /// </summary>
         private void VolunteersList_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -168,6 +231,9 @@ namespace PL.ManagerWindows
             }
         }
 
+        /// <summary>
+        /// Initializes the database and closes all other windows except the main window.
+        /// </summary>
         private void InitializationDB_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to initialize the database?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -190,6 +256,9 @@ namespace PL.ManagerWindows
             }
         }
 
+        /// <summary>
+        /// Resets the database and closes all other windows except the main window.
+        /// </summary>
         private void ResetDB_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to reset the database?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -212,6 +281,9 @@ namespace PL.ManagerWindows
             }
         }
 
+        /// <summary>
+        /// Closes all open windows except the main window.
+        /// </summary>
         private void CloseAllWindowsExceptMain()
         {
             foreach (Window window in Application.Current.Windows)
@@ -223,6 +295,9 @@ namespace PL.ManagerWindows
             }
         }
 
+        /// <summary>
+        /// Handles the window's loaded event, initializing data and observers.
+        /// </summary>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             CurrentTime = s_bl.Admin.GetClock();

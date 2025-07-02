@@ -9,6 +9,32 @@
         Loaded="Window_Loaded"
         Closed="Window_Closed"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Window.Resources>
+        <!-- Define a colorful style for Labels -->
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Foreground" Value="#2E86C1"/>
+        </Style>
+
+        <!-- Define a colorful style for ComboBoxes -->
+        <Style TargetType="ComboBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#F9E79F"/>
+            <Setter Property="BorderBrush" Value="#B7950B"/>
+        </Style>
+
+        <!-- Define a colorful style for ListView -->
+        <Style TargetType="ListView">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#FDEDEC"/>
+            <Setter Property="BorderBrush" Value="#E74C3C"/>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -33,7 +59,7 @@
             <ComboBox ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}" SelectedValue="{Binding SelectedCallType}"
                  SelectionChanged="ChangeCallsListSortOrFilter" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Grid>
-        <ListView Grid.Row="1" ItemsSource="{Binding CallList}" SelectedItem="{Binding SelectedCall, Mode=TwoWay}" >
+        <ListView Grid.Row="1" ItemsSource="{Binding CallList}" SelectedItem="{Binding SelectedCall, Mode=TwoWay}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="Auto"/>
@@ -46,7 +72,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        
-
     </Grid>
 </Window>

@@ -8,6 +8,59 @@
         Title="VolunteerWindow" Height="750" Width="400" Padding="50"
         Loaded="Window_Loeded" Closed="Window_Closed"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+    <Window.Resources>
+        <!-- Define a colorful style for Labels -->
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Foreground" Value="#2E86C1"/>
+        </Style>
+
+        <!-- Define a colorful style for TextBoxes -->
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#D6EAF8"/>
+            <Setter Property="BorderBrush" Value="#2E86C1"/>
+        </Style>
+
+        <!-- Define a colorful style for Buttons -->
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#28B463"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#1D8348"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <!-- Define a colorful style for ComboBoxes -->
+        <Style TargetType="ComboBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#F9E79F"/>
+            <Setter Property="BorderBrush" Value="#B7950B"/>
+        </Style>
+
+        <!-- Define a colorful style for CheckBoxes -->
+        <Style TargetType="CheckBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Foreground" Value="#AF7AC5"/>
+        </Style>
+
+        <!-- Define a colorful style for ListView -->
+        <Style TargetType="ListView">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#FDEDEC"/>
+            <Setter Property="BorderBrush" Value="#E74C3C"/>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -114,7 +167,7 @@
                     <Label Content="Directions:" HorizontalAlignment="Left"/>
                     <Label Content="{Binding CurrentVolunteerCall.Description, Mode=OneWay}" Width="200"/>
                 </StackPanel>
-                
+
 
                 <Label Content="Call Assign List:" HorizontalAlignment="Left"/>
                 <ListView Margin="0,0,30,0" ItemsSource="{Binding CurrentVolunteerCall.CallAssignList}">
