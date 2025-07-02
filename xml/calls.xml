@@ -91,16 +91,6 @@
     <Id>1008</Id>
   </Call>
   <Call>
-    <CallType>Physiotherapy</CallType>
-    <Address>Rav Kook St 4, Jerusalem</Address>
-    <OpenTime>2023-06-15T00:00:00</OpenTime>
-    <MaxCloseTime>2024-05-14T00:00:00</MaxCloseTime>
-    <Latitude>31.7818</Latitude>
-    <Longitude>35.218</Longitude>
-    <Description>Need physiotherapy 5 times a week</Description>
-    <Id>1009</Id>
-  </Call>
-  <Call>
     <CallType>TakeCareOut</CallType>
     <Address>Talmud Torah St 8, Jerusalem</Address>
     <OpenTime>2023-09-24T00:00:00</OpenTime>
@@ -499,5 +489,45 @@
     <Longitude>35.22</Longitude>
     <Description>Need physiotherapy 5 times a week</Description>
     <Id>1049</Id>
+  </Call>
+  <Call>
+    <CallType>Physiotherapy</CallType>
+    <Address>Rav Kook St 5, Jerusalem</Address>
+    <OpenTime>2023-06-15T00:00:00</OpenTime>
+    <MaxCloseTime>2024-05-14T00:00:00</MaxCloseTime>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <Description>Need physiotherapy 5 times a week</Description>
+    <Id>1009</Id>
+  </Call>
+  <Call>
+    <CallType>TakeCareOut</CallType>
+    <Address>Sulam Yaakov 10, Jerusalem</Address>
+    <OpenTime>2024-01-01T00:00:00</OpenTime>
+    <MaxCloseTime>2024-01-25T00:00:00</MaxCloseTime>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <Description>dd</Description>
+    <Id>1050</Id>
+  </Call>
+  <Call>
+    <CallType>TakeCareAtHome</CallType>
+    <Address>Sualm Yaakov 10, Jerusalem</Address>
+    <OpenTime>2024-01-01T00:00:00</OpenTime>
+    <MaxCloseTime>2024-01-23T00:00:00</MaxCloseTime>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <Description>ddd</Description>
+    <Id>1051</Id>
+  </Call>
+  <Call>
+    <CallType>Physiotherapy</CallType>
+    <Address>Sulam Yaakov 5, Jerusalem</Address>
+    <OpenTime>2024-01-01T00:00:00</OpenTime>
+    <MaxCloseTime>2024-01-26T00:00:00</MaxCloseTime>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <Description>dddddddddddddddddddddddddddddd</Description>
+    <Id>1052</Id>
   </Call>
 </ArrayOfCall>
