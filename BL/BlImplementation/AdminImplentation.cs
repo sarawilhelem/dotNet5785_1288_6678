@@ -56,6 +56,7 @@ internal class AdminImplentaition : IAdmin
         }
         CallManager.Observers.NotifyListUpdated();
         VolunteerManager.Observers.NotifyListUpdated();
+        CallManager.PeriodicSCallsUpdates(AdminManager.Now);
     }
 
     /// <summary>

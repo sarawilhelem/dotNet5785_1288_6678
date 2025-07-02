@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -13,6 +14,7 @@ namespace PL.ManagerWindows
     {
         private volatile DispatcherOperation? _clockObserverOperation = null;
         private volatile DispatcherOperation? _configObserverOperation = null;
+        private volatile DispatcherOperation? _callsStatusesCount = null;
         private const int defaultInternal = 10000;
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private Call.CallListWindow callListWindow;
@@ -78,6 +80,15 @@ namespace PL.ManagerWindows
             set { SetValue(IsSimulatorRunningProperty, value); }
         }
 
+        public static readonly DependencyProperty CallsStatusesProperty =
+    DependencyProperty.Register("CallsStatuses", typeof(IEnumerable<Tuple<string, int>>), typeof(MainWindow), new PropertyMetadata(null));
+
+        public IEnumerable<Tuple<string, int>> CallsStatuses
+        {
+            get { return (IEnumerable<Tuple<string, int>>)GetValue(CallsStatusesProperty); }
+            set { SetValue(CallsStatusesProperty, value); }
+        }
+
         /// <summary>
         /// Toggles the simulator's state between running and stopped.
         /// </summary>
@@ -93,6 +104,15 @@ namespace PL.ManagerWindows
                 s_bl.Admin.StartSimulator(Interval);
                 IsSimulatorRunning = true;
             }
+        }
+
+        private void CallsStatusesObserver()
+        {
+            if (_callsStatusesCount is null || _callsStatusesCount.Status == DispatcherOperationStatus.Completed)
+                _callsStatusesCount = Dispatcher.BeginInvoke(() =>
+                {
+                    CallsStatuses = s_bl.Call.GetCountsGroupByStatus();
+                });
         }
 
         /// <summary>
@@ -298,18 +318,49 @@ namespace PL.ManagerWindows
         /// <summary>
         /// Handles the window's loaded event, initializing data and observers.
         /// </summary>
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             CurrentTime = s_bl.Admin.GetClock();
             RiskRange = s_bl.Admin.GetRiskRange();
+
+            var statusCountsArray = s_bl.Call.GetCountsGroupByStatus(); // שהשורה הזו מחזירה int[]
+            var statusCounts = new List<Tuple<string, int>>();
+
+            for (int i = 0; i < statusCountsArray.Length; i++)
+            {
+                if (statusCountsArray[i] > 0) // אם הכמות גדולה מ-0
+                {
+                    statusCounts.Add(new Tuple<string, int>
+                    (
+                        ((BO.FinishCallType)i).ToString(),  // המרת הסטטוס לשם
+                        statusCountsArray[i]
+                    ));
+                }
+            }
+
+            CallsStatuses = statusCounts; // CallsStatuses צריך להיות מסוג IEnumerable<Tuple<string, int>>
             s_bl.Admin.AddClockObserver(ClockObserver);
             s_bl.Admin.AddConfigObserver(ConfigObserver);
+            s_bl.Call.AddObserver(CallsStatusesObserver);
             this.DataContext = this;
         }
 
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is DataGrid dataGrid && dataGrid.SelectedItem is Tuple<string, int> selectedStatus)
+            {
+                // כאן תוכל לפתוח את חלון הקריאות בהתאם לסטטוס שנבחר
+                var callsWindow = new Call.CallListWindow(); // או whatever חלון שצריך
+                callsWindow.LoadCallsByStatus(selectedStatus.Item1); // פעולה לפתוח חלון על פי הסטטוס
+                callsWindow.Show();
+            }
         }
     }
 }

@@ -3,7 +3,7 @@ namespace BlApi;
 
 public interface ICall: IObservable
 {
-    public int[] GetCountsGroupByStatus();
+    public List<Tuple<string, int>> GetCountsGroupByStatus();
     public IEnumerable<BO.CallInList> ReadAll(BO.CallInListFields? sort=null , Object? findVal = null, BO.CallInListFields? findField=null);
     public BO.Call? Read(int id);
     public Task Update( BO.Call call);

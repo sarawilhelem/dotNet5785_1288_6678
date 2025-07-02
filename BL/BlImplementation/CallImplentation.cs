@@ -21,20 +21,24 @@ internal class CallImplentation : ICall
     /// read all calls and calculate the number of times each status in the calls
     /// </summary>
     /// <returns>an array of the count statuses</returns>
-    public int[] GetCountsGroupByStatus()
+    public List<Tuple<string, int>> GetCountsGroupByStatus()
     {
         var calls = ReadAll();
 
-        int[] statusCounts = new int[Enum.GetNames(typeof(BO.FinishCallType)).Length];
-
         var counts =
-         (from call in calls
-          group call by call.Status into g
-          select new { Status = g.Key, Count = g.Count() });
+            (from call in calls
+             group call by call.Status into g
+             select new { Status = g.Key, Count = g.Count() });
+
+        var statusCounts = new List<Tuple<string, int>>();
 
         foreach (var count in counts)
         {
-            statusCounts[(int)count.Status] = count.Count;
+            statusCounts.Add(new Tuple<string, int>
+            (
+                 count.Status.ToString(), // תרגם ל-string בהתאם ל-enum
+                count.Count
+            ));
         }
 
         return statusCounts;
@@ -245,23 +249,28 @@ internal class CallImplentation : ICall
     /// <returns>the open calls</returns>
     public IEnumerable<BO.OpenCallInList> ReadAllVolunteerOpenCalls(int volunteerId, BO.CallType? callType = null, BO.OpenCallInListFields? sort = null)
     {
+        DO.Volunteer volunteer;
+        lock (AdminManager.BlMutex)
+            volunteer = _dal.Volunteer.Read(volunteerId) ??
+                throw new BO.BlDoesNotExistException($"Volunteer with id {volunteerId} does not exists");
         var openedCalls = CallManager.ReadAll();
-        openedCalls = openedCalls.Where(a =>
-      Helpers.CallManager.GetCallStatus(a.CallId) == BO.FinishCallType.Open ||
-       Helpers.CallManager.GetCallStatus(a.CallId) == BO.FinishCallType.OpenInRisk);
-        var openCallsToReturn = openedCalls.Select(a =>
+        openedCalls = openedCalls.Where(c =>
+        Helpers.CallManager.DistanceBetweenVolunteerAndCall(volunteerId, c.CallId) <= volunteer.MaxDistanceCall &&
+      (Helpers.CallManager.GetCallStatus(c.CallId) == BO.FinishCallType.Open ||
+       Helpers.CallManager.GetCallStatus(c.CallId) == BO.FinishCallType.OpenInRisk));
+        var openCallsToReturn = openedCalls.Select(c =>
         {
             DO.Call call;
             lock (AdminManager.BlMutex)
-                call = _dal.Call.Read(c => c.Id == a.CallId)!;
+                call = _dal.Call.Read(c.CallId)!;
             return new BO.OpenCallInList
             {
-                Id = a.CallId,
+                Id = c.CallId,
                 CallType = (BO.CallType)call.CallType,
                 Address = call.Address,
                 OpenTime = call.OpenTime,
                 MaxCloseTime = call.MaxCloseTime,
-                Distance = Helpers.CallManager.DistanceBetweenVolunteerAndCall(volunteerId, a.CallId),
+                Distance = Helpers.CallManager.DistanceBetweenVolunteerAndCall(volunteerId, c.CallId),
                 Description = call.Description
             };
         });
