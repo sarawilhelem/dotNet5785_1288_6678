@@ -22,6 +22,7 @@
         <pl:ConvertDateTime x:Key="ConvertDateTimeKey" />
         <pl:BooleanToNullableConverter x:Key="BooleanToNullableConverterKey"/>
         <pl:NullToVisibilityConverter x:Key="NullToVisibilityConverterKey"/>
+        <pl:NullToUnVisibilityConverter x:Key="NullToUnVisibilityConverterKey"/>
         <pl:DeleteableCallToVisibilityConverter x:Key="DeleteableCallToVisibilityConverterKey"/>
         <pl:VolunteerCanSelectCallConverter x:Key="VolunteerCanSelectCallConverter"/>
         <pl:FilterFieldsCollection x:Key="FilterFieldCollectionKey"/>

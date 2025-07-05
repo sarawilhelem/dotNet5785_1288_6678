@@ -70,12 +70,10 @@
             <Label Content="Sort by:" Margin="0,0,10,0" />
             <ComboBox ItemsSource="{Binding Source={StaticResource VolunteerInListFieldsCollectionKey}}"
                       SelectedValue="{Binding SelectedSortField, Mode=TwoWay}"
-                      SelectionChanged="ChangeVolunteersListSortOrFilter"
                       Grid.Column="1" />
 
             <Label Content="Active Status:" Margin="10,0,10,0" Grid.Column="2" />
             <ComboBox SelectedValue="{Binding IsActiveFilter, Converter={StaticResource BooleanToNullableConverterKey}, Mode=TwoWay}"
-                      SelectionChanged="ChangeVolunteersListSortOrFilter"
                       Grid.Column="3">
                 <ComboBoxItem Content="All" Tag="{x:Null}"/>
                 <ComboBoxItem Content="Active" Tag="True"/>
@@ -105,7 +103,8 @@
                     <GridViewColumn Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Delete" Command="{Binding DataContext.DeleteVolunteerCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" />
+                                <Button Content="Delete" Visibility="{Binding CallId, Converter={StaticResource NullToUnVisibilityConverterKey}}"
+                                        Command="{Binding DataContext.DeleteVolunteerCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -114,6 +113,6 @@
         </ListView>
 
         <!-- Add Button -->
-        <Button Content="Add" Grid.Row="2" />
+        <Button Content="Add" Grid.Row="2" Click="AddVolunteer_Click"/>
     </Grid>
 </Window>

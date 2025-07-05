@@ -73,7 +73,7 @@ public static class Initialization
 
             string vPhone = string.Concat(vStartsPhones[s_rand.Next(0, 6)], s_rand.Next(10000, 100000).ToString());
             string vEmail = string.Concat(vNames[i].Split(' ')[0], "@gmail.com");
-            int maxDistance = s_rand.Next(0, 5);
+            int maxDistance = s_rand.Next(0, 10);
             Role role = i==managerIndex? Role.Manager : Role.Volunteer;
             Volunteer newV = new(vId, vNames[i], vPhone, vEmail, vAddresses[i], vLatitude[i], vLongitude[i], maxDistance, role);
             try

@@ -102,13 +102,27 @@ namespace PL.ManagerWindows.Volunteer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            s_bl.Volunteer.AddObserver(UpdateVolunteersList);
             UpdateVolunteersList();
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            // Perform any cleanup if necessary
+            s_bl.Volunteer.RemoveObserver(UpdateVolunteersList);
         }
+
+        private void AddVolunteer_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                new VolunteerWindow().Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to show volunteer window", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
 
         private void Volunteer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -145,18 +159,12 @@ namespace PL.ManagerWindows.Volunteer
                 {
                     int id = volunteer.Id;
                     s_bl.Volunteer.Delete(id);
-                    UpdateVolunteersList(); // Refresh the volunteer list after deletion
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void ChangeVolunteersListSortOrFilter(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateVolunteersList();
         }
     }
 }

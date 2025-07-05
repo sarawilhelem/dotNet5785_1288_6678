@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.ManagerWindows.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerWindow" Height="600" Width="400" Padding="20"
+        Title="VolunteerWindow" Height="850" Width="400" Padding="20"
         Loaded="Window_Loaded" Closed="Window_Closed"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
 

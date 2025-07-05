@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.VolunteerWindows"
         mc:Ignorable="d"
-        Title="VolunteerWindow" Height="750" Width="400" Padding="50"
+        Title="VolunteerWindow" Height="1000" Width="450" Padding="50"
         Loaded="Window_Loeded" Closed="Window_Closed"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Window.Resources>
@@ -13,7 +13,7 @@
         <Style TargetType="Label">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Margin" Value="1"/>
             <Setter Property="Foreground" Value="#2E86C1"/>
         </Style>
 
@@ -21,7 +21,7 @@
         <Style TargetType="TextBox">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Padding" Value="5"/>
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Margin" Value="1"/>
             <Setter Property="Background" Value="#D6EAF8"/>
             <Setter Property="BorderBrush" Value="#2E86C1"/>
         </Style>
@@ -30,7 +30,7 @@
         <Style TargetType="Button">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Padding" Value="10"/>
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Margin" Value="1"/>
             <Setter Property="Background" Value="#28B463"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderBrush" Value="#1D8348"/>
@@ -41,7 +41,7 @@
         <Style TargetType="ComboBox">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Padding" Value="5"/>
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Margin" Value="1"/>
             <Setter Property="Background" Value="#F9E79F"/>
             <Setter Property="BorderBrush" Value="#B7950B"/>
         </Style>
@@ -49,13 +49,13 @@
         <!-- Define a colorful style for CheckBoxes -->
         <Style TargetType="CheckBox">
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Margin" Value="1"/>
             <Setter Property="Foreground" Value="#AF7AC5"/>
         </Style>
 
         <!-- Define a colorful style for ListView -->
         <Style TargetType="ListView">
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Margin" Value="1"/>
             <Setter Property="Background" Value="#FDEDEC"/>
             <Setter Property="BorderBrush" Value="#E74C3C"/>
         </Style>
@@ -68,21 +68,22 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <!-- Changed to allow flexibility -->
         </Grid.RowDefinitions>
 
         <Label Content="Id:" HorizontalAlignment="Right" Grid.Row="0" />
@@ -115,7 +116,7 @@
         <TextBox Text="{Binding CurrentVolunteer.MaxDistance, Mode=TwoWay}" PreviewTextInput="NumberTextBox_PreviewTextInput"
                  Width="200" Grid.Row="8" Grid.Column="1" TextChanged="TextBox_TextChanged"/>
 
-        <ContentControl Grid.Row="9" Grid.ColumnSpan="2" Margin="50,0,0,0" 
+        <ContentControl Grid.Row="9" Grid.ColumnSpan="2" Margin="50,3,0,0" 
                         Visibility="{Binding CurrentVolunteer.Call, Converter={StaticResource NullToVisibilityConverterKey}}">
             <StackPanel Orientation="Vertical">
                 <Label Content="Current Call:" HorizontalAlignment="Left" FontWeight="Bold"/>
@@ -140,7 +141,7 @@
                     <Label Content="{Binding CurrentVolunteerCall.Address, Mode=OneWay}" Width="200"/>
                 </StackPanel>
 
-                <TextBlock Margin="5,5,0,0">
+                <TextBlock >
                 <Hyperlink NavigateUri="{Binding MapLink}" 
                            RequestNavigate="Hyperlink_RequestNavigate">
                            Open in map
@@ -170,7 +171,7 @@
 
 
                 <Label Content="Call Assign List:" HorizontalAlignment="Left"/>
-                <ListView Margin="0,0,30,0" ItemsSource="{Binding CurrentVolunteerCall.CallAssignList}">
+                <ListView  ItemsSource="{Binding CurrentVolunteerCall.CallAssignList}" Margin="0,2,10,0">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Id" DisplayMemberBinding="{Binding VolunteerId, Mode=TwoWay}" Width="Auto"/>

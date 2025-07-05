@@ -129,6 +129,29 @@ internal class CallManager
         }
     }
 
+    public static async Task UpdateCoordinatesForCallAddressAsync(string address)
+    {
+        if (address is not null)
+        {
+            var (latitude, longitude) = await Tools.GetCoordinatesAsync(address);
+            if (latitude is not null && longitude is not null)
+            {
+                DO.Call? callToUpdate;
+                lock (AdminManager.BlMutex)
+                    callToUpdate = s_dal.Call.Read(c => c.Address == address && c.Latitude is null && c.Longitude is null);
+                if (callToUpdate is null)
+                    return;
+                callToUpdate = callToUpdate with { Latitude = latitude.Value, Longitude = longitude.Value };
+                lock (AdminManager.BlMutex)
+                {
+                    Update(callToUpdate);
+                }
+                Observers.NotifyListUpdated();
+                Observers.NotifyItemUpdated(callToUpdate.Id);
+            }
+        }
+    }
+
     /// <summary>
     /// convert an Object to timeSpan   
     /// </summary>
@@ -181,7 +204,6 @@ internal class CallManager
     {
         DO.Volunteer volunteer;
         DO.Call call;
-
         lock (AdminManager.BlMutex)
             volunteer = s_dal.Volunteer.Read(v => v.Id == volunteerId) ??
                 throw new BO.BlDoesNotExistException($"volunteer with id {volunteerId} does not exist");

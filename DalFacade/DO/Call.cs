@@ -24,6 +24,6 @@ public record Call
 )
 {
     public int Id { get; init; }
-    public Call() : this(CallType.TakeCareAtHome, "Zayit 1, Jerusalem, Israel",  DateTime.Now, DateTime.Now, 0, 0, "no more details")
+    public Call() : this(CallType.TakeCareAtHome, "Zayit 1, Jerusalem, Israel",  DateTime.Now, DateTime.Now, null, null, "no more details")
     { }
 }

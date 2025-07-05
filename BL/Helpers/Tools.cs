@@ -22,6 +22,13 @@ static internal class Tools
         string url = $"https://us1.locationiq.com/v1/search.php?key={apiKey}&q={Uri.EscapeDataString(address)}&format=json";
 
         var response = await client.GetAsync(url);
+
+        if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+        {
+            await Task.Delay(1000);
+            response = await client.GetAsync(url);
+        }
+
         if (!response.IsSuccessStatusCode)
             throw new BO.BlCoordinatesException("Invalid address or API error.");
 

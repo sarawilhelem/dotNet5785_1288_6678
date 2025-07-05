@@ -80,7 +80,7 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlIllegalValues">if a field in the updated call is not legal</exception>
     /// <exception cref="BO.BlCoordinatesException">if there is an exception when calculate the lat and lon</exception>
     /// <exception cref="BO.BlDoesNotExistException">if there is not a call with that id</exception>
-    public async Task Update(BO.Call call)
+    public void Update(BO.Call call)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CallManager.CheckValidation(call);
@@ -92,6 +92,8 @@ internal class CallImplentation : ICall
             OpenTime = call.OpenTime,
             MaxCloseTime = call.MaxCloseTime,
             Description = call.Description,
+            Latitude = null,
+            Longitude = null,
             Id = call.Id
         };
 
@@ -101,7 +103,7 @@ internal class CallImplentation : ICall
             VolunteerManager.Observers.NotifyListUpdated();
             CallManager.Observers.NotifyListUpdated();
             CallManager.Observers.NotifyItemUpdated(callToUpdate.Id);
-            _ = UpdateCoordinatesForCallAddressAsync(callToUpdate); //stage 7
+            _ = CallManager.UpdateCoordinatesForCallAddressAsync(callToUpdate.Address); //stage 7
         }
         catch
         {
@@ -148,7 +150,7 @@ internal class CallImplentation : ICall
     /// <exception cref="BO.BlIllegalValues">if a field in the new call is not legal</exception>
     /// <exception cref="BO.BlIllegalDatesOrder">if the dates order in the new call is illegal</exception>
     /// <exception cref="BO.BlCoordinatesException">if there is an exception when calculate the lat and lon</exception>
-    public async Task Create(BO.Call call)
+    public void Create(BO.Call call)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         if (call.Address is null)
@@ -171,26 +173,10 @@ internal class CallImplentation : ICall
         }
 
         CallManager.Observers.NotifyListUpdated();
-         _=UpdateCoordinatesForCallAddressAsync(callToAdd); 
+         _=Helpers.CallManager.UpdateCoordinatesForCallAddressAsync(callToAdd.Address); 
     }
 
-    private static async Task UpdateCoordinatesForCallAddressAsync(DO.Call doCall)
-    {
-        if (doCall.Address is not null)
-        {
-            var (latitude, longitude) = await Tools.GetCoordinatesAsync(doCall.Address);
-            if (latitude is not null && longitude is not null)
-            {
-                doCall = doCall with { Latitude = latitude.Value, Longitude = longitude.Value };
-                lock (AdminManager.BlMutex)
-                {
-                    Helpers.CallManager.Update(doCall);
-                }
-                CallManager.Observers.NotifyListUpdated();
-                CallManager.Observers.NotifyItemUpdated(doCall.Id);
-            }
-        }
-    }
+    
 
 
     /// <summary>
@@ -255,7 +241,8 @@ internal class CallImplentation : ICall
                 throw new BO.BlDoesNotExistException($"Volunteer with id {volunteerId} does not exists");
         var openedCalls = CallManager.ReadAll();
         openedCalls = openedCalls.Where(c =>
-        Helpers.CallManager.DistanceBetweenVolunteerAndCall(volunteerId, c.CallId) <= volunteer.MaxDistanceCall &&
+       (volunteer.MaxDistanceCall is null ||
+       Helpers.CallManager.DistanceBetweenVolunteerAndCall(volunteerId, c.CallId) <= volunteer.MaxDistanceCall) &&
       (Helpers.CallManager.GetCallStatus(c.CallId) == BO.FinishCallType.Open ||
        Helpers.CallManager.GetCallStatus(c.CallId) == BO.FinishCallType.OpenInRisk));
         var openCallsToReturn = openedCalls.Select(c =>
