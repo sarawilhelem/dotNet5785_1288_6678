@@ -36,7 +36,7 @@ internal class VolunteerImplentation : IVolunteer
     /// <param name="volunteer">the volunteer to add</param>
     /// <exception cref="BO.BlIllegalValues">to when the volunteers' details are illegal</exception>
     /// <exception cref="BO.BlAlreadyExistsException">to when trying to add a volunteer with already exist id</exception>
-    public async Task Create(BO.Volunteer volunteer)
+    public void Create(BO.Volunteer volunteer)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         VolunteerManager.CheckValidation(volunteer);
@@ -149,7 +149,7 @@ internal class VolunteerImplentation : IVolunteer
     /// <param name="volunteer">the updated volunteer</param>
     /// <exception cref="BO.BlIllegalValues">if the volunteer details are illegal</exception>
     /// <exception cref="BO.BlDoesNotExistException">there is not any volunteer with the id like the parameter volunteer</exception>
-    public async Task Update(int id, BO.Volunteer volunteer)
+    public void Update(int id, BO.Volunteer volunteer)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         DO.Volunteer? requester;
@@ -160,8 +160,6 @@ internal class VolunteerImplentation : IVolunteer
 
         VolunteerManager.CheckValidation(volunteer);
 
-        try
-        {
             DO.Volunteer? prevDoVolunteer;
             lock (AdminManager.BlMutex)
                 prevDoVolunteer = _dal.Volunteer.Read(volunteer.Id) ??
@@ -187,6 +185,8 @@ internal class VolunteerImplentation : IVolunteer
                 volunteer.Latitude, volunteer.Longitude, volunteer.MaxDistance, (DO.Role)volunteer.Role,
                 (DO.DistanceType)volunteer.DistanceType, VolunteerManager.Encrypt(volunteer.Password), volunteer.IsActive);
 
+        try
+        {
             VolunteerManager.Update(updateDoVolunteer);
             VolunteerManager.Observers.NotifyListUpdated();
             VolunteerManager.Observers.NotifyItemUpdated(prevDoVolunteer.Id);
@@ -196,7 +196,7 @@ internal class VolunteerImplentation : IVolunteer
         }
         catch (Exception ex)
         {
-            throw new BO.BlDoesNotExistException($"volunteer with id {volunteer.Id} does not exist", ex);
+            throw new BO.BlDoesNotExistException(ex.Message);
         }
     }
 

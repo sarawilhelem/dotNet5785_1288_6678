@@ -108,7 +108,7 @@ namespace PL.VolunteerWindows
             }
         }
 
-        private async void BtnUpdate_Click(object sender, RoutedEventArgs e)
+        private void BtnUpdate_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace PL.VolunteerWindows
                     throw new NullReferenceException("CurrentVolunteer is null");
 
                 int userId = (int)Application.Current.Resources["UserIdKey"];
-                await s_bl.Volunteer.Update(userId, CurrentVolunteer);
+                s_bl.Volunteer.Update(userId, CurrentVolunteer);
                 MessageBox.Show($"Succeed to Update volunteer {CurrentVolunteer.Id} details", "success",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }

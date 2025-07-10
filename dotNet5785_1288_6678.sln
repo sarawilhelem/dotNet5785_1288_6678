@@ -26,7 +26,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BL", "BL\BL.csproj", "{AC98
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlTest", "BlTest\BlTest.csproj", "{3B7FD2D7-29F0-4154-99E2-5923E35B91B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL", "PL\PL.csproj", "{72F9587B-FE89-4D87-8D9A-422C25E520AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PL", "PL\PL.csproj", "{72F9587B-FE89-4D87-8D9A-422C25E520AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{98F4D301-B941-480D-9AB1-9ED3A659E5CD}"
+	ProjectSection(SolutionItems) = preProject
+		דוט נט תשפ_ה - דוח סיום פרויקט - למילוי על ידי הסטודנטים - סמינרים - Google Docs.docx = דוט נט תשפ_ה - דוח סיום פרויקט - למילוי על ידי הסטודנטים - סמינרים - Google Docs.docx
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

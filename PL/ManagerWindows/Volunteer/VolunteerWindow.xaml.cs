@@ -80,18 +80,18 @@ public partial class VolunteerWindow : Window
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">The event data.</param>
-    private async void BtnAddUpdate_Click(object sender, RoutedEventArgs e)
+    private void BtnAddUpdate_Click(object sender, RoutedEventArgs e)
     {
         try
         {
             if (CurrentVolunteer == null)
                 throw new NullReferenceException("currentVolunteer is null");
             else if (ButtonText == "ADD")
-                await s_bl.Volunteer.Create(CurrentVolunteer);
+                s_bl.Volunteer.Create(CurrentVolunteer);
             else
             {
                 int userId = (int)Application.Current.Resources["UserIdKey"];
-                await s_bl.Volunteer.Update(userId, CurrentVolunteer);
+                s_bl.Volunteer.Update(userId, CurrentVolunteer);
             };
             MessageBox.Show($"Succeed to {ButtonText} volunteer {CurrentVolunteer.Id}", "success",
                 MessageBoxButton.OK, MessageBoxImage.Information);
